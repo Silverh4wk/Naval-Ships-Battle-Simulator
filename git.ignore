@@ -1,0 +1,13 @@
+# Ignore all files in the directory
+*
+
+# Except this file
+!.gitignore
+
+# Ignore compiled files
+*.class
+*.o
+*.so
+*.dll
+*.exe
+
