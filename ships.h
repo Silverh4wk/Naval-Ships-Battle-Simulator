@@ -15,161 +15,180 @@ private:
     int LIVES = 3;
     char SYMBOL =  '-';
     std::string TYPE = "Ship";
-    // ask abt return type after death
+
 public:
     virtual void actions() const = 0;
-    virtual void look(int X, int Y)  = 0;;
-    virtual void move(int X, int Y)  = 0;;
-    virtual void shoot(int X, int Y) = 0;
-
     //getters
-    char getSYMBOL()const {return SYMBOL;}
+    char getSymbol()const {return SYMBOL;}
     
     int getShipPositionX()const {return ShipPositionX;}
     
     int getShipPositionY()const {return ShipPositionY;}
     
-    bool getLIVES()const 
-    { 
-    {
-        return LIVES <1 ? false:true;
-    }
-    }
+    bool getLives()const { return LIVES <1 ;}
     
-    std::string getTYPE()const {return TYPE;}
+    std::string getType()const {return TYPE;}
+
+     virtual ~Ship() = default;
 };
 
 
 //cant move to a location that contains another battleship
-class movingship : public Ship
+class MovingShip : public Ship
 {
 private:
     
 public:
-    movingship(/* args */);
-    ~movingship();
+    virtual void move(int X, int Y)  = 0;
 };
 
 
-class shootignship : public Ship
+class ShootignShip : public Ship
 {
 private:
     /* data */
 public:
-    shootignship(/* args */);
-    ~shootignship();
+    virtual void fire(int X, int Y) = 0;
 };
 
-class seeingrobot: public Ship
+class SeeingrRobot: public Ship
 {
 private:
     /* data */
 public:
-    seeingrobot(/* args */);
-    ~seeingrobot();
+      virtual void look(int X, int Y)  = 0;
 };
 
 
 
-class ramship: public Ship
+class RamShip: public Ship
 {
 private:
-    /* data */
+    
 public:
-    ramship(/* args */);
-    ~ramship();
+    virtual void ram(int x, int y) = 0;
 };
 
 
 
+/*
+--------------------------------------------------------------------
+ 
+ battleship --: 
+ it can shoot, it can move, it can see
+ looks at its current pos then decide to move
+  move once then shoot twice at random positions, x+y is 5 blocks 
+ cant move to a location that contain another Ship
+ if shoot hit >4 ---> upgrade to destroyer 
 
-// battleship 
-// it can shoot, it can move, it can see
-// looks at its current pos then decide to move
-//  move once then shoot twice at random positions, max is 5 blocks 
-// cant move to a location that contain another Ship
-// if shoot hit >4 ---> upgrade to destroyer 
-
-
-class BattleShip // public seeingrobot : public movingship :public shootignship
+--------------------------------------------------------------------
+*/
+class BattleShip:
+                 public MovingShip,public ShootignShip,public SeeingrRobot // public seeingrobot : public movingship :public shootignship
 {
 private:
-int SHIPSDESTROYED;   
+int SHIPSDESTROYED = 0;   
 public:
     BattleShip(/* args */);
-    ~BattleShip();
     void upgrade();
 
 };
 
-// it can look it can move and it can ram
-// will not shoot at all and will terminate ships at its path
-// in each turn it looks at 3x3 window, it will move to one of them
-// if the cruiser kills 3 of them, cruiser ---> upgrade to destroyer 
+/*
+--------------------------------------------------------------------
+ Cruiser --:
+ it can look it can move and it can ram
+ will not shoot at all and will terminate ships at its path
+ in each turn it looks at 3x3 window, it will move to one of them
+ if the cruiser kills 3 of them, cruiser ---> upgrade to destroyer 
 
-class cruiser
+ --------------------------------------------------------------------
+*/
+
+class cruiser:
+             public MovingShip,public RamShip
 {
 private:
-    /* data */
+    int SHIPSDESTROYED;
 public:
     cruiser(/* args */);
-    ~cruiser();
+
 };
 
-// it can move it can shoot it can ram it can look 
-// if kill = 3, upgrades to supership
-
-class Destroyer
+/*
+--------------------------------------------------------------------
+ Destroyer --:
+ it can move it can shoot it can ram it can look 
+ if kill = 3, upgrades to supership
+ --------------------------------------------------------------------
+*/
+class Destroyer:
+     public MovingShip,public ShootignShip,public SeeingrRobot,public RamShip
 {
 private:
     /* data */
 public:
     Destroyer(/* args */);
-    ~Destroyer();
-};
-                                                           
-// it can shoot at neighbouring cells 1x1
-// and when it shoots it clock wise direction 
-//if kill = 3, upgrades to corvette
 
-class Frigate
+};
+/*
+--------------------------------------------------------------------                                                           
+ Frigate --:
+ it can shoot at neighbouring cells 1x1
+ and when it shoots it clock wise direction 
+ if kill = 3, upgrades to corvette
+--------------------------------------------------------------------
+*/
+class Frigate: 
+    public ShootignShip
 {
 private:
     /* data */
 public:
     Frigate(/* args */);
-    ~Frigate();
+
 };
 
-//cant move, shoot at random neighbour cells
-
-class corvette
+/*
+--------------------------------------------------------------------
+Corvette --:
+cant move, shoot at random neighbour cells
+--------------------------------------------------------------------
+*/
+class corvette:
+    public ShootignShip
 {
 private:
     /* data */
 public:
     corvette(/* args */);
-    ~corvette();
+   
 };
 
-
-//land and water
-//battleship behaviour
-// if kill =4, upgrades to SUPERSHIP 
-
-class Amphibious 
+/*
+--------------------------------------------------------------------
+Amphibious --:
+land and water
+battleship behaviour
+ if kill =4, upgrades to SUPERSHIP 
+ -------------------------------------------------------------------
+*/
+class Amphibious :public BattleShip
 {
 private:
-    /* data */
+    int SHIPSDESTROYED = 0;
 public:
     Amphibious (/* args */);
-    ~Amphibious ();
+  
 };
-
-//it can do everything 
-// it move like a cruiser, killing everything in its way
-//shoots randomly at 3 locations in the same turn
-
+/*
+--------------------------------------------------------------------
+SuperShip --:
+it can do everything 
+ it move like a cruiser, killing everything in its way
+shoots randomly at 3 locations in the same turn
+--------------------------------------------------------------------
+*/
 class SuperShip
 {
 private:
