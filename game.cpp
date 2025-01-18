@@ -16,6 +16,7 @@ game::~game()
     delete A;
     delete B;
     delete battlefield;
+    
     std::cout << "game ended\n";
 };
 bool game::gameInit(std::string &&filename)
@@ -188,3 +189,15 @@ bool game::gameInit(std::string &&filename)
     std::cout << "Game initialized from the file: " << filename << std::endl;
     return true;
 }
+
+void game::addShipToGame(Ship *ship)
+{
+    battlefield->placeShip(ship);
+}
+void game::hardaddShipToGame(Ship *ship,int x, int y)
+{
+    battlefield->hardPlaceShip(ship,x,y);
+}
+
+
+void game::displayBattleField()const {battlefield->display();}
