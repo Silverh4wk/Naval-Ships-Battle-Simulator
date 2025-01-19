@@ -8,7 +8,9 @@ game::game()
 {
     gameInit("game.txt");
     battlefield = new Battlefield(grid, Width, Height);
+    std::cout << std::endl;
     battlefield->display();
+    std::cout << std::endl;
 };
 
 game::~game()

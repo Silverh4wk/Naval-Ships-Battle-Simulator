@@ -29,6 +29,8 @@ public:
     }
 
     virtual void actions(char **gr, int rows, int cols) = 0;
+    virtual void move(char **gr, int rows, int cols) = 0;
+
     void reduceLives()
     {
         if (lives > 0)
@@ -60,14 +62,16 @@ public:
     int getProjPositionY() const { return projectilePosY; }
     void getNeighbourCells() const
     {
+        std::cout << "\nNeighbouring cells for ship : " << getSymbol() << std::endl;
         for (int i = 0; i < 3; ++i)
         {
             for (int j = 0; j < 3; ++j)
             {
                 std::cout << intel.neighbourCells[i][j] << " ";
             }
-            std::cout << "\n";
+            std::endl(std::cout);
         }
+        std::endl(std::cout);
     }
 
     bool getlives() const { return lives < 1; }
@@ -144,9 +148,9 @@ public:
  battleship --:
  it can shoot, it can move, it can see
  looks at its current pos then decide to move
-  move once then shoot twice at random positions, x+y is 5 blocks
+ move once then shoot twice at random positions, x+y is 5 blocks
  cant move to a location that contain another Ship
- if shoot hit >4 ---> upgrade to destroyer
+ if shoot hit = 4 ---> upgrade to destroyer
 
 --------------------------------------------------------------------
 */
@@ -168,7 +172,6 @@ public:
         int chance = uniform_dist(r1);
         int newX = 0;
         int newY = 0;
-        std::cout <<getShipPositionX() << " " << getShipPositionY() << "\n";
         // 1 in 4 chance to move in a random direction
         switch (chance)
         {
@@ -189,7 +192,6 @@ public:
             newY = getShipPositionY() + directions[3][1];
             break;
         }
-        std::cout << "new x = " << newX << " " << "new y = " << newY << "\n";
         if (newX >= 0 && newX < cols && newY >= 0 && newY < rows && gr[newY][newX] == '0')
         {
             // Valid move found
@@ -210,8 +212,8 @@ public:
 
     void look(char **gr, int rows, int cols) override
     {
-        int nx;
-        int ny;
+        int nx = 0;
+        int ny = 0;
         char cell;
         // look at 3x3 window and check for enemy ships/out of bounds
         std::cout << "\n"
@@ -221,25 +223,27 @@ public:
         {
             for (int j = -1; j <= 1; ++j)
             {
-                nx = getShipPositionX() + j;
-                ny = getShipPositionY() + i;
+                
+                nx = getShipPositionX() + j; // (Y,0) + neighbor cell position
+                ny = getShipPositionY() + i; // (0,X) + neighbor cell position
                 // if function to check if the cell is within the grid
-                if (nx >= 0 && nx < cols && ny >= 0 && ny < rows)
-                {
-                    cell = gr[ny][nx];
-                    std::cout << cell << " ";
-                    setNeighbourCells(cell, i, j);
-                }
-                else
-                {
-                    std::cout << "?" << " "; // out of bounds
-                    setNeighbourCells('?', i, j);
-                }
                 // if an enemy ship is detected, print the location of that ship
+                // fix anomaly tomorrow- woo fixed- nvm still need to fix
+                
+
                 if (cell != '0' && cell != '1' && cell != this->getSymbol() && cell != '\0')
                 {
                     std::cout << "\nEnemy ship detected at (" << ny << ", " << nx << ")!\n";
                     setEnemyShipPos(nx, ny);
+                }
+                if (nx >= 0 && nx < cols && ny >= 0 && ny < rows)
+                {
+                    cell = gr[ny][nx];
+                    setNeighbourCells(cell, i, j);
+                }
+                else
+                {
+                    setNeighbourCells('?', i, j);
                 }
             }
             std::cout << "\n";
@@ -248,12 +252,13 @@ public:
 
     void shoot() override
     {
-        std::random_device r;
-        std::default_random_engine r1(r());
-        std::uniform_int_distribution<int> uniform_dist(1, -1);
-        int chance = uniform_dist(r1);
-        setProjectilePos(chance, chance);
-        std::cout << "battleship " << getSymbol() << " shooting at (" << chance << ", " << chance << ")\n";
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> chanceX(-1, 1);
+        std::uniform_int_distribution<int> chanceY(-1, 1);
+        int x = chanceX(gen);
+        int y = chanceY(gen);
+        setProjectilePos(x, y);
     }
     void actions(char **gr, int rows, int cols) override
     {
@@ -372,3 +377,14 @@ public:
     prototype(/* args */);
     ~prototype();
 };
+
+/// blow  a 3x3 area and anything in that area will get cleared even islands
+class Suicidal
+{
+private:
+    /* data */
+public:
+    Suicidal(/* args */);
+    ~Suicidal();
+};
+
