@@ -1,7 +1,7 @@
 # Makefile for warship project
 
 # Compiler
-CC = g++
+CC = g++ -std=c++17
 
 # Compiler flags
 CFLAGS = -Wall -g 
