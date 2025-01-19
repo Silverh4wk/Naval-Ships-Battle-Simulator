@@ -4,7 +4,7 @@
 CC = g++
 
 # Compiler flags
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g 
 
 # Executable name
 TARGET = warship
@@ -29,7 +29,7 @@ $(TARGET): $(OBJS)
 
 # Run the executable
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET)  g++ -std=c++17
 
 # Clean up object files and executable
 clean:
