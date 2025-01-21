@@ -10,8 +10,8 @@
 int main()
 {
     game g;
-    BattleShip *ship = new BattleShip('*', "battleship");
-    BattleShip *ship2 = new BattleShip('+', "battleship2");
+     BattleShip *ship = new BattleShip('*', "battleship");
+     BattleShip *ship2 = new BattleShip('+', "battleship2");
     BattleShip *ship3 = new BattleShip('+', "battleship");
     BattleShip *ship4 = new BattleShip('+', "battleship");
     BattleShip *ship5 = new BattleShip('+', "battleship");
@@ -39,6 +39,10 @@ int main()
     delete ship4;
     delete ship5;
     delete ship6;
-
+    delete ship7;
+    delete ship8;
+    delete ship9;
+    g.battlefield->getShipAt(3,6);
+    
     return EXIT_SUCCESS;
 }

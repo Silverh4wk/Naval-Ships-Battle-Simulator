@@ -3,6 +3,11 @@
 #include <random>
 #include "ships.h"
 #include "Battlefield.h"
+
+#define RANDOM_DEVICE     \
+    std::random_device r; \
+    std::default_random_engine r1(r());
+
 Ship::Ship(char shipSymbol, std::string type) : shipSymbol(shipSymbol),
                                                 type(type)
 {
@@ -51,8 +56,10 @@ void Ship::getNeighbourCells() const
     std::endl(std::cout);
 }
 
-bool Ship::getlives() const {
-     return lives < 1; }
+bool Ship::getlives() const
+{
+    return lives < 1;
+}
 
 std::string Ship::getType() const { return type; }
 
@@ -104,8 +111,7 @@ void BattleShip::move(char **gr, int rows, int cols)
 {
     int directions[4][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     std::string directionNames[4] = {"up", "right", "down", "left"};
-    std::random_device r;
-    std::default_random_engine r1(r());
+    RANDOM_DEVICE
     std::uniform_int_distribution<int> uniform_dist(0, 3);
     int chance = uniform_dist(r1);
     int newX = 0;
@@ -189,11 +195,10 @@ void BattleShip::look(char **gr, int rows, int cols)
 
 void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
 {
-    // std::random_device rd;
-    // std::mt19937 gen(rd());
-    // std::uniform_int_distribution<int> chanceX(0, cols - 1);
-    // std::uniform_int_distribution<int> chanceY(0, rows - 1);
-
+    RANDOM_DEVICE
+    std::uniform_int_distribution<int> chanceX(0, cols - 1);
+    std::uniform_int_distribution<int> chanceY(0, rows - 1);
+    // remember to return this after testing
     for (int i = 0; i < 3; ++i)
     {
         int targetX = 3;
@@ -208,6 +213,7 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
             std::cout << "target cell: " << targetCell << "\n";
             if (targetCell != '0' && targetCell != getSymbol()) // If it's an enemy ship
             {
+                std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
                 Ship *enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
                 if (enemyShip != nullptr)
                 {
@@ -215,7 +221,7 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
                     std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->getlives() << "\n";
                     if (enemyShip)
                     {
-                        enemyShip->reduceLives();   // Deal damage to the target ship
+                        enemyShip->reduceLives();          // Deal damage to the target ship
                         if (enemyShip->getlives() == true) // If the ship is destroyed
                         {
                             enemyShip = nullptr; // Clear the pointer
@@ -224,7 +230,7 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
                             gr[targetY][targetX] = '0'; // Clear the cell
                             if (SHIPSDESTROYED >= 4)
                             {
-                                canDestroy = true; // Upgrade to destroyer
+                                canDestroy = true; // Upgrade to destroyer-- figure out how to do that
                                 std::cout << "Battleship upgraded to Destroyer!\n";
                             }
                         }

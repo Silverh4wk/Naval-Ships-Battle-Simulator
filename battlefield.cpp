@@ -2,6 +2,7 @@
 #include <random>
 #include "Battlefield.h"
 #include "Ships.h"
+
 // update just to test commit push
 
 void Battlefield::initializeGrid()
@@ -14,7 +15,7 @@ void Battlefield::initializeGrid()
 // my thoughts just for tracking
 // will set the grid in battelfield = to the grid from game
 // then after copying everything, it will set gr(grid in game) to nullptr;
-Battlefield::Battlefield(char **gr, int w, int h) : width(w), height(h)
+Battlefield::Battlefield(char **gr, int w, int h) : width(w), height(h), ships(new list<Ship>())
 {
     grid = gr;
     for (int i = 0; i < height; ++i)
@@ -47,7 +48,7 @@ void Battlefield::placeShip(Ship *ship)
     } while (grid[y][x] != '0');
 
     ship->setShipPosition(x, y);
-    ships.push_back(ship);
+    ships->push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at " << ship->getShipPositionY() << ":" << ship->getProjPositionX() << std::endl;
     grid[y][x] = ship->getSymbol();
 }
@@ -55,7 +56,7 @@ void Battlefield::placeShip(Ship *ship)
 void Battlefield::hardPlaceShip(Ship *ship, int x, int y)
 {
     ship->setShipPosition(x, y);
-    ships.push_back(ship);
+    ships->push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
@@ -71,13 +72,16 @@ void Battlefield::display() const
 
 Ship *Battlefield::getShipAt(int x, int y)
 {
-    for (Ship *ship : ships)
+    list<Ship> *p = ships->prev;
+    while (p != nullptr)
     {
-        if (ship->getShipPositionX() == x && ship->getShipPositionY() == y)
+        if (p->data->getShipPositionX() == x && p->data->getShipPositionY() == y)
         {
-            return ship;
+            return p->data;
         }
+        p = p->next;
     }
+    
     return nullptr;
 }
 int Battlefield::getWidth() const { return width; }

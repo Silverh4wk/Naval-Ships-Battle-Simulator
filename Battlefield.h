@@ -1,5 +1,5 @@
 #pragma once
-#include <list>
+#include "helpers.h"
 class Ship;
 
 class Battlefield
@@ -7,8 +7,8 @@ class Battlefield
 private:
     int width = 0, height = 0;
     char **grid;
-    std::list<Ship *> ships;
     void initializeGrid();
+    list<Ship> *ships;
 
 public:
     Battlefield(char **gr, int w, int h);
