@@ -1,12 +1,13 @@
 #pragma once
-#include "Ships.h"
+#include <list>
+class Ship;
 
 class Battlefield
 {
 private:
     int width = 0, height = 0;
     char **grid;
-
+    std::list<Ship *> ships;
     void initializeGrid();
 
 public:
@@ -21,4 +22,5 @@ public:
     int getHeight() const;
     char **getGrid() const;
     void display() const;
+    Ship *getShipAt(int x, int y);
 };

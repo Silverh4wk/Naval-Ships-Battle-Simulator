@@ -1,6 +1,7 @@
 #include <iostream>
-#include "battlefield.h"
 #include "game.h"
+#include "Ships.h"
+#include "Battlefield.h"
 #include <fstream>
 #include <sstream>
 

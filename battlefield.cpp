@@ -1,6 +1,7 @@
 #include <iostream>
-
+#include <random>
 #include "Battlefield.h"
+#include "Ships.h"
 // update just to test commit push
 
 void Battlefield::initializeGrid()
@@ -46,6 +47,7 @@ void Battlefield::placeShip(Ship *ship)
     } while (grid[y][x] != '0');
 
     ship->setShipPosition(x, y);
+    ships.push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at " << ship->getShipPositionY() << ":" << ship->getProjPositionX() << std::endl;
     grid[y][x] = ship->getSymbol();
 }
@@ -53,6 +55,7 @@ void Battlefield::placeShip(Ship *ship)
 void Battlefield::hardPlaceShip(Ship *ship, int x, int y)
 {
     ship->setShipPosition(x, y);
+    ships.push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
@@ -66,6 +69,17 @@ void Battlefield::display() const
     }
 }
 
+Ship *Battlefield::getShipAt(int x, int y)
+{
+    for (Ship *ship : ships)
+    {
+        if (ship->getShipPositionX() == x && ship->getShipPositionY() == y)
+        {
+            return ship;
+        }
+    }
+    return nullptr;
+}
 int Battlefield::getWidth() const { return width; }
 int Battlefield::getHeight() const { return height; }
 char **Battlefield::getGrid() const { return grid; }

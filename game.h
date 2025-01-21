@@ -1,9 +1,10 @@
+#pragma once
 #include <iostream>
-#include "battlefield.h"
-// #include "ships.h"
 #include <fstream>
 #include <sstream>
 
+class Ship;
+class Battlefield;
 struct Team
 {
 public:
@@ -42,5 +43,5 @@ public:
     void displayBattleField() const;
     void hardaddShipToGame(Ship *ship, int x, int y);
 
-        bool gameInit(std::string &&filename);
+    bool gameInit(std::string &&filename);
 };
