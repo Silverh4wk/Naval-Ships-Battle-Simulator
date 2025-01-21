@@ -193,44 +193,48 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
     std::uniform_int_distribution<int> chanceX(0, cols - 1);
     std::uniform_int_distribution<int> chanceY(0, rows - 1);
 
-    for (int i = 0; i < 2; ++i) 
+    for (int i = 0; i < 2; ++i)
     {
         int targetX = chanceX(gen);
         int targetY = chanceY(gen);
         std::cout << "target coordinates: (" << targetY << ", " << targetX << ")\n";
         // Check if the target is within the city block distance of 5
         // SO MANY ISSUES HERE FIX SOON, also need to understand the city block distance constraint
-        std::cout << "city block distance: " << getShipPositionX << "-" << targetX << std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) << "\n";
+        std::cout << "city block distance: " << getShipPositionX() << "-" << targetX << " " << std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) << "\n";
         if (std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) <= 5)
         {
             char targetCell = gr[targetY][targetX];
             if (targetCell != '0' && targetCell != getSymbol()) // If it's an enemy ship
             {
-                std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
                 Ship *enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
-                std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "lives = " << enemyShip->getlives() << "\n";
-                if (enemyShip)
+                if (enemyShip != nullptr)
                 {
-                    enemyShip->reduceLives();  // Deal damage to the target ship
-                    if (enemyShip->getlives()) // If the ship is destroyed
+                    std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
+                    std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "lives = " << enemyShip->getlives() << "\n";
+                    if (enemyShip)
                     {
-                        SHIPSDESTROYED++;
-                        std::cout << "Ship destroyed! Total ships destroyed: " << SHIPSDESTROYED << "\n";
-                        if (SHIPSDESTROYED >= 4)
+                        enemyShip->reduceLives();  // Deal damage to the target ship
+                        if (!enemyShip->getlives()) // If the ship is destroyed
                         {
-                            canDestroy = true; // Upgrade to destroyer
-                            std::cout << "Battleship upgraded to Destroyer!\n";
+                            SHIPSDESTROYED++;
+                            std::cout << "Ship destroyed! Total ships destroyed: " << SHIPSDESTROYED << "\n";
+                            if (SHIPSDESTROYED >= 4)
+                            {
+                                canDestroy = true; // Upgrade to destroyer
+                                std::cout << "Battleship upgraded to Destroyer!\n";
+                            }
                         }
                     }
                 }
             }
-        }
-        else
-        {
-            std::cout << "Target out of range due to city block distance constraint.\n";
+            else
+            {
+                std::cout << "Target out of range due to city block distance constraint.\n";
+            }
         }
     }
 }
+
 void BattleShip::actions(char **gr, int rows, int cols, Battlefield &battlefield)
 {
     look(gr, rows, cols);
