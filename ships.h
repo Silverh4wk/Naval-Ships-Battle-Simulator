@@ -1,4 +1,5 @@
 #pragma once
+// add a destroyed function that will be called when the ship is destroyed
 // Abstract base object for Ships
 class Battlefield;
 
