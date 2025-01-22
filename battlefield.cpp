@@ -49,7 +49,7 @@ void Battlefield::placeShip(Ship *ship)
 
     ship->setShipPosition(x, y);
     ships->push_back(ship);
-    std::cout << "ship of type " << ship->getType() << " is placed at " << ship->getShipPositionY() << ":" << ship->getProjPositionX() << std::endl;
+    std::cout << "ship of type " << ship->getType() << " is placed at Y:X " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
 
@@ -57,7 +57,7 @@ void Battlefield::hardPlaceShip(Ship *ship, int x, int y)
 {
     ship->setShipPosition(x, y);
     ships->push_back(ship);
-    std::cout << "ship of type " << ship->getType() << " is placed at " << y << ":" << x << std::endl;
+    std::cout << "ship of type " << ship->getType() << " is placed at Y:X " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
 void Battlefield::display() const
