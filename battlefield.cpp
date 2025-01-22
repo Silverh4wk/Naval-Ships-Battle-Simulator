@@ -15,7 +15,7 @@ void Battlefield::initializeGrid()
 // my thoughts just for tracking
 // will set the grid in battelfield = to the grid from game
 // then after copying everything, it will set gr(grid in game) to nullptr;
-Battlefield::Battlefield(char **gr, int w, int h) : width(w), height(h), ships(new list<Ship>())
+Battlefield::Battlefield(char **gr, int w, int h) : width(w), height(h)
 {
     grid = gr;
     for (int i = 0; i < height; ++i)
@@ -39,7 +39,7 @@ void Battlefield::placeShip(Ship *ship)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> disX(0, width - 1);
     std::uniform_int_distribution<> disY(0, height - 1);
-
+    
     int x, y;
     do
     {
@@ -48,7 +48,7 @@ void Battlefield::placeShip(Ship *ship)
     } while (grid[y][x] != '0');
 
     ship->setShipPosition(x, y);
-    ships->push_back(ship);
+    ships.push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at Y:X " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
@@ -56,7 +56,7 @@ void Battlefield::placeShip(Ship *ship)
 void Battlefield::hardPlaceShip(Ship *ship, int x, int y)
 {
     ship->setShipPosition(x, y);
-    ships->push_back(ship);
+    ships.push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at Y:X " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
@@ -72,7 +72,7 @@ void Battlefield::display() const
 
 Ship *Battlefield::getShipAt(int x, int y)
 {
-    list<Ship> *p = ships->prev;
+    list<Ship*> *p = ships.prev;
     while (p != nullptr)
     {
         if (p->data->getShipPositionX() == x && p->data->getShipPositionY() == y)

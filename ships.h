@@ -68,7 +68,7 @@ class ShootignShip : virtual public Ship
 private:
     Ship *target;
 public:
-    virtual void shoot(char **gr, int rows, int cols,Battlefield &battlefiel) = 0;
+    virtual void shoot(char **gr, int rows, int cols,Battlefield &battlefield) = 0;
 };
 
 class SeeingrRobot : virtual public Ship

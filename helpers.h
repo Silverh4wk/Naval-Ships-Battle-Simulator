@@ -26,19 +26,25 @@ class list
 {
 private:
 public:
-    t* data;
+    t data;
     list *prev;
     list *next;
-    static list *lastptr;
-    static int count;
+    list *lastptr;
+    int count;
 
     list() : prev(nullptr),
-             next(nullptr)
+             next(nullptr),
+             lastptr(this),
+             count(0)
     {
         lastptr = this;
     }
 
-    list(t* data) : data(data), prev(nullptr), next(nullptr)
+    list(t data) : data(data), 
+                    prev(nullptr),
+                    next(nullptr),
+                    lastptr(this),
+                    count(0)
     {
         lastptr = this;
         count++;
@@ -59,7 +65,7 @@ public:
         this->next = n.next;
     }
 
-    void push_front(t* data)
+    void push_front(t data)
     {
         list<t> *temp = new list<t>(data);
         temp->prev = nullptr;
@@ -76,7 +82,7 @@ public:
         }
     }
 
-    void push_back(t* data)
+    void push_back(t data)
     {
         list<t> *temp = new list<t>(data);
         temp->next = nullptr;
@@ -214,7 +220,3 @@ public:
         count--;
     }
 };
-template <typename t>
-list<t> *list<t>::lastptr = nullptr;
-template <typename t>
-int list<t>::count = 0;

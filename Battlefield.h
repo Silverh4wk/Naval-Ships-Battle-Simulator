@@ -8,7 +8,7 @@ private:
     int width = 0, height = 0;
     char **grid;
     void initializeGrid();
-    list<Ship> *ships;
+    list<Ship*> ships;
 
 public:
     Battlefield(char **gr, int w, int h);

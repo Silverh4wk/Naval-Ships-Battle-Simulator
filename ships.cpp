@@ -228,6 +228,7 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
                             SHIPSDESTROYED++;
                             std::cout << "Ship destroyed! Total ships destroyed: " << SHIPSDESTROYED << "\n";
                             gr[targetY][targetX] = '0'; // Clear the cell
+                            
                             if (SHIPSDESTROYED >= 4)
                             {
                                 canDestroy = true; // Upgrade to destroyer-- figure out how to do that

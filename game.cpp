@@ -8,7 +8,7 @@
 game::game()
 {
     gameInit("game.txt");
-    battlefield = new Battlefield(grid, Width, Height);
+    
     std::cout << std::endl;
     battlefield->display();
     std::cout << std::endl;
@@ -19,9 +19,10 @@ game::~game()
     delete A;
     delete B;
     delete battlefield;
-    
+
     std::cout << "game ended\n";
 };
+
 bool game::gameInit(std::string &&filename)
 {
     A = new Team;
@@ -57,115 +58,9 @@ bool game::gameInit(std::string &&filename)
             ss >> Height;
             std::cout << "Height = " << Height << std::endl;
         }
-        else if (line.find("Team A") != std::string::npos)
-        {
-            ss.ignore(7);
-            ss >> A->NumberOfShips;
-            std::cout << "Number of ships assigned to Team A is: " << A->NumberOfShips << "\n";
-
-            for (int i = 0; i < A->NumberOfShips; ++i)
-            {
-                std::getline(file, line);
-                std::istringstream shipStream(line);
-                std::string shipType;
-                char symbol;
-                int count;
-
-                shipStream >> shipType >> symbol >> count;
-                if (shipType == "Battleship")
-                {
-                    A->BattleShipSymbol = symbol;
-                    A->NumberOfBattleShip = count;
-                }
-                else if (shipType == "Cruiser")
-                {
-                    A->CruiserSymbol = symbol;
-                    A->NumberOfCruiser = count;
-                }
-                else if (shipType == "Destroyer")
-                {
-                    A->DestroyerSymbol = symbol;
-                    A->NumberOfDestroyer = count;
-                }
-                else if (shipType == "Frigate")
-                {
-                    A->FrigateSymbol = symbol;
-                    A->NumberOfFrigate = count;
-                }
-                else if (shipType == "Corvette")
-                {
-                    A->CorvetteSymbol = symbol;
-                    A->NumberOfCorvette = count;
-                }
-                else if (shipType == "Amphibious")
-                {
-                    A->AmphibiousSymbol = symbol;
-                    A->NumberOfAmphibious = count;
-                }
-                else if (shipType == "SuperShip")
-                {
-                    A->SuperShipSymbol = symbol;
-                    A->NumberOfSuperShip = count;
-                }
-                std::cout << shipType << " " << symbol << " " << count << "\n";
-            }
-        }
-        else if (line.find("Team B") != std::string::npos)
-        {
-            ss.ignore(7);
-            ss >> B->NumberOfShips;
-            std::cout << "Number of ships assigned to Team B is: " << B->NumberOfShips << "\n";
-
-            for (int i = 0; i < B->NumberOfShips; ++i)
-            {
-                std::getline(file, line);
-                std::istringstream shipStream(line);
-                std::string shipType;
-                char symbol;
-                int count;
-
-                shipStream >> shipType >> symbol >> count;
-                if (shipType == "Battleship")
-                {
-                    B->BattleShipSymbol = symbol;
-                    B->NumberOfBattleShip = count;
-                }
-                else if (shipType == "Cruiser")
-                {
-                    B->CruiserSymbol = symbol;
-                    B->NumberOfCruiser = count;
-                }
-                else if (shipType == "Destroyer")
-                {
-                    B->DestroyerSymbol = symbol;
-                    B->NumberOfDestroyer = count;
-                }
-                else if (shipType == "Frigate")
-                {
-                    B->FrigateSymbol = symbol;
-                    B->NumberOfFrigate = count;
-                }
-                else if (shipType == "Corvette")
-                {
-                    B->CorvetteSymbol = symbol;
-                    B->NumberOfCorvette = count;
-                }
-                else if (shipType == "Amphibious")
-                {
-                    B->AmphibiousSymbol = symbol;
-                    B->NumberOfAmphibious = count;
-                }
-                else if (shipType == "SuperShip")
-                {
-                    B->SuperShipSymbol = symbol;
-                    B->NumberOfSuperShip = count;
-                }
-                std::cout << shipType << " " << symbol << " " << count << "\n";
-            }
-        }
         else if (isdigit(line[0]) || line[0] == '0')
         {
-            break; // This marks the start of the grid/map
+            break;
         }
     }
 
@@ -186,6 +81,145 @@ bool game::gameInit(std::string &&filename)
         {
             std::getline(file, line);
         }
+    battlefield = new Battlefield(grid, Width, Height);
+    }
+
+    file.close();
+    file.open(filename);
+
+    while (std::getline(file, line))
+    {
+        std::istringstream ss(line);
+        if (line.find("Team A") != std::string::npos)
+        {
+            ss.ignore(7);
+            ss >> A->NumberOfShips;
+            std::cout << "Number of ships assigned to Team A is: " << A->NumberOfShips << "\n";
+
+            for (int i = 0; i < A->NumberOfShips; ++i)
+            {
+                std::getline(file, line);
+                std::istringstream shipStream(line);
+                std::string shipType;
+                char symbol;
+                int count;
+
+                shipStream >> shipType >> symbol >> count;
+
+                for (int j = 0; j < count; ++j)
+                {
+                    Ship *ship = nullptr;
+                    if (shipType == "Battleship")
+                    {
+                        ship = new BattleShip(symbol, "Battleship");
+                        A->BattleShipSymbol = symbol;
+                        A->NumberOfBattleShip++;
+                    }
+                    else if (shipType == "Cruiser")
+                    {
+                        A->CruiserSymbol = symbol;
+                        A->NumberOfCruiser++;
+                    }
+                    else if (shipType == "Destroyer")
+                    {
+                        A->DestroyerSymbol = symbol;
+                        A->NumberOfDestroyer++;
+                    }
+                    else if (shipType == "Frigate")
+                    {
+                        A->FrigateSymbol = symbol;
+                        A->NumberOfFrigate++;
+                    }
+                    else if (shipType == "Corvette")
+                    {
+                        A->CorvetteSymbol = symbol;
+                        A->NumberOfCorvette++;
+                    }
+                    else if (shipType == "Amphibious")
+                    {
+                        A->AmphibiousSymbol = symbol;
+                        A->NumberOfAmphibious++;
+                    }
+                    else if (shipType == "SuperShip")
+                    {
+                        A->SuperShipSymbol = symbol;
+                        A->NumberOfSuperShip++;
+                    }
+
+                    if (ship)
+                    {
+                        A->ships.push_back(ship);
+                         addShipToGame(ship);
+                    }
+                }
+                std::cout << shipType << " " << symbol << " " << count << "\n";
+            }
+        }
+        else if (line.find("Team B") != std::string::npos)
+        {
+            ss.ignore(7);
+            ss >> B->NumberOfShips;
+            std::cout << "Number of ships assigned to Team B is: " << B->NumberOfShips << "\n";
+
+            for (int i = 0; i < B->NumberOfShips; ++i)
+            {
+                std::getline(file, line);
+                std::istringstream shipStream(line);
+                std::string shipType;
+                char symbol;
+                int count;
+
+                shipStream >> shipType >> symbol >> count;
+
+                for (int j = 0; j < count; ++j)
+                {
+                    Ship *ship = nullptr;
+                    if (shipType == "Battleship")
+                    {
+                        ship = new BattleShip(symbol, "Battleship");
+                        B->BattleShipSymbol = symbol;
+                        B->NumberOfBattleShip++;
+                    }
+                    else if (shipType == "Cruiser")
+                    {
+                        B->CruiserSymbol = symbol;
+                        B->NumberOfCruiser++;
+                    }
+                    else if (shipType == "Destroyer")
+                    {
+                        B->DestroyerSymbol = symbol;
+                        B->NumberOfDestroyer++;
+                    }
+                    else if (shipType == "Frigate")
+                    {
+                        B->FrigateSymbol = symbol;
+                        B->NumberOfFrigate++;
+                    }
+                    else if (shipType == "Corvette")
+                    {
+                        B->CorvetteSymbol = symbol;
+                        B->NumberOfCorvette++;
+                    }
+                    else if (shipType == "Amphibious")
+                    {
+                        B->AmphibiousSymbol = symbol;
+                        B->NumberOfAmphibious++;
+                    }
+                    else if (shipType == "SuperShip")
+                    {
+                        B->SuperShipSymbol = symbol;
+                        B->NumberOfSuperShip++;
+                    }
+
+                    if (ship)
+                    {
+                        B->ships.push_back(ship);
+                        // addShipToGame(ship);
+                    }
+                }
+                std::cout << shipType << " " << symbol << " " << count << "\n";
+            }
+        }
     }
 
     file.close();
@@ -195,12 +229,21 @@ bool game::gameInit(std::string &&filename)
 
 void game::addShipToGame(Ship *ship)
 {
-    battlefield->placeShip(ship);
+    if (ship == nullptr)
+    {
+        std::cerr << "Error: Ship pointer is null." << std::endl;
+        return;
+    }
+    if (battlefield != nullptr)
+    {
+        battlefield->placeShip(ship);
+    }
+    std::cerr << "Error: Battlefield is not initialized." << std::endl;
+    return;
 }
-void game::hardaddShipToGame(Ship *ship,int x, int y)
+void game::hardaddShipToGame(Ship *ship, int x, int y)
 {
-    battlefield->hardPlaceShip(ship,x,y);
+    battlefield->hardPlaceShip(ship, x, y);
 }
 
-
-void game::displayBattleField()const {battlefield->display();}
+void game::displayBattleField() const { battlefield->display(); }

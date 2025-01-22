@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 class Ship;
 class Battlefield;
@@ -9,7 +10,7 @@ struct Team
 {
 public:
     int NumberOfShips = 0;
-
+    std::vector<Ship *> ships;
     int NumberOfBattleShip = 0;
     char BattleShipSymbol;
     int NumberOfCruiser = 0;
