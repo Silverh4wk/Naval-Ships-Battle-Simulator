@@ -3,14 +3,14 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-
+#include "helpers.h"
 class Ship;
 class Battlefield;
 struct Team
 {
 public:
     int NumberOfShips = 0;
-    std::vector<Ship *> ships;
+    list<Ship *> ships;
     int NumberOfBattleShip = 0;
     char BattleShipSymbol;
     int NumberOfCruiser = 0;
@@ -30,19 +30,22 @@ public:
 class game
 {
 private:
-    int iterations{0},
-        Width{0}, Height{0};
+    int Width{0}, Height{0};
     Team *A, *B;
-    // Ship *ships;
     char **grid;
-
+    list<Ship *> queue;
 public:
+    int iterations{0};
     Battlefield *battlefield;
     game();
     ~game();
     void addShipToGame(Ship *ship);
     void displayBattleField() const;
     void hardaddShipToGame(Ship *ship, int x, int y);
-
+    bool shipListEmpty()const ;
+    bool teamAEmpty()const;
+    bool teamBEmpty()const;
     bool gameInit(std::string &&filename);
+    void actionQueue();
+    void fillQueue();
 };

@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 // tracking of what it can do so far:
-
+// remonder to add a catch for underflow for pop_front
 // Double linked list
 // 1. add to next - add a node to the end of the list, if the list is empty, it will be the first node
 // 2. push front - add a node to the front of the list, if the list is empty, it will be the first node
@@ -16,6 +16,10 @@
 // 11. copy constructor - copy the list
 // 12. copy assignment operator - copy the list
 // 13. destructor - delete the list
+// 14. enque - add a node to the end of the list
+// 15. dequeue - delete the first node in the list
+// 16. front - get the data of the first node in the list
+// 17. back - get the data of the last node in the list
 // need to add these stuff later
 // //           copy assignment operator - copy the list
 //              move constructor - move the list
@@ -24,7 +28,6 @@
 template <typename t>
 class list
 {
-private:
 public:
     t data;
     list *prev;
@@ -38,13 +41,14 @@ public:
              count(0)
     {
         lastptr = this;
+        count++;
     }
 
-    list(t data) : data(data), 
-                    prev(nullptr),
-                    next(nullptr),
-                    lastptr(this),
-                    count(0)
+    list(t data) : data(data),
+                   prev(nullptr),
+                   next(nullptr),
+                   lastptr(this),
+                   count(0)
     {
         lastptr = this;
         count++;
@@ -104,7 +108,7 @@ public:
     {
         if (this->prev == nullptr)
         {
-            std::cout << "List is empty\n";
+            throw std::out_of_range("list is empty");
             return;
         }
 
@@ -124,7 +128,7 @@ public:
     {
         if (index < 0 || index >= count)
         {
-            std::cout << "Invalid range\n";
+            throw std::out_of_range("Invalid range");
             return;
         }
 
@@ -161,7 +165,7 @@ public:
     {
         if (index < 0 || index >= count)
         {
-            std::cout << "Invalid range\n";
+            throw std::out_of_range("Invalid range");
             return t();
         }
 
@@ -172,6 +176,36 @@ public:
         }
         return p->data;
     }
+
+    // queue operations
+    void enqueue(t data)
+    {
+        push_back(data);
+    }
+
+    void dequeue()
+    {
+        pop_front();
+    }
+
+    t front()
+    {
+        if (this->prev == nullptr)
+        {
+            throw std::out_of_range("Queue is empty");
+        }
+        return this->prev->data;
+    }
+
+    t back()
+    {
+        if (this->next == nullptr)
+        {
+            throw std::out_of_range("Queue is empty");
+        }
+        return this->next->data;
+    }
+    //
 
     void clearList()
     {
@@ -187,17 +221,16 @@ public:
         count = 0;
     }
 
-   
-     void forwardPrint()
+    void forwardPrint()
     {
         list *p = this->prev;
 
         while (p != nullptr)
         {
-            std::cout << p->data << " <--> ";
+            std::cout << p->data << ", ";
             p = p->next;
         }
-        std::cout << "NULL" << std::endl;
+        std::cout << " " << std::endl;
     }
 
     void reversePrint()
@@ -206,15 +239,19 @@ public:
 
         while (p != nullptr)
         {
-            std::cout << p->data << " <--> ";
+            std::cout << p->data << ", ";
             p = p->prev;
         }
-        std::cout << "NULL" << std::endl;
+        std::cout << " " << std::endl;
     }
 
-    t* getData() { return data;}
+    t *getData() { return data; }
     int getSize() { return count; }
 
+    bool empty()
+    {
+        return count < 0;
+    }
     ~list()
     {
         count--;

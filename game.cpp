@@ -8,7 +8,7 @@
 game::game()
 {
     gameInit("game.txt");
-    
+
     std::cout << std::endl;
     battlefield->display();
     std::cout << std::endl;
@@ -25,8 +25,6 @@ game::~game()
 
 bool game::gameInit(std::string &&filename)
 {
-    A = new Team;
-    B = new Team;
 
     std::ifstream file{filename};
     std::string line;
@@ -81,12 +79,13 @@ bool game::gameInit(std::string &&filename)
         {
             std::getline(file, line);
         }
-    battlefield = new Battlefield(grid, Width, Height);
+        battlefield = new Battlefield(grid, Width, Height);
     }
 
     file.close();
     file.open(filename);
-
+    A = new Team;
+    B = new Team;
     while (std::getline(file, line))
     {
         std::istringstream ss(line);
@@ -111,7 +110,7 @@ bool game::gameInit(std::string &&filename)
                     Ship *ship = nullptr;
                     if (shipType == "Battleship")
                     {
-                        ship = new BattleShip(symbol, "Battleship");
+                        ship = new BattleShip(symbol, "Battleship", 'A');
                         A->BattleShipSymbol = symbol;
                         A->NumberOfBattleShip++;
                     }
@@ -149,7 +148,8 @@ bool game::gameInit(std::string &&filename)
                     if (ship)
                     {
                         A->ships.push_back(ship);
-                         addShipToGame(ship);
+                        addShipToGame(ship);
+                        queue.enqueue(ship);
                     }
                 }
                 std::cout << shipType << " " << symbol << " " << count << "\n";
@@ -176,7 +176,7 @@ bool game::gameInit(std::string &&filename)
                     Ship *ship = nullptr;
                     if (shipType == "Battleship")
                     {
-                        ship = new BattleShip(symbol, "Battleship");
+                        ship = new BattleShip(symbol, "Battleship", 'B');
                         B->BattleShipSymbol = symbol;
                         B->NumberOfBattleShip++;
                     }
@@ -214,7 +214,8 @@ bool game::gameInit(std::string &&filename)
                     if (ship)
                     {
                         B->ships.push_back(ship);
-                        // addShipToGame(ship);
+                        addShipToGame(ship);
+                        queue.enqueue(ship);
                     }
                 }
                 std::cout << shipType << " " << symbol << " " << count << "\n";
@@ -237,6 +238,7 @@ void game::addShipToGame(Ship *ship)
     if (battlefield != nullptr)
     {
         battlefield->placeShip(ship);
+        return;
     }
     std::cerr << "Error: Battlefield is not initialized." << std::endl;
     return;
@@ -247,3 +249,60 @@ void game::hardaddShipToGame(Ship *ship, int x, int y)
 }
 
 void game::displayBattleField() const { battlefield->display(); }
+
+bool game::shipListEmpty() const
+{
+    if (A->ships.getSize() == 0 && B->ships.getSize() == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool game::teamAEmpty() const
+{
+    return A->ships.getSize() < 1;
+}
+
+bool game::teamBEmpty() const
+{
+    return B->ships.getSize() < 1;
+}
+
+
+void game::actionQueue()
+{
+    while (queue.getSize() > 0) 
+    {
+        try
+        {
+            Ship *ship = queue.front();
+
+            ship->actions(grid, Width, Height, *battlefield);
+            battlefield->display();
+
+            queue.dequeue();
+            std::cin.get();
+        }
+        catch (const std::exception &e) 
+        {
+            std::cerr << "Error during queue processing: " << e.what() << "\n";
+            break;
+        }
+    }
+
+    std::cout << "Action queue processing complete. Remaining queue size: " << queue.getSize() << "\n";
+}
+
+void game::fillQueue()
+{
+    for (int i = 0; i < A->ships.getSize(); i++)
+    {
+        queue.enqueue(A->ships.getNode(i));
+    }
+    for (int i = 0; i < B->ships.getSize(); i++)
+    {
+        queue.enqueue(B->ships.getNode(i));
+    }
+    std::cout << queue.getSize() << "\n";
+}

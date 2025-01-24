@@ -1,8 +1,11 @@
 #pragma once
+#include "helpers.h"
+
 // add a destroyed function that will be called when the ship is destroyed
 // Abstract base object for Ships
-class Battlefield;
 
+
+class Battlefield;
 class Ship
 {
 private:
@@ -14,18 +17,17 @@ private:
     int projectilePosX = 0;
     int projectilePosY = 0;
     std::string type = "Ship";
+    char teamSymbol = '0';
     struct intelligence
     {
-        int enemyShipX = -1;
-        int enemyShipY = -1;
         char neighbourCells[3][3] = {{'0'}};
     };
     intelligence intel;
 
 public:
-    Ship(char shipSymbol, std::string type);
+    Ship(char shipSymbol, std::string type, char teamSymbol);
 
-    virtual void actions(char **gr, int rows, int cols,Battlefield &battlefield) = 0;
+    virtual void actions(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
     virtual void move(char **gr, int rows, int cols) = 0;
 
     void reduceLives();
@@ -40,8 +42,8 @@ public:
 
     int getProjPositionY() const;
     void getNeighbourCells() const;
-
-    bool getlives() const;
+    int getLives() const;
+    bool isDestroyed() const;
 
     std::string getType() const;
 
@@ -49,7 +51,7 @@ public:
     void setShipPosition(int x, int y);
     void setProjectilePos(int x, int y);
     void setEnemyShipPos(int x, int y);
-
+    char getTeamSymbol() const;
     void setNeighbourCells(char neighbourCell, int i, int j);
 
     virtual ~Ship() = default;
@@ -67,8 +69,9 @@ class ShootignShip : virtual public Ship
 {
 private:
     Ship *target;
+
 public:
-    virtual void shoot(char **gr, int rows, int cols,Battlefield &battlefield) = 0;
+    virtual void shoot(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
 };
 
 class SeeingrRobot : virtual public Ship
@@ -102,17 +105,18 @@ class BattleShip : public MovingShip, public ShootignShip, public SeeingrRobot
 {
 private:
     int SHIPSDESTROYED = 0;
+    list <char> destroyedShips;
     bool canDestroy = false;
 
 public:
-    BattleShip(char shipSymbol, std::string type);
+    BattleShip(char shipSymbol, std::string type, char teamSymbol);
 
     void move(char **gr, int rows, int cols) override;
 
     void look(char **gr, int rows, int cols) override;
 
-    void shoot(char **gr, int rows, int cols,Battlefield &battlefield) override;
-    void actions(char **gr, int rows, int cols,Battlefield &battlefield) override;
+    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
     ~BattleShip();
 };
 
@@ -127,7 +131,7 @@ public:
  --------------------------------------------------------------------
 */
 
-class cruiser : public MovingShip, public RamShip
+class cruiser : public MovingShip, public RamShip, public SeeingrRobot
 {
 private:
     int SHIPSDESTROYED;
@@ -143,7 +147,7 @@ public:
  if kill = 3, upgrades to supership
  --------------------------------------------------------------------
 */
-class Destroyer : public MovingShip, public ShootignShip, public SeeingrRobot, public RamShip
+class Destroyer : public BattleShip
 {
 private:
     /* data */

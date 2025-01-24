@@ -2,8 +2,7 @@
 #include <random>
 #include "Battlefield.h"
 #include "Ships.h"
-
-// update just to test commit push
+#include "helpers.h"
 
 void Battlefield::initializeGrid()
 {

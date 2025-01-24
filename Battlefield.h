@@ -1,6 +1,7 @@
 #pragma once
-#include "helpers.h"
 class Ship;
+#include "helpers.h"
+
 
 class Battlefield
 {
