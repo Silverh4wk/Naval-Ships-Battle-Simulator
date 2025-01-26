@@ -4,6 +4,7 @@
 #include "Battlefield.h"
 #include <fstream>
 #include <sstream>
+#include <random>
 
 game::game()
 {
@@ -16,6 +17,7 @@ game::game()
 
 game::~game()
 {
+    std::cout << "game is ending.. \n";
     delete A;
     delete B;
     delete battlefield;
@@ -214,8 +216,8 @@ bool game::gameInit(std::string &&filename)
                     if (ship)
                     {
                         B->ships.push_back(ship);
-                        addShipToGame(ship);
-                        queue.enqueue(ship);
+                         addShipToGame(ship);
+                         queue.enqueue(ship);
                     }
                 }
                 std::cout << shipType << " " << symbol << " " << count << "\n";
@@ -269,24 +271,23 @@ bool game::teamBEmpty() const
     return B->ships.getSize() < 1;
 }
 
-
 void game::actionQueue()
 {
-    while (queue.getSize() > 0) 
+    while (queue.getSize() > 0)
     {
         try
         {
             Ship *ship = queue.front();
-
-            ship->actions(grid, Width, Height, *battlefield);
-            battlefield->display();
-
-            queue.dequeue();
-            std::cin.get();
+            if (!ship->isDestroyed())
+            {
+                ship->actions(grid, Width, Height, *battlefield);
+                battlefield->display();
+                queue.dequeue();
+            }
         }
-        catch (const std::exception &e) 
+        catch (const std::exception &e)
         {
-            std::cerr << "Error during queue processing: " << e.what() << "\n";
+            std::cerr << "queue processing: " << e.what() << "\n";
             break;
         }
     }
@@ -304,5 +305,52 @@ void game::fillQueue()
     {
         queue.enqueue(B->ships.getNode(i));
     }
-    std::cout << queue.getSize() << "\n";
+    std::cout << "actionQueue size = " << queue.getSize() << "\n";
+}
+
+void game::respawn()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, Width - 1);
+    std::uniform_int_distribution<> disY(0, Height - 1);
+    std::cout << "deathQueue size = " << battlefield->shipGraveYard.getSize() << "\n";
+    while (!battlefield->shipGraveYard.empty())
+    {
+        try
+        {
+            Ship *ship = battlefield->shipGraveYard.front();
+            int x, y;
+
+              do
+              {
+                  x = disX(gen);
+                  y = disY(gen);
+              } while (grid[y][x] != '0');
+          
+
+            ship->setShipPosition(x, y);
+            grid[y][x] = ship->getSymbol();
+            std::cout << "Ship of type " << ship->getType() << " respawned at (" << y << ", " << x << ")\n";
+
+            ship->isInDeathQueue = false;
+            battlefield->shipGraveYard.dequeue();
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "repsawn complete: " << e.what() << "\n";
+            break;
+        }
+    }
+}
+
+
+void game::removeDeadShipFromTeam(list<Ship*>& teamShips, Ship* deadShip) {
+    for (int i = 0; i < teamShips.getSize(); ++i) {
+        if (teamShips.getNode(i) == deadShip) {
+            teamShips.deleteNodeAtIndex(i);  
+            std::cout << "Removed dead ship: " << deadShip->getType() << std::endl;
+            break;  
+        }
+    }
 }

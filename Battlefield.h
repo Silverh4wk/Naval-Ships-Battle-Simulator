@@ -1,7 +1,7 @@
-#pragma once
+#ifndef BATTLEFIELD_H
+#define BATTLEFIELD_H
 class Ship;
 #include "helpers.h"
-
 
 class Battlefield
 {
@@ -9,9 +9,14 @@ private:
     int width = 0, height = 0;
     char **grid;
     void initializeGrid();
-    list<Ship*> ships;
+    list<Ship *> ships;
 
 public:
+    list<Ship *> &getShips()
+    {
+        return ships; 
+    }
+    list<Ship *> shipGraveYard;
     Battlefield(char **gr, int w, int h);
     ~Battlefield();
     // To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;
@@ -25,3 +30,5 @@ public:
     void display() const;
     Ship *getShipAt(int x, int y);
 };
+
+#endif

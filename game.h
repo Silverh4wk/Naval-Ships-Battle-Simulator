@@ -1,8 +1,9 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vector>
+
 #include "helpers.h"
 class Ship;
 class Battlefield;
@@ -31,9 +32,9 @@ class game
 {
 private:
     int Width{0}, Height{0};
-    Team *A, *B;
     char **grid;
     list<Ship *> queue;
+    Team *A, *B;
 public:
     int iterations{0};
     Battlefield *battlefield;
@@ -48,4 +49,7 @@ public:
     bool gameInit(std::string &&filename);
     void actionQueue();
     void fillQueue();
+    void respawn();
+    void removeDeadShipFromTeam(list<Ship*>& teamShips, Ship* deadShip);// need more working and fixes
 };
+#endif

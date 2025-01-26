@@ -71,7 +71,7 @@ void Battlefield::display() const
 
 Ship *Battlefield::getShipAt(int x, int y)
 {
-    list<Ship*> *p = ships.prev;
+    list<Ship*> *p = ships.head;
     while (p != nullptr)
     {
         if (p->data->getShipPositionX() == x && p->data->getShipPositionY() == y)

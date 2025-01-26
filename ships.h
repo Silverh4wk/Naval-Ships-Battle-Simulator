@@ -1,9 +1,10 @@
-#pragma once
+#ifndef SHIP_H
+#define SHIP_H
+
 #include "helpers.h"
 
 // add a destroyed function that will be called when the ship is destroyed
 // Abstract base object for Ships
-
 
 class Battlefield;
 class Ship
@@ -25,12 +26,14 @@ private:
     intelligence intel;
 
 public:
+    bool isInDeathQueue = false;
+    bool isAlive = true;
     Ship(char shipSymbol, std::string type, char teamSymbol);
 
     virtual void actions(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
     virtual void move(char **gr, int rows, int cols) = 0;
 
-    void reduceLives();
+    void reduceLives(Battlefield &battlefield);
     // getters
     char getSymbol() const;
 
@@ -86,7 +89,7 @@ public:
 class RamShip : virtual public Ship
 {
 public:
-    virtual void ram(int x, int y) = 0;
+    virtual void ram(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
 };
 
 /*
@@ -105,7 +108,7 @@ class BattleShip : public MovingShip, public ShootignShip, public SeeingrRobot
 {
 private:
     int SHIPSDESTROYED = 0;
-    list <char> destroyedShips;
+    list<char> destroyedShips;
     bool canDestroy = false;
 
 public:
@@ -131,13 +134,14 @@ public:
  --------------------------------------------------------------------
 */
 
-class cruiser : public MovingShip, public RamShip, public SeeingrRobot
+class cruiser : public RamShip
 {
 private:
     int SHIPSDESTROYED;
 
 public:
-    cruiser(/* args */);
+    cruiser(char shipSymbol, std::string type, char teamSymbol);
+    void ram(char **gr, int rows, int cols, Battlefield &battlefield) override;
 };
 
 /*
@@ -238,3 +242,5 @@ public:
     Suicidal(/* args */);
     ~Suicidal();
 };
+
+#endif
