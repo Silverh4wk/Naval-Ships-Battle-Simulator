@@ -169,9 +169,13 @@ public:
 class Frigate : public ShootignShip
 {
 private:
-    /* data */
+    int SHIPSDESTROYED = 0;
+    list <char> destroyedShips;
+    bool canDestroy = false;
 public:
-    Frigate(/* args */);
+    Frigate(char shipSymbol, std::string type, char teamSymbol);
+    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override ;
+    ~Frigate();
 };
 
 /*
