@@ -526,58 +526,73 @@ Frigate::Frigate(char shipSymbol, std::string type, char teamSymbol) : Ship(ship
 
 void Frigate::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
 {
-    static int clock = 0; 
     int shipX = getShipPositionX();
     int shipY = getShipPositionY();
     
-   
+    // Clockwise movement order
     int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
     int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
 
-    for (int i = 0; i < 8; ++i) // clockwise turn
+    for (int i = 0; i < 8; ++i) // move only in 8 directions clockwise
     {
         int targetX = shipX + dx[clock];
         int targetY = shipY + dy[clock];
 
-    
+        // checks if its out of bounds 
         if (targetX >= 0 && targetX < cols && targetY >= 0 && targetY < rows)
         {
             char targetCell = gr[targetY][targetX];
-            std::cout << "Shooting at (" << targetY << ", " << targetX << ")\n";
-            gr[targetY][targetX] = 'X'; 
-
-            if (targetCell != '0' && targetCell != getSymbol()) 
+            // if it's just water or an island or the ship itself
+            if (targetCell == '0' || targetCell == '1')
             {
+                std::cout << "Nothing to shoot at (" << targetY << ", " << targetX << "). Rotating...\n";
+            }
+            else 
+            {
+                std::cout << "Shooting at (" << targetY << ", " << targetX << ")\n";
                 Ship *enemyShip = battlefield.getShipAt(targetX, targetY);
-                if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
+                if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol()) // check for own team members
                 {
                     std::cout << "Hit enemy ship at (" << targetY << ", " << targetX << ")\n";
                     enemyShip->reduceLives(battlefield);
-                    gr[targetY][targetX] = '0'; 
-
+                    gr[targetY][targetX] = '0'; // Clear the grid
+                    std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->isDestroyed() << "\n";
                     if (enemyShip->isDestroyed())
                     {
                         destroyedShips.push_back(enemyShip->getSymbol());
                         std::cout << enemyShip->getSymbol() << " destroyed\n";
                         enemyShip = nullptr;
                         SHIPSDESTROYED++;
-
+                        std::cout << "Ship destroyed! Total ships destroyed: " << SHIPSDESTROYED << "\n";
                         if (SHIPSDESTROYED >= 3)
                         {
-                            gr[shipY][shipX] = '0';
+                           gr[this->getShipPositionY()][this->getShipPositionX()] = '0';
                             std::cout << "Frigate upgraded to Corvette!\n";
-                            //Corvette *newCorvette = Corvette::createFrom(this);
+                            //corvette *newCorvette = corvette::createFrom(this);
                             //battlefield.replaceShip(this, newCorvette);
-                            return;
+                            return; // so program dont use the deleted pointer or big crash happen
                         }
                     }
                 }
+                else 
+                {
+                    std::cout << "Team member found! skip shooting at (" << targetY << ", " << targetX << "). Rotating...\n";
+                }
             }
+            clock = (clock + 1) % 8;
+            return;  // End turn after shooting
         }
-        clock = (clock + 1) % 8; 
-        return;
+        else 
+        {
+            std::cout << "Target out of bounds!!(" << targetY << ", " << targetX << "). Rotating...\n";
+            clock = (clock + 1) % 8;
+            break;
+        }
+        clock = (clock + 1) % 8;
+        return;  // End turn after shooting
     }
 }
+
 
 
 void Frigate::actions(char **gr, int rows, int cols, Battlefield &battlefield)
@@ -586,10 +601,7 @@ void Frigate::actions(char **gr, int rows, int cols, Battlefield &battlefield)
     {
         SHIPS_INFO;
         shoot(gr, rows, cols, battlefield);
-        std::cout << " is shooting now \n";
     }
     else
         std::cout << getSymbol() << " is waiting to respawn\n";
 }
-
-Frigate::~Frigate() { std::cout << "destroyed battleship\n"; }

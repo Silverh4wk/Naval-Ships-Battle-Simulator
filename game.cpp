@@ -204,7 +204,6 @@ bool game::gameInit(std::string &&filename)
                     else if (shipType == "Frigate")
                     {
                         ship = new Frigate(symbol, "Frigate", 'B');
-                        std::cout << "Frigate created\n";
                         B->FrigateSymbol = symbol;
                         B->NumberOfFrigate++;
                     }

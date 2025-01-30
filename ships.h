@@ -184,6 +184,7 @@ class Frigate : public ShootingShip
 {
 private:
     int SHIPSDESTROYED = 0;
+    int clock = 0;
     list<char> destroyedShips;
     bool canDestroy = false;
 
@@ -194,7 +195,6 @@ public:
 
     void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
     
-    ~Frigate();
 };
 
 /*
