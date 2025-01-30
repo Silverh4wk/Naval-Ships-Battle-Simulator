@@ -50,6 +50,6 @@ public:
     void actionQueue();
     void fillQueue();
     void respawn();
-    void removeDeadShipFromTeam(list<Ship*>& teamShips, Ship* deadShip);// need more working and fixes
+    void removeDeadShipFromTeam();// need more working and fixes
 };
 #endif

@@ -31,7 +31,6 @@ Ship &Ship::operator=(const Ship &other)
     {
         lives = other.lives;
         shipSymbol = other.shipSymbol;
-        destroyedSymbol = other.destroyedSymbol;
         shipPositionX = other.shipPositionX;
         shipPositionY = other.shipPositionY;
         projectilePosX = other.projectilePosX;
@@ -46,7 +45,6 @@ Ship &Ship::operator=(const Ship &other)
 
 Ship::Ship(const Ship &other)
     : lives(other.lives), shipSymbol(other.shipSymbol),
-      destroyedSymbol(other.destroyedSymbol),
       shipPositionX(other.shipPositionX),
       shipPositionY(other.shipPositionY),
       projectilePosX(other.projectilePosX),
@@ -59,7 +57,6 @@ Ship &Ship::operator=(Ship &&other) noexcept
     {
         // Transfer resources
         lives = other.lives;
-        destroyedSymbol = other.destroyedSymbol;
         shipPositionX = other.shipPositionX;
         shipPositionY = other.shipPositionY;
         projectilePosX = other.projectilePosX;
@@ -86,7 +83,6 @@ Ship &Ship::operator=(Ship &&other) noexcept
 
 Ship::Ship(Ship &&other) noexcept
     : lives(other.lives),
-      destroyedSymbol(other.destroyedSymbol),
       shipPositionX(other.shipPositionX),
       shipPositionY(other.shipPositionY),
       projectilePosX(other.projectilePosX),
@@ -130,10 +126,6 @@ void Ship::reduceLives(Battlefield &battlefield)
 // getters
 char Ship::getSymbol() const
 {
-    if (lives < 1)
-    {
-        return destroyedSymbol;
-    }
     return shipSymbol;
 }
 
@@ -194,6 +186,7 @@ void Ship::setNeighbourCells(char neighbourCell, int i, int j)
 
 void Ship::setType(std::string type) { type = type; }
 void Ship::setLives(int lives) { lives = lives; }
+void Ship::setSymbol(char c) {shipSymbol = c;} 
 /*
 --------------------------------------------------------------------
 
@@ -338,7 +331,7 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
                             std::cout << "Battleship upgraded to Destroyer!\n";
                             Destroyer *newDestroyer = Destroyer::createFrom(this);
                             battlefield.replaceShip(this, newDestroyer);
-                            return;// so program dont use the deleted pointer or big crash happen
+                            return; // so program dont use the deleted pointer or big crash happen
                         }
                     }
                 }
@@ -358,7 +351,7 @@ void BattleShip::actions(char **gr, int rows, int cols, Battlefield &battlefield
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
-         look(gr, rows, cols);
+        look(gr, rows, cols);
         move(gr, rows, cols);
         shoot(gr, rows, cols, battlefield);
     }
@@ -500,7 +493,7 @@ Destroyer *Destroyer::createFrom(Ship *source)
     dest->setShipPosition(source->getShipPositionX(), source->getShipPositionY());
     dest->setLives(source->getLives());
     dest->setType("Destroyer");
-    dest->shipSymbol = '$';
+    dest->setSymbol('$') ;
     return dest;
 }
 

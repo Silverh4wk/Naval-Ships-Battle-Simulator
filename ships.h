@@ -11,13 +11,13 @@ class Ship
 {
 private:
     int lives = 3;
-    char destroyedSymbol = 'X';
     int shipPositionX = 0;
     int shipPositionY = 0;
     int projectilePosX = 0;
     int projectilePosY = 0;
     std::string type = "Ship";
     char teamSymbol = '0';
+    char shipSymbol = '-';
     struct intelligence
     {
         char neighbourCells[3][3] = {{'0'}};
@@ -25,7 +25,6 @@ private:
     intelligence intel;
 
 public:
-    char shipSymbol = '-';
     bool isInDeathQueue = false;
 
     Ship(char shipSymbol, std::string type, char teamSymbol);
@@ -63,7 +62,7 @@ public:
     void setNeighbourCells(char neighbourCell, int i, int j);
     void setType(std::string type);
     void setLives(int lives);
-
+    void setSymbol(char c) ;
     bool isDestroyed() const;
     virtual ~Ship() = default;
 };

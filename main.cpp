@@ -6,7 +6,7 @@
 #include "game.h"
 #include "Ships.h"
 #include "Battlefield.h"
-// changed the number of iterations to 15 just for testing 
+
 
 int main()
 {
@@ -23,6 +23,7 @@ int main()
          g.respawn();
          g.displayBattleField();
          g.iterations--;
+         g.removeDeadShipFromTeam();
     //      pause between rounds if needed
          std::cin.get();
      }

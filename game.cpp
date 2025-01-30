@@ -18,8 +18,14 @@ game::game()
 game::~game()
 {
     std::cout << "game is ending.. \n";
-    delete A;
-    delete B;
+    for (int i = 0; i < A->ships.getSize(); ++i)
+    {
+        A->ships.deleteNodeAtIndex(i);
+    }
+    for (int i = 0; i < B->ships.getSize(); ++i)
+    {
+        B->ships.deleteNodeAtIndex(i);
+    }
     delete battlefield;
 
     std::cout << "game ended\n";
@@ -282,10 +288,10 @@ void game::actionQueue()
             Ship *ship = queue.front();
             if (!ship->isDestroyed())
             {
-                std::cout << queue.getSize() << std::endl;
                 ship->actions(grid, Width, Height, *battlefield);
                 battlefield->display();
             }
+
             queue.dequeue();
         }
         catch (const std::exception &e)
@@ -318,18 +324,40 @@ void game::respawn()
     std::uniform_int_distribution<> disX(0, Width - 1);
     std::uniform_int_distribution<> disY(0, Height - 1);
     std::cout << "deathQueue size = " << battlefield->shipGraveYard.getSize() << "\n";
-    while (!battlefield->shipGraveYard.empty())
+
+    for (size_t i = 0; i < 2; i++)
     {
         try
         {
+            if (battlefield->shipGraveYard.empty())
+            {
+                std::cout << "No ships in the graveyard to respawn.\n";
+                break;
+            }
+
             Ship *ship = battlefield->shipGraveYard.front();
+            if (!ship || ship->isDestroyed())
+            {
+                battlefield->shipGraveYard.dequeue();
+                continue;
+            }
+
             int x, y;
+            int attempts = 0;
+            const int maxAttempts = 100; // Maximum number of attempts to find an empty cell
 
             do
             {
                 x = disX(gen);
                 y = disY(gen);
-            } while (grid[y][x] != '0');
+                attempts++;
+            } while (grid[y][x] != '0' && attempts < maxAttempts);
+
+            if (attempts >= maxAttempts)
+            {
+                std::cout << "Failed to find an empty cell for respawning.\n";
+                continue;
+            }
 
             ship->setShipPosition(x, y);
             grid[y][x] = ship->getSymbol();
@@ -340,21 +368,34 @@ void game::respawn()
         }
         catch (const std::exception &e)
         {
-            std::cerr << "repsawn complete: " << e.what() << "\n";
+            std::cerr << "respawn queue is empty, respawn complete: " << e.what() << "\n";
             break;
         }
     }
+    std::cout << "At least two ships respawned \n";
 }
 
-void game::removeDeadShipFromTeam(list<Ship *> &teamShips, Ship *deadShip)
+void game::removeDeadShipFromTeam()
 {
-    for (int i = 0; i < teamShips.getSize(); ++i)
+    for (int i = 0; i < A->ships.getSize(); ++i)
     {
-        if (teamShips.getNode(i) == deadShip)
+        if (A->ships.getNode(i)->isDestroyed())
         {
-            teamShips.deleteNodeAtIndex(i);
-            std::cout << "Removed dead ship: " << deadShip->getType() << std::endl;
-            break;
+            Ship *deadShip = A->ships.getNode(i);
+            std::cout << "Ship of type " << A->ships.getNode(i)->getType() << " is getting removed from the game.." << "\n";
+            A->ships.deleteNodeAtIndex(i);
+            delete deadShip;
+        }
+    }
+
+    for (int i = 0; i < B->ships.getSize(); ++i)
+    {
+        if (B->ships.getNode(i)->isDestroyed())
+        {
+            Ship *deadShip = B->ships.getNode(i);
+            std::cout << "Ship of type " << B->ships.getNode(i)->getType() << " is getting removed from the game.." << "\n";
+            B->ships.deleteNodeAtIndex(i);
+            delete deadShip;
         }
     }
 }
