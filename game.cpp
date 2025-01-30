@@ -118,6 +118,7 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Cruiser")
                     {
+                        ship = new cruiser(symbol, "Cruiser", 'A');
                         A->CruiserSymbol = symbol;
                         A->NumberOfCruiser++;
                     }
@@ -184,6 +185,7 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Cruiser")
                     {
+                        ship = new cruiser(symbol, "Cruiser", 'B');
                         B->CruiserSymbol = symbol;
                         B->NumberOfCruiser++;
                     }
@@ -216,8 +218,8 @@ bool game::gameInit(std::string &&filename)
                     if (ship)
                     {
                         B->ships.push_back(ship);
-                         addShipToGame(ship);
-                         queue.enqueue(ship);
+                        addShipToGame(ship);
+                        queue.enqueue(ship);
                     }
                 }
                 std::cout << shipType << " " << symbol << " " << count << "\n";
@@ -280,10 +282,11 @@ void game::actionQueue()
             Ship *ship = queue.front();
             if (!ship->isDestroyed())
             {
+                std::cout << queue.getSize() << std::endl;
                 ship->actions(grid, Width, Height, *battlefield);
                 battlefield->display();
-                queue.dequeue();
             }
+            queue.dequeue();
         }
         catch (const std::exception &e)
         {
@@ -297,13 +300,13 @@ void game::actionQueue()
 
 void game::fillQueue()
 {
-    for (int i = 0; i < A->ships.getSize(); i++)
+    for (int i = 0; i < battlefield->getShips().getSize(); ++i)
     {
-        queue.enqueue(A->ships.getNode(i));
-    }
-    for (int i = 0; i < B->ships.getSize(); i++)
-    {
-        queue.enqueue(B->ships.getNode(i));
+        if (!battlefield->getShips().getNode(i)->isDestroyed())
+        {
+            std::cout << "ship  add = " << battlefield->getShips().getNode(i)->getType() << "\n";
+            queue.enqueue(battlefield->getShips().getNode(i));
+        }
     }
     std::cout << "actionQueue size = " << queue.getSize() << "\n";
 }
@@ -322,12 +325,11 @@ void game::respawn()
             Ship *ship = battlefield->shipGraveYard.front();
             int x, y;
 
-              do
-              {
-                  x = disX(gen);
-                  y = disY(gen);
-              } while (grid[y][x] != '0');
-          
+            do
+            {
+                x = disX(gen);
+                y = disY(gen);
+            } while (grid[y][x] != '0');
 
             ship->setShipPosition(x, y);
             grid[y][x] = ship->getSymbol();
@@ -344,13 +346,15 @@ void game::respawn()
     }
 }
 
-
-void game::removeDeadShipFromTeam(list<Ship*>& teamShips, Ship* deadShip) {
-    for (int i = 0; i < teamShips.getSize(); ++i) {
-        if (teamShips.getNode(i) == deadShip) {
-            teamShips.deleteNodeAtIndex(i);  
+void game::removeDeadShipFromTeam(list<Ship *> &teamShips, Ship *deadShip)
+{
+    for (int i = 0; i < teamShips.getSize(); ++i)
+    {
+        if (teamShips.getNode(i) == deadShip)
+        {
+            teamShips.deleteNodeAtIndex(i);
             std::cout << "Removed dead ship: " << deadShip->getType() << std::endl;
-            break;  
+            break;
         }
     }
 }

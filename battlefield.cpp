@@ -38,7 +38,7 @@ void Battlefield::placeShip(Ship *ship)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> disX(0, width - 1);
     std::uniform_int_distribution<> disY(0, height - 1);
-    
+
     int x, y;
     do
     {
@@ -71,7 +71,7 @@ void Battlefield::display() const
 
 Ship *Battlefield::getShipAt(int x, int y)
 {
-    list<Ship*> *p = ships.head;
+    list<Ship *> *p = ships.head;
     while (p != nullptr)
     {
         if (p->data->getShipPositionX() == x && p->data->getShipPositionY() == y)
@@ -80,9 +80,41 @@ Ship *Battlefield::getShipAt(int x, int y)
         }
         p = p->next;
     }
-    
+
     return nullptr;
 }
 int Battlefield::getWidth() const { return width; }
 int Battlefield::getHeight() const { return height; }
 char **Battlefield::getGrid() const { return grid; }
+
+// upgrade system
+//  Remove old ship from the battlefield
+//  then set the new ship’s position
+//  Replace it in the ship list
+//  Add the new ship to the battlefield in place of the older one .... hope this works IT DOESNT
+void Battlefield::replaceShip(Ship *oldShip, Ship *newShip)
+{
+    int x = oldShip->getShipPositionX();
+    int y = oldShip->getShipPositionY();
+    //newShip = std::move(oldShip);
+    std::cout << oldShip->getType() << " upgraded to " << newShip->getType() << " at (" << y << ", " << x << ")\n";
+    newShip->setShipPosition(x, y);
+
+    for (int i = 0; i < ships.getSize(); ++i)
+    {
+        if (ships.getNode(i) == oldShip)
+        {
+            std::cout << "ship of type " << ships.getNode(i)->getType() << " was removed \n";
+            std::cin.get();
+            ships.deleteNodeAtIndex(i);
+            break;
+        }
+    }
+
+    grid[y][x] = newShip->getSymbol();
+    ships.push_back(newShip);
+
+    std::cout << oldShip->getType() << " upgraded to " << newShip->getType() << " at (" << y << ", " << x << ")\n";
+    std::cout << "Upgrade complete: " << newShip->getType() << " now at (" << y << ", " << x << ")\n";
+    delete oldShip;
+}

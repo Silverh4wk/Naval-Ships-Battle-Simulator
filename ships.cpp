@@ -7,28 +7,124 @@
 #define RANDOM_DEVICE     \
     std::random_device r; \
     std::default_random_engine r1(r());
+#define SHIPS_INFO                                                             \
+    std::cout << "________________________________________\n"                  \
+              << getType() << " status: \n"                                    \
+                              "Symbol: "                                       \
+              << getSymbol() << "\n"                                           \
+                                "Position: ("                                  \
+              << getShipPositionY() << ", " << getShipPositionX() << ")\n"     \
+                                                                     "Lives: " \
+              << getLives() << "\n"                                            \
+                               "Type: "                                        \
+              << getType() << "\n"                                             \
+                              "ships destroyed: "                              \
+              << SHIPSDESTROYED << "| ";                                       \
+    destroyedShips.forwardPrint();                                             \
+    std::cout << "________________________________________\n";
 
 Ship::Ship(char shipSymbol, std::string type, char teamSymbol) : shipSymbol(shipSymbol),
-                                                                 type(type), teamSymbol(teamSymbol)
+                                                                 type(type), teamSymbol(teamSymbol) {}
+Ship &Ship::operator=(const Ship &other)
 {
+    if (this != &other)
+    {
+        lives = other.lives;
+        shipSymbol = other.shipSymbol;
+        destroyedSymbol = other.destroyedSymbol;
+        shipPositionX = other.shipPositionX;
+        shipPositionY = other.shipPositionY;
+        projectilePosX = other.projectilePosX;
+        projectilePosY = other.projectilePosY;
+        type = other.type;
+        teamSymbol = other.teamSymbol;
+        intel = other.intel;
+        isInDeathQueue = other.isInDeathQueue;
+    }
+    return *this;
 }
 
+Ship::Ship(const Ship &other)
+    : lives(other.lives), shipSymbol(other.shipSymbol),
+      destroyedSymbol(other.destroyedSymbol),
+      shipPositionX(other.shipPositionX),
+      shipPositionY(other.shipPositionY),
+      projectilePosX(other.projectilePosX),
+      projectilePosY(other.projectilePosY),
+      type(other.type), teamSymbol(other.teamSymbol),
+      intel(other.intel), isInDeathQueue(other.isInDeathQueue) {}
+Ship &Ship::operator=(Ship &&other) noexcept
+{
+    if (this != &other)
+    {
+        // Transfer resources
+        lives = other.lives;
+        destroyedSymbol = other.destroyedSymbol;
+        shipPositionX = other.shipPositionX;
+        shipPositionY = other.shipPositionY;
+        projectilePosX = other.projectilePosX;
+        projectilePosY = other.projectilePosY;
+        type = std::move(other.type);
+        shipSymbol = other.shipSymbol;
+        teamSymbol = other.teamSymbol;
+        intel = other.intel;
+        isInDeathQueue = other.isInDeathQueue;
+
+        // Reset the source
+        other.lives = 0;
+        other.shipPositionX = 0;
+        other.shipPositionY = 0;
+        other.projectilePosX = 0;
+        other.projectilePosY = 0;
+        other.type.clear();
+        other.shipSymbol = '-';
+        other.teamSymbol = '\0';
+        other.isInDeathQueue = false;
+    }
+    return *this;
+}
+
+Ship::Ship(Ship &&other) noexcept
+    : lives(other.lives),
+      destroyedSymbol(other.destroyedSymbol),
+      shipPositionX(other.shipPositionX),
+      shipPositionY(other.shipPositionY),
+      projectilePosX(other.projectilePosX),
+      projectilePosY(other.projectilePosY),
+      type(std::move(other.type)),
+      shipSymbol(other.shipSymbol),
+      teamSymbol(other.teamSymbol),
+      intel(other.intel),
+      isInDeathQueue(other.isInDeathQueue)
+{
+    // Reset the source
+    other.lives = 0;
+    other.shipPositionX = 0;
+    other.shipPositionY = 0;
+    other.projectilePosX = 0;
+    other.projectilePosY = 0;
+    other.type.clear();
+    other.shipSymbol = '-';
+    other.teamSymbol = '\0';
+    other.isInDeathQueue = false;
+}
 void Ship::reduceLives(Battlefield &battlefield)
 {
     if (!isDestroyed())
     {
         lives--;
+
         std::cout << "Ship hit! Lives remaining: " << lives << "\n";
-        if (!isDestroyed() && !isInDeathQueue)
+        if (isDestroyed())
         {
-            battlefield.shipGraveYard.push_back(this); 
-            isInDeathQueue = true; 
-            std::cout << "Ship destroyed and added to graveyard!, waiting to respawn...\n";
+            std::cout << "Ship destroyed and added to graveyard!\n";
         }
-    }
-    else 
-    {
-        std::cout << "Ship destroyed!\n";
+        else if (!isInDeathQueue)
+        {
+            battlefield.shipGraveYard.push_back(this);
+            isInDeathQueue = true;
+            std::cout << "Ship added to graveyard for repairs...\n";
+        }
     }
 }
 // getters
@@ -83,11 +179,6 @@ void Ship::setProjectilePos(int x, int y)
     projectilePosX = shipPositionX + x;
     projectilePosY = shipPositionY + y;
 }
-// void Ship::setEnemyShipPos(int x, int y)
-// {
-//     intel.enemyShipX = x;
-//     intel.enemyShipY = y;
-// }
 
 void Ship::setNeighbourCells(char neighbourCell, int i, int j)
 {
@@ -101,6 +192,8 @@ void Ship::setNeighbourCells(char neighbourCell, int i, int j)
     }
 }
 
+void Ship::setType(std::string type) { type = type; }
+void Ship::setLives(int lives) { lives = lives; }
 /*
 --------------------------------------------------------------------
 
@@ -227,25 +320,27 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
                 // check if its not on the same team before shooting at it
                 if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
                 {
-                        std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
-                        enemyShip->reduceLives(battlefield);
-                        gr[targetY][targetX] = '0'; // Clear the grid
-                        std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->isDestroyed() << "\n";
-                        if (enemyShip->isDestroyed() == true) // If the ship is destroyed
-                        {
-                            destroyedShips.push_back(enemyShip->getSymbol());
-                            std::cout << enemyShip->getSymbol() << " destroyed\n";
-                            enemyShip = nullptr; // set the dead ship to null
-                            SHIPSDESTROYED++;
-                            std::cout << "Ship destroyed! Total ships destroyed: " << SHIPSDESTROYED << "\n";
+                    std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
+                    enemyShip->reduceLives(battlefield);
+                    gr[targetY][targetX] = '0'; // Clear the grid
+                    std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->isDestroyed() << "\n";
+                    if (enemyShip->isDestroyed() == true) // If the ship is destroyed
+                    {
+                        destroyedShips.push_back(enemyShip->getSymbol());
+                        std::cout << enemyShip->getSymbol() << " destroyed\n";
+                        enemyShip = nullptr; // set the dead ship to null
+                        SHIPSDESTROYED++;
+                        std::cout << "Ship destroyed! Total ships destroyed: " << SHIPSDESTROYED << "\n";
 
-                            if (SHIPSDESTROYED >= 4)
-                            {
-                                canDestroy = true; // Upgrade to destroyer-- figure out how to do that
-                                std::cout << "Battleship upgraded to Destroyer!\n";
-                            }
+                        if (SHIPSDESTROYED >= 4)
+                        {
+                            gr[this->getShipPositionY()][this->getShipPositionX()] = '0';
+                            std::cout << "Battleship upgraded to Destroyer!\n";
+                            Destroyer *newDestroyer = Destroyer::createFrom(this);
+                            battlefield.replaceShip(this, newDestroyer);
+                            return;// so program dont use the deleted pointer or big crash happen
                         }
-                    
+                    }
                 }
             }
             else
@@ -262,23 +357,9 @@ void BattleShip::actions(char **gr, int rows, int cols, Battlefield &battlefield
 {
     if (!isInDeathQueue)
     {
-        std::cout << "________________________________________\n"
-                     "Battleship status: \n"
-                     "Symbol: "
-                  << getSymbol() << "\n"
-                                    "Position: ("
-                  << getShipPositionY() << ", " << getShipPositionX() << ")\n"
-                                                                         "Lives: "
-                  << getLives() << "\n"
-                                   "Type: "
-                  << getType() << "\n"
-                                  "ships destroyed: "
-                  << SHIPSDESTROYED << "| ";
-        destroyedShips.forwardPrint();
-        std::cout << "________________________________________\n";
-
-        look(gr, rows, cols);
-         move(gr, rows, cols);
+        SHIPS_INFO;
+         look(gr, rows, cols);
+        move(gr, rows, cols);
         shoot(gr, rows, cols, battlefield);
     }
     else
@@ -286,40 +367,164 @@ void BattleShip::actions(char **gr, int rows, int cols, Battlefield &battlefield
 }
 BattleShip::~BattleShip() { std::cout << "destroyed battleship\n"; }
 
+/*
+--------------------------------------------------------------------
+ Cruiser --:
+ it can look it can move and it can ram
+ will not shoot at all and will terminate ships at its path
+ in each turn it looks at 3x3 window, it will move to one of them
+ if the cruiser kills 3 of them, cruiser ---> upgrade to destroyer
+
+ --------------------------------------------------------------------
+*/
+
 cruiser::cruiser(char shipSymbol, std::string type, char teamSymbol) : Ship(shipSymbol, type, teamSymbol) {}
 
 void cruiser::ram(char **gr, int rows, int cols, Battlefield &battlefield)
 {
     int nx = 0;
     int ny = 0;
-    char cell;
+    char cell = '0';
+    bool foundEnemy = false;
 
     std::cout << "\n"
               << getSymbol() << " is deciding \n";
     std::cout << "________________________________________\n";
+
+    // Check neighboring cells for enemy ships
     for (int i = -1; i <= 1; ++i)
     {
         for (int j = -1; j <= 1; ++j)
         {
-
             nx = getShipPositionX() + j; // (Y,0) + neighbor cell position
             ny = getShipPositionY() + i; // (0,X) + neighbor cell position
-            // if function to check if the cell is within the grid
-            if (cell != '0' && cell != '1' && cell != this->getSymbol() && cell != '\0')
-            {
-                std::cout << "\n destroying ship at (" << ny << ", " << nx - 1 << ")!\n";
-                Ship *enemyShip = battlefield.getShipAt(nx, ny);
-                enemyShip->reduceLives(battlefield);
-                battlefield.shipGraveYard.push_back(enemyShip);
-                // add a function to send to grave for replacing later
-                cell = this->getSymbol();
-                this->setShipPosition(nx, ny);
-            }
+            // Check if within the grid
             if (nx >= 0 && nx < cols && ny >= 0 && ny < rows)
             {
                 cell = gr[ny][nx];
+
+                if (cell != '0' && cell != '1' && cell != this->getSymbol())
+                {
+                    std::cout << "\nChecking ship at (" << ny << ", " << nx << ")!\n";
+                    Ship *enemyShip = battlefield.getShipAt(nx, ny);
+                    if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
+                    {
+                        enemyShip->reduceLives(battlefield);
+                        gr[this->getShipPositionY()][this->getShipPositionX()] = '0'; // Set current ship position to 0
+                        gr[ny][nx] = this->getSymbol();                               // Move cruiser to new position
+                        this->setShipPosition(nx, ny);
+                        std::cout << "Enemy ship symbol: " << enemyShip->getSymbol()
+                                  << " is dead? = " << enemyShip->isDestroyed() << "\n";
+
+                        if (enemyShip->isDestroyed())
+                        {
+                            destroyedShips.push_back(enemyShip->getSymbol());
+                            std::cout << enemyShip->getSymbol() << " destroyed\n";
+                            enemyShip = nullptr;
+                            SHIPSDESTROYED++;
+                            std::cout << "Ship destroyed! Total ships destroyed: "
+                                      << SHIPSDESTROYED << "\n";
+
+                            if (SHIPSDESTROYED >= 3)
+                            {
+                                std::cout << "Cruiser upgraded to Destroyer!\n";
+                                Destroyer *newDestroyer = Destroyer::createFrom(this);
+                                battlefield.replaceShip(this, newDestroyer);
+                                return; // so program dont use the deleted pointer or big crash happen
+                            }
+                        }
+                        foundEnemy = true;
+                        break;
+                    }
+                }
             }
         }
-        std::cout << "\n";
     }
+
+    if (!foundEnemy)
+    {
+        RANDOM_DEVICE;
+        std::uniform_int_distribution<int> uniform_dist(-1, 1); // 3x3 distance will ofc skip the current ship location
+
+        // infinite loop that will check if the new position is not out of bound or if is valid
+        do
+        {
+            ny = this->getShipPositionY() + uniform_dist(r1);
+            nx = this->getShipPositionX() + uniform_dist(r1);
+
+            // Check if the new position is within bounds
+            if (ny >= 0 && ny < rows && nx >= 0 && nx < cols)
+            {
+                if (gr[ny][nx] == '0')
+                {
+                    gr[this->getShipPositionY()][this->getShipPositionX()] = '0';
+                    gr[ny][nx] = this->getSymbol();
+                    this->setShipPosition(nx, ny);
+                    std::cout << "No enemy found. Moved to random position (" << ny << ", " << nx << ").\n";
+                    break;
+                }
+            }
+        } while (true);
+    }
+}
+
+void cruiser::actions(char **gr, int rows, int cols, Battlefield &battlefield)
+{
+    if (!isInDeathQueue)
+    {
+        SHIPS_INFO;
+        std::cout << " is ramming now \n";
+        ram(gr, rows, cols, battlefield);
+    }
+    else
+        std::cout << getSymbol() << " is waiting to respawn\n";
+}
+
+/*
+--------------------------------------------------------------------
+ Destroyer --:
+ it can move it can shoot it can ram it can look
+ if kill = 3, upgrades to supership
+ --------------------------------------------------------------------
+*/
+
+Destroyer::Destroyer(char shipSymbol, std::string type, char teamSymbol)
+    : Ship(shipSymbol, type, teamSymbol),
+      BattleShip(shipSymbol, type, teamSymbol),
+      cruiser(shipSymbol, type, teamSymbol) {}
+
+// factory function cuz i didnt know how to properly use movesemantics and im tired for now
+Destroyer *Destroyer::createFrom(Ship *source)
+{
+    Destroyer *dest = new Destroyer('D', "Destroyer", source->getTeamSymbol());
+    dest->setShipPosition(source->getShipPositionX(), source->getShipPositionY());
+    dest->setLives(source->getLives());
+    dest->setType("Destroyer");
+    dest->shipSymbol = '$';
+    return dest;
+}
+
+void Destroyer::actions(char **gr, int rows, int cols, Battlefield &battlefield)
+{
+    if (!isInDeathQueue)
+    {
+        SHIPS_INFO;
+        std::cout << " is ramming now \n";
+        ram(gr, rows, cols, battlefield);
+
+        std::cout << " is looking now \n";
+        look(gr, rows, cols);
+        std::cout << " is moving now \n";
+        move(gr, rows, cols);
+        std::cout << " is shooting now \n";
+        shoot(gr, rows, cols, battlefield);
+        if (SHIPSDESTROYED >= 3)
+        {
+            std::cout << "Destroyer upgrading to SuperShip!\n";
+            // SuperShip *newShip = new SuperShip(std::move(*this));
+            // battlefield.replaceShip(this, newShip);
+        }
+    }
+    else
+        std::cout << getSymbol() << " is waiting to respawn\n";
 }

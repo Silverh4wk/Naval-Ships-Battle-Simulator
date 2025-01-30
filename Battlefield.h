@@ -23,6 +23,8 @@ public:
 
     void placeShip(Ship *ship);
     void hardPlaceShip(Ship *ship, int x, int y);
+    void replaceShip(Ship* oldShip, Ship* newShip);
+
 
     int getWidth() const;
     int getHeight() const;

@@ -11,7 +11,6 @@ class Ship
 {
 private:
     int lives = 3;
-    char shipSymbol = '-';
     char destroyedSymbol = 'X';
     int shipPositionX = 0;
     int shipPositionY = 0;
@@ -26,12 +25,20 @@ private:
     intelligence intel;
 
 public:
+    char shipSymbol = '-';
     bool isInDeathQueue = false;
-    bool isAlive = true;
+
     Ship(char shipSymbol, std::string type, char teamSymbol);
 
+    Ship(const Ship &other);
+
+    Ship &operator=(const Ship &other);
+
+    Ship(Ship &&other) noexcept;
+
+    Ship &operator=(Ship &&other) noexcept;
+
     virtual void actions(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
-    virtual void move(char **gr, int rows, int cols) = 0;
 
     void reduceLives(Battlefield &battlefield);
     // getters
@@ -46,17 +53,18 @@ public:
     int getProjPositionY() const;
     void getNeighbourCells() const;
     int getLives() const;
-    bool isDestroyed() const;
-
+    char getTeamSymbol() const;
     std::string getType() const;
+
 
     // setters
     void setShipPosition(int x, int y);
     void setProjectilePos(int x, int y);
-    void setEnemyShipPos(int x, int y);
-    char getTeamSymbol() const;
     void setNeighbourCells(char neighbourCell, int i, int j);
+    void setType(std::string type);
+    void setLives(int lives);
 
+    bool isDestroyed() const;
     virtual ~Ship() = default;
 };
 
@@ -109,7 +117,6 @@ class BattleShip : public MovingShip, public ShootignShip, public SeeingrRobot
 private:
     int SHIPSDESTROYED = 0;
     list<char> destroyedShips;
-    bool canDestroy = false;
 
 public:
     BattleShip(char shipSymbol, std::string type, char teamSymbol);
@@ -137,11 +144,13 @@ public:
 class cruiser : public RamShip
 {
 private:
-    int SHIPSDESTROYED;
+    int SHIPSDESTROYED = 0;
+    list<char> destroyedShips;
 
 public:
     cruiser(char shipSymbol, std::string type, char teamSymbol);
     void ram(char **gr, int rows, int cols, Battlefield &battlefield) override;
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
 };
 
 /*
@@ -151,12 +160,18 @@ public:
  if kill = 3, upgrades to supership
  --------------------------------------------------------------------
 */
-class Destroyer : public BattleShip
+class Destroyer : public BattleShip, public cruiser
 {
 private:
-    /* data */
+    int SHIPSDESTROYED = 0;
+    list<char> destroyedShips;
+
 public:
-    Destroyer(/* args */);
+    Destroyer(char shipSymbol, std::string type, char teamSymbol);
+
+    static Destroyer* createFrom(Ship* source);
+
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
 };
 /*
 --------------------------------------------------------------------
@@ -170,11 +185,12 @@ class Frigate : public ShootignShip
 {
 private:
     int SHIPSDESTROYED = 0;
-    list <char> destroyedShips;
+    list<char> destroyedShips;
     bool canDestroy = false;
+
 public:
     Frigate(char shipSymbol, std::string type, char teamSymbol);
-    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override ;
+    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
     ~Frigate();
 };
 
