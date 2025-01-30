@@ -521,3 +521,75 @@ void Destroyer::actions(char **gr, int rows, int cols, Battlefield &battlefield)
     else
         std::cout << getSymbol() << " is waiting to respawn\n";
 }
+
+Frigate::Frigate(char shipSymbol, std::string type, char teamSymbol) : Ship(shipSymbol, type, teamSymbol) {}
+
+void Frigate::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
+{
+    static int clock = 0; 
+    int shipX = getShipPositionX();
+    int shipY = getShipPositionY();
+    
+   
+    int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
+    int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+
+    for (int i = 0; i < 8; ++i) // clockwise turn
+    {
+        int targetX = shipX + dx[clock];
+        int targetY = shipY + dy[clock];
+
+    
+        if (targetX >= 0 && targetX < cols && targetY >= 0 && targetY < rows)
+        {
+            char targetCell = gr[targetY][targetX];
+            std::cout << "Shooting at (" << targetY << ", " << targetX << ")\n";
+            gr[targetY][targetX] = 'X'; 
+
+            if (targetCell != '0' && targetCell != getSymbol()) 
+            {
+                Ship *enemyShip = battlefield.getShipAt(targetX, targetY);
+                if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
+                {
+                    std::cout << "Hit enemy ship at (" << targetY << ", " << targetX << ")\n";
+                    enemyShip->reduceLives(battlefield);
+                    gr[targetY][targetX] = '0'; 
+
+                    if (enemyShip->isDestroyed())
+                    {
+                        destroyedShips.push_back(enemyShip->getSymbol());
+                        std::cout << enemyShip->getSymbol() << " destroyed\n";
+                        enemyShip = nullptr;
+                        SHIPSDESTROYED++;
+
+                        if (SHIPSDESTROYED >= 3)
+                        {
+                            gr[shipY][shipX] = '0';
+                            std::cout << "Frigate upgraded to Corvette!\n";
+                            //Corvette *newCorvette = Corvette::createFrom(this);
+                            //battlefield.replaceShip(this, newCorvette);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        clock = (clock + 1) % 8; 
+        return;
+    }
+}
+
+
+void Frigate::actions(char **gr, int rows, int cols, Battlefield &battlefield)
+{
+    if (!isInDeathQueue)
+    {
+        SHIPS_INFO;
+        shoot(gr, rows, cols, battlefield);
+        std::cout << " is shooting now \n";
+    }
+    else
+        std::cout << getSymbol() << " is waiting to respawn\n";
+}
+
+Frigate::~Frigate() { std::cout << "destroyed battleship\n"; }

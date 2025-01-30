@@ -1,6 +1,6 @@
 #include <iostream>
 #include "game.h"
-#include "Ships.h"
+#include "ships.h"
 #include "Battlefield.h"
 #include <fstream>
 #include <sstream>
@@ -135,6 +135,7 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Frigate")
                     {
+                        ship = new Frigate(symbol, "Frigate", 'A');
                         A->FrigateSymbol = symbol;
                         A->NumberOfFrigate++;
                     }
@@ -202,6 +203,8 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Frigate")
                     {
+                        ship = new Frigate(symbol, "Frigate", 'B');
+                        std::cout << "Frigate created\n";
                         B->FrigateSymbol = symbol;
                         B->NumberOfFrigate++;
                     }

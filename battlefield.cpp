@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 #include "Battlefield.h"
-#include "Ships.h"
+#include "ships.h"
 #include "helpers.h"
 
 void Battlefield::initializeGrid()
@@ -28,7 +28,7 @@ Battlefield::~Battlefield()
     for (int i = 0; i < height; ++i)
         delete[] grid[i];
     delete[] grid;
-    std::cout << "battlefled deleted\n";
+    std::cout << "battlefield deleted\n";
 }
 
 // To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;

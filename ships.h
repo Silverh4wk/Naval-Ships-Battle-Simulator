@@ -75,7 +75,7 @@ public:
     virtual void move(char **gr, int rows, int cols) = 0;
 };
 
-class ShootignShip : virtual public Ship
+class ShootingShip : virtual public Ship
 {
 private:
     Ship *target;
@@ -84,7 +84,7 @@ public:
     virtual void shoot(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
 };
 
-class SeeingrRobot : virtual public Ship
+class SeeingRobot : virtual public Ship
 {
 private:
     Ship *acquiredTarget;
@@ -111,7 +111,7 @@ public:
 
 --------------------------------------------------------------------
 */
-class BattleShip : public MovingShip, public ShootignShip, public SeeingrRobot
+class BattleShip : public MovingShip, public ShootingShip, public SeeingRobot
 {
 private:
     int SHIPSDESTROYED = 0;
@@ -180,7 +180,7 @@ public:
  if kill = 3, upgrades to corvette
 --------------------------------------------------------------------
 */
-class Frigate : public ShootignShip
+class Frigate : public ShootingShip
 {
 private:
     int SHIPSDESTROYED = 0;
@@ -189,7 +189,11 @@ private:
 
 public:
     Frigate(char shipSymbol, std::string type, char teamSymbol);
+
     void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
+
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
+    
     ~Frigate();
 };
 
@@ -199,7 +203,7 @@ Corvette --:
 cant move, shoot at random neighbour cells
 --------------------------------------------------------------------
 */
-class corvette : public ShootignShip
+class corvette : public ShootingShip
 {
 private:
     /* data */

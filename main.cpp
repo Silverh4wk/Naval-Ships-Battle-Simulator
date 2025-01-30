@@ -4,7 +4,7 @@
 #include <string>
 #include <random>
 #include "game.h"
-#include "Ships.h"
+#include "ships.h"
 #include "Battlefield.h"
 
 
