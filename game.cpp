@@ -141,16 +141,19 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Corvette")
                     {
+                        ship = new corvette(symbol, "Corvette", 'A');
                         A->CorvetteSymbol = symbol;
                         A->NumberOfCorvette++;
                     }
                     else if (shipType == "Amphibious")
                     {
+                        ship = new Amphibious(symbol, "Amphibious", 'A');
                         A->AmphibiousSymbol = symbol;
                         A->NumberOfAmphibious++;
                     }
                     else if (shipType == "SuperShip")
                     {
+                        ship = new SuperShip(symbol, "SuperShip", 'A');
                         A->SuperShipSymbol = symbol;
                         A->NumberOfSuperShip++;
                     }
@@ -209,16 +212,19 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Corvette")
                     {
+                        ship = new corvette(symbol, "Corvette", 'B');
                         B->CorvetteSymbol = symbol;
                         B->NumberOfCorvette++;
                     }
                     else if (shipType == "Amphibious")
                     {
+                        ship = new Amphibious(symbol, "Amphibious", 'B');
                         B->AmphibiousSymbol = symbol;
                         B->NumberOfAmphibious++;
                     }
                     else if (shipType == "SuperShip")
                     {
+                        ship = new SuperShip(symbol, "SuperShip", 'A');
                         B->SuperShipSymbol = symbol;
                         B->NumberOfSuperShip++;
                     }
@@ -374,7 +380,7 @@ void game::respawn()
             break;
         }
     }
-    std::cout << "At least two ships respawned \n";
+    // std::cout << "At least two ships respawned \n";
 }
 
 void game::removeDeadShipFromTeam()

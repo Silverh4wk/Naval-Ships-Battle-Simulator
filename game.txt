@@ -1,14 +1,16 @@
 ------------------------------
-iterations 11
+iterations 25
 width 7
 height 7
 Team A 1
-Frigate @ 3
+Frigate @ 10
 Team B 1
-Frigate & 3
+Frigate & 13
 
 
-0 0 0 0 0 0 0
+
+
+0 0 1 0 1 0 0
 1 0 0 0 1 0 1
 1 0 0 0 1 0 1 
 0 0 0 0 0 0 0

@@ -25,6 +25,8 @@ private:
     intelligence intel;
 
 public:
+    bool wasOnIsland = false; // Store last known position of island
+    char lastTerrain ; // Store last known terrain
     bool isInDeathQueue = false;
 
     Ship(char shipSymbol, std::string type, char teamSymbol);
@@ -120,9 +122,9 @@ private:
 public:
     BattleShip(char shipSymbol, std::string type, char teamSymbol);
 
-    void move(char **gr, int rows, int cols) override;
+    virtual void move(char **gr, int rows, int cols) override;
 
-    void look(char **gr, int rows, int cols) override;
+    virtual void look(char **gr, int rows, int cols) override;
 
     void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
     void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
@@ -184,10 +186,8 @@ class Frigate : public ShootingShip
 {
 private:
     int SHIPSDESTROYED = 0;
-    int clock = 0;
     list<char> destroyedShips;
-    bool canDestroy = false;
-
+    int clock = 0; 
 public:
     Frigate(char shipSymbol, std::string type, char teamSymbol);
 
@@ -206,9 +206,17 @@ cant move, shoot at random neighbour cells
 class corvette : public ShootingShip
 {
 private:
-    /* data */
+    int SHIPSDESTROYED = 0;
+    int clock = 0; 
+    list<char> destroyedShips;
 public:
-    corvette(/* args */);
+    corvette(char shipSymbol, std::string type, char teamSymbol);
+
+    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
+
+    static corvette* createFrom(Ship* source);
+
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield) override;
 };
 
 /*
@@ -223,9 +231,17 @@ class Amphibious : public BattleShip
 {
 private:
     int SHIPSDESTROYED = 0;
-
+    list<char> destroyedShips;
+    
+    
 public:
-    Amphibious(/* args */);
+    Amphibious(char shipSymbol, std::string type, char teamSymbol);
+
+    void move(char **gr, int rows, int cols) override;
+
+    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield)override; 
+   
 };
 /*
 --------------------------------------------------------------------
@@ -235,13 +251,19 @@ it can do everything
 shoots randomly at 3 locations in the same turn
 --------------------------------------------------------------------
 */
-class SuperShip
+class SuperShip : public cruiser, public ShootingShip
 {
 private:
-    /* data */
+    int SHIPSDESTROYED = 0;
+    list<char> destroyedShips;
 public:
-    SuperShip(/* args */);
-    ~SuperShip();
+    SuperShip(char shipSymbol, std::string type, char teamSymbol);
+
+    void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
+
+    void actions(char **gr, int rows, int cols, Battlefield &battlefield)override; 
+
+    static SuperShip* createFrom(Ship* source);
 };
 
 // extra marks
