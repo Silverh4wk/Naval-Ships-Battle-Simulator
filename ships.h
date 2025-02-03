@@ -26,7 +26,7 @@ private:
 
 public:
     bool wasOnIsland = false; // Store last known position of island
-    bool getWasOnIsland() const;
+    virtual bool getWasOnIsland() const;
    
     bool isInDeathQueue = false;
 
@@ -75,7 +75,7 @@ class MovingShip : virtual public Ship
 {
 private:
 public:
-    virtual void move(char **gr, int rows, int cols) = 0;
+    virtual void move(char **gr, int rows, int cols, Battlefield &battlefield) = 0;
 };
 
 class ShootingShip : virtual public Ship
@@ -123,7 +123,7 @@ private:
 public:
     BattleShip(char shipSymbol, std::string type, char teamSymbol);
 
-    virtual void move(char **gr, int rows, int cols) override;
+    virtual void move(char **gr, int rows, int cols, Battlefield &battlefield) override;
 
     virtual void look(char **gr, int rows, int cols) override;
 
@@ -233,12 +233,10 @@ class Amphibious : public BattleShip
 private:
     int SHIPSDESTROYED = 0;
     list<char> destroyedShips;
-    
-    
 public:
     Amphibious(char shipSymbol, std::string type, char teamSymbol);
 
-    void move(char **gr, int rows, int cols) override;
+    void move(char **gr, int rows, int cols, Battlefield &battlefield) override;
 
     void shoot(char **gr, int rows, int cols, Battlefield &battlefield) override;
     void actions(char **gr, int rows, int cols, Battlefield &battlefield)override; 

@@ -17,17 +17,29 @@ void Battlefield::initializeGrid()
 Battlefield::Battlefield(char **gr, int w, int h) : width(w), height(h)
 {
     grid = gr;
+    terrain = new char *[height];
     for (int i = 0; i < height; ++i)
+    {
         grid[i] = gr[i];
+        terrain[i] = new char[width];
+        for (int j = 0; j < width; ++j)
+            terrain[i][j] = gr[i][j];
+    }
     **grid = **gr;
     gr = nullptr;
 }
 
+char Battlefield::getTerrainAt(int y, int x) const{ return terrain[y][x]; }
+
 Battlefield::~Battlefield()
 {
     for (int i = 0; i < height; ++i)
+    {
         delete[] grid[i];
+        delete[] terrain[i];
+    }
     delete[] grid;
+    delete[] terrain;
     std::cout << "battlefield deleted\n";
 }
 

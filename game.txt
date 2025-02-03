@@ -3,7 +3,7 @@ iterations 150
 width 5
 height 5
 Team A 1
-Corvette - 3
+SuperShip - 3
 Team B 1
 SuperShip ~ 3
 

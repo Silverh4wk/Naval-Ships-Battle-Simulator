@@ -10,7 +10,7 @@ private:
     char **grid;
     void initializeGrid();
     list<Ship *> ships;
-
+    char **terrain;
 public:
     list<Ship *> &getShips()
     {
@@ -24,7 +24,7 @@ public:
     void placeShip(Ship *ship);
     void hardPlaceShip(Ship *ship, int x, int y);
     void replaceShip(Ship* oldShip, Ship* newShip);
-
+    char getTerrainAt(int y, int x) const;
 
     int getWidth() const;
     int getHeight() const;
