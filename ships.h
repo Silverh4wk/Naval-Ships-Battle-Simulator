@@ -26,7 +26,8 @@ private:
 
 public:
     bool wasOnIsland = false; // Store last known position of island
-    char lastTerrain ; // Store last known terrain
+    bool getWasOnIsland() const;
+   
     bool isInDeathQueue = false;
 
     Ship(char shipSymbol, std::string type, char teamSymbol);

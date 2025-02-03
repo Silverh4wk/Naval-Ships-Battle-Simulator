@@ -224,7 +224,7 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "SuperShip")
                     {
-                        ship = new SuperShip(symbol, "SuperShip", 'A');
+                        ship = new SuperShip(symbol, "SuperShip", 'B');
                         B->SuperShipSymbol = symbol;
                         B->NumberOfSuperShip++;
                     }
@@ -390,9 +390,9 @@ void game::removeDeadShipFromTeam()
         if (A->ships.getNode(i)->isDestroyed())
         {
             Ship *deadShip = A->ships.getNode(i);
-            std::cout << "Ship of type " << A->ships.getNode(i)->getType() << " is getting removed from the game.." << "\n";
-            A->ships.deleteNodeAtIndex(i);
-            delete deadShip;
+                 std::cout << "Ship of type " << A->ships.getNode(i)->getType() << " is getting removed from the game.." << "\n";
+                A->ships.deleteNodeAtIndex(i);
+                delete deadShip;
         }
     }
 
@@ -402,8 +402,8 @@ void game::removeDeadShipFromTeam()
         {
             Ship *deadShip = B->ships.getNode(i);
             std::cout << "Ship of type " << B->ships.getNode(i)->getType() << " is getting removed from the game.." << "\n";
-            B->ships.deleteNodeAtIndex(i);
-            delete deadShip;
+                    B->ships.deleteNodeAtIndex(i);
+                    delete deadShip;
+            }
         }
     }
-}
