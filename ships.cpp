@@ -128,10 +128,10 @@ char Ship::getSymbol() const
     return shipSymbol;
 }
 
-bool Ship::getWasOnIsland() const
-{
-    return wasOnIsland ;
-}
+// bool Ship::getWasOnIsland() const
+// {
+//     return wasOnIsland ;
+// }
 char Ship::getTeamSymbol() const { return teamSymbol; }
 int Ship::getShipPositionX() const { return shipPositionX; }
 
@@ -240,7 +240,9 @@ void BattleShip::move(char **gr, int rows, int cols,Battlefield &battlefield)
         // clear current position
         // update position
         // update grid
-        gr[getShipPositionY()][getShipPositionX()] = '0';
+        int oldX = getShipPositionX();
+        int oldY = getShipPositionY();
+        gr[oldY][oldX] = battlefield.getTerrainAt(oldY,oldX) ;
         setShipPosition(newX, newY);
         gr[newY][newX] = getSymbol();
         std::cout << "battleship " << getSymbol() << " moving " << directionNames[chance] << "\n";
@@ -318,7 +320,7 @@ void BattleShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield)
                 {
                     std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
                     enemyShip->reduceLives(battlefield);
-                    gr[targetY][targetX] = '0'; // Clear the grid
+                    gr[targetY][targetX] = battlefield.getTerrainAt(targetY,targetX) ;  // Clear the grid
                     std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->isDestroyed() << "\n";
                     if (enemyShip->isDestroyed() == true) // If the ship is destroyed
                     {
@@ -406,7 +408,9 @@ void cruiser::ram(char **gr, int rows, int cols, Battlefield &battlefield)
                     if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
                     {
                         enemyShip->reduceLives(battlefield);
-                        gr[this->getShipPositionY()][this->getShipPositionX()] = '0'; // Set current ship position to 0
+                        int oldx = this->getShipPositionX();
+                        int oldy = this->getShipPositionY();
+                        gr[oldy][oldx] = battlefield.getTerrainAt(oldy,oldx) ; // Set current ship position to 0
                         gr[ny][nx] = this->getSymbol();                               // Move cruiser to new position
                         this->setShipPosition(nx, ny);
                         std::cout << "Enemy ship symbol: " << enemyShip->getSymbol()
@@ -447,13 +451,14 @@ void cruiser::ram(char **gr, int rows, int cols, Battlefield &battlefield)
         {
             ny = this->getShipPositionY() + uniform_dist(r1);
             nx = this->getShipPositionX() + uniform_dist(r1);
-
+            int oldx = this->getShipPositionX();
+            int oldy = this->getShipPositionY();
             // Check if the new position is within bounds
             if (ny >= 0 && ny < rows && nx >= 0 && nx < cols)
             {
                 if (gr[ny][nx] == '0')
                 {
-                    gr[this->getShipPositionY()][this->getShipPositionX()] = '0';
+                    gr[oldy][oldx] = battlefield.getTerrainAt(oldy,oldx) ; // Set current ship position to 0
                     gr[ny][nx] = this->getSymbol();
                     this->setShipPosition(nx, ny);
                     std::cout << "No enemy found. Moved to random position (" << ny << ", " << nx << ").\n";
@@ -707,6 +712,8 @@ void Amphibious::move(char **gr, int rows, int cols, Battlefield &battlefield)
     int chance = uniform_dist(r1);
     int newX = 0;
     int newY = 0;
+    int oldX = getShipPositionX();
+    int oldY = getShipPositionY();
     // 1 in 4 chance to move in a random direction
     
     newX = getShipPositionX() + directions[chance][0];
@@ -717,7 +724,7 @@ void Amphibious::move(char **gr, int rows, int cols, Battlefield &battlefield)
 
         setShipPosition(newX, newY);
         gr[newY][newX] = getSymbol();
-        gr[getShipPositionY()][getShipPositionX()] = battlefield.getTerrainAt(getShipPositionY(),getShipPositionX()); // Clear the old position
+        gr[oldY][oldX] = battlefield.getTerrainAt(oldY,oldX); // Clear the old position
    
         std::cout << "Amphibious " << getSymbol() << " moving " << directionNames[chance] << "\n";
     }

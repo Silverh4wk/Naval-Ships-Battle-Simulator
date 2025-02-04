@@ -25,8 +25,8 @@ private:
     intelligence intel;
 
 public:
-    bool wasOnIsland = false; // Store last known position of island
-    virtual bool getWasOnIsland() const;
+    // bool wasOnIsland = false; // Store last known position of island
+    // virtual bool getWasOnIsland() const;
    
     bool isInDeathQueue = false;
 
