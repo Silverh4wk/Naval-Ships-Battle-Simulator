@@ -1,10 +1,10 @@
 # Makefile for warship project
 
 # Compiler
-CC = g++ -std=c++17
+CC = g++ -std=c++17 
 
 # Compiler flags
-CFLAGS = -Wall -g 
+CFLAGS =  -g  
 
 # Executable name
 TARGET = warship

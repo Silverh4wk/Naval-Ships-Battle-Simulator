@@ -1,12 +1,25 @@
+/**********|**********|**********|
+Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Course: Object Oriented Programming
+Trimester: 2410??
+Name: Hazim Elamin Mohamed Ali musa
+ID: 241UC2400P
+Lecture Section: TC2L
+Tutorial Section: TT7L
+Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
+Phone: +60-111-871-9811
+**********|**********|**********/
 #pragma once
 #include <iostream>
+#include <stdexcept>
+
 // tracking of what it can do so far:
-// remonder to add a catch for underflow for pop_front
+// reminder: add a catch for underflow for pop_front
 // Double linked list
-// 1. add to next - add a node to the end of the list, if the list is empty, it will be the first node
+// 1. add to end - add a node to the end of the list, if the list is empty, it will be the first node
 // 2. push front - add a node to the front of the list, if the list is empty, it will be the first node
-// 3. forward print - print the list from the prev to the next
-// 4. reverse print - print the list from the next to the prev
+// 3. forward print - print the list from beginning to end
+// 4. reverse print - print the list from end to beginning
 // 5. pop_front - delete the first node in the list
 // 6. delete node at index - delete the node at the index provided
 // 7. get node at index - get the node at the index provided
@@ -16,78 +29,81 @@
 // 11. copy constructor - copy the list
 // 12. copy assignment operator - copy the list
 // 13. destructor - delete the list
-// 14. enque - add a node to the end of the list
+// 14. enqueue - add a node to the end of the list
 // 15. dequeue - delete the first node in the list
 // 16. front - get the data of the first node in the list
 // 17. back - get the data of the last node in the list
-// need to add these stuff later
-// //           copy assignment operator - copy the list
-//              move constructor - move the list
-//              move assignment operator - move the list
+// need to add these later(remember to update what it does since multiple refactors and fixes):
+//     move constructor - move the list
+//     move assignment operator - move the list
 
-template <typename t>
+template <typename T>
 class list {
 public:
-    t data;
-    list *head;    // Pointer to the first item in the list
-    list *next;    // Pointer to the next item in the list
-    list *lastptr; // Pointer to the last item in the list
-    list *first;   // Pointer to the first item in the list
+    // Node structure (each node is an instance of list<T>)
+    T data;
+    list* prev; // Pointer to the previous item in the list
+    list* next; // Pointer to the next item in the list
+
+    // Container pointers and counter
+    list* head;   // Pointer to the first node (when this is acting as container)
+    list* tail;   // Pointer to the last node (when this is acting as container)
     int count;
 
+    // Constructors/Destructor and assignment operators
     list();
-    list(t data);
-    list(const list &other);
-    list &operator=(const list &other);
-    list(list &&other);
-    list &operator=(list &&n);
-    
-    void push_front(t data);
-    void push_back(t data);
+    list(T data);
+    list(const list& other);
+    list& operator=(const list& other);
+    list(list&& other);
+    list& operator=(list&& other);
+    ~list();
+
+    // Methods for list manipulation
+    void insertNodeAtIndex(int index, T data);
+    void push_front(T data);
+    void push_back(T data);
     void pop_front();
     void deleteNodeAtIndex(int index);
-    t getNode(int index);
-    void deleteNode(list *node);
-    
+    T getNode(int index);
+    void deleteNode(list* node);
+
     // Queue operations
-    void enqueue(t data);
+    void enqueue(T data);
     void dequeue();
-    t front();
-    t back();
-    
+    T front();
+    T back();
+
     void clearList();
     void forwardPrint();
     void reversePrint();
     int getSize();
     bool empty();
-    
-    ~list();
 };
 
+// ================================
+// Implementation
+// ================================
 
-
-
-
-
-
-// Default constructor
-template <typename t>
-list<t>::list() : head(nullptr), next(nullptr), lastptr(nullptr), first(nullptr), count(0) {}
-
-// Constructor with data
-template <typename t>
-list<t>::list(t data) : data(data), head(nullptr), next(nullptr), lastptr(this), first(this), count(1) {
+// Default constructor for an empty container
+template <typename T>
+list<T>::list() : prev(nullptr), next(nullptr), head(nullptr), tail(nullptr),
+count(0) {
 }
 
-// Copy constructor
-template <typename t>
-list<t>::list(const list &other) {
-    count = 0;
-    head = nullptr;
-    lastptr = nullptr;
-    first = nullptr;
+// Constructor to create a new node with data.
+// This constructor is used by the push methods when creating a new node.
+template <typename T>
+list<T>::list(T data)
+    : data(data), prev(nullptr), next(nullptr), head(nullptr), tail(nullptr),
+    count(1) {
+}
 
-    list *current = other.head;
+// Copy constructor (copies nodes from other list)
+template <typename T>
+list<T>::list(const list& other)
+    : head(nullptr), tail(nullptr), count(0) {
+    list* current = other.head;
     while (current != nullptr) {
         push_back(current->data);
         current = current->next;
@@ -95,11 +111,11 @@ list<t>::list(const list &other) {
 }
 
 // Copy assignment operator
-template <typename t>
-list<t> &list<t>::operator=(const list &other) {
+template <typename T>
+list<T>& list<T>::operator=(const list& other) {
     if (this != &other) {
         clearList();
-        list *current = other.head;
+        list* current = other.head;
         while (current != nullptr) {
             push_back(current->data);
             current = current->next;
@@ -109,244 +125,233 @@ list<t> &list<t>::operator=(const list &other) {
 }
 
 // Move constructor
-template <typename t>
-list<t>::list(list &&other) 
-    : head(other.head), next(other.next), lastptr(other.lastptr), first(other.first), count(other.count) {
-    other.head = nullptr; 
-    other.next = nullptr;
-    other.lastptr = nullptr;
-    other.first = nullptr;
+template <typename T>
+list<T>::list(list&& other)
+    : head(other.head), tail(other.tail), count(other.count) {
+    other.head = nullptr;
+    other.tail = nullptr;
     other.count = 0;
 }
 
 // Move assignment operator
-template <typename t>
-list<t> &list<t>::operator=(list &&n) {
-    if (this != &n) {
-        clearList(); 
+template <typename T>
+list<T>& list<T>::operator=(list&& other) {
+    if (this != &other) {
+        clearList();
+        head = other.head;
+        tail = other.tail;
+        count = other.count;
 
-        head = n.head;
-        next = n.next;
-        lastptr = n.lastptr;
-        first = n.first;
-        count = n.count;
-
-        n.head = nullptr;
-        n.next = nullptr;
-        n.lastptr = nullptr;
-        n.first = nullptr;
-        n.count = 0;
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.count = 0;
     }
     return *this;
 }
-// Push front
-template <typename t>
-void list<t>::push_front(t data) {
-    list<t> *temp = new list<t>(data);
-    temp->next = this->head;
-    temp->head = nullptr;
 
-    if (this->head != nullptr) {
-        this->head->head = temp;
-    }
-    this->head = temp;
-
-    if (count == 0) {
-        lastptr = temp; 
-    }
-    count++;
-}
-
-
-// Push back
-template <typename t>
-void list<t>::push_back(t data) {
-    list *temp = new list(data);
+// Push front: add a node to the front of the list.
+template <typename T>
+void list<T>::push_front(T data) {
+    list<T>* temp = new list<T>(data);
     if (head == nullptr) {
+        head = tail = temp;
+    }
+    else {
+        temp->next = head;
+        head->prev = temp;
         head = temp;
-        first = temp;
-        lastptr = temp;
-    } else {
-        lastptr->next = temp;
-        temp->head = lastptr;
-        lastptr = temp;
     }
     count++;
 }
 
-// Pop front
-template <typename t>
-void list<t>::pop_front() {
-    if (this->head == nullptr) {
+// Push back: add a node to the end of the list.
+template <typename T>
+void list<T>::push_back(T data) {
+    list<T>* temp = new list<T>(data);
+    if (head == nullptr) {
+        head = tail = temp;
+    }
+    else {
+        tail->next = temp;
+        temp->prev = tail;
+        tail = temp;
+    }
+    count++;
+}
+
+// Pop front: remove the node at the front of the list.
+template <typename T>
+void list<T>::pop_front() {
+    if (head == nullptr) {
         throw std::underflow_error("list is empty");
     }
-
-    list *p = this->head;
-    this->head = p->next;
-
-    if (this->head != nullptr) {
-        this->head->head = nullptr;
-    } else {
-        lastptr = nullptr; 
+    list<T>* temp = head;
+    head = head->next;
+    if (head != nullptr) {
+        head->prev = nullptr;
     }
-
-    delete p;
+    else {
+        tail = nullptr;
+    }
+    delete temp;
     count--;
 }
 
-
-// Delete node at index
-template <typename t>
-void list<t>::deleteNodeAtIndex(int index) {
-    if (index < 0 || index >= count) {
+template <typename T>
+void list<T>::insertNodeAtIndex(int index, T data) {
+    if (index < 0 || index > count) {
         throw std::out_of_range("Invalid range");
+    }
+
+    // If inserting at the front (index 0)
+    if (index == 0) {
+        push_front(data);
         return;
     }
 
-    list *p = this->head;
+    // If inserting at the end (index == count)
+    if (index == count) {
+        push_back(data);
+        return;
+    }
 
+    // Otherwise, traverse to the index and insert
+    list<T>* temp = new list<T>(data);
+    list<T>* p = head;
     for (int i = 0; i < index; i++) {
         p = p->next;
     }
 
-    if (p->head != nullptr) {
-        p->head->next = p->next;
-    } else {
-        this->head = p->next;
-        if (this->head == nullptr) {
-            first = nullptr;
-            lastptr = nullptr;
-        } else {
-            first = this->head;
-        }
-    }
+    temp->prev = p->prev;
+    temp->next = p;
+    p->prev->next = temp;
+    p->prev = temp;
 
-    if (p->next != nullptr) {
-        p->next->head = p->head;
-    } else {
-        lastptr = p->head;
-    }
-
-    delete p;
-    count--;
+    count++;
 }
 
-
-// Get node at index
-template <typename t>
-t list<t>::getNode(int index) {
+// Delete node at a given index.
+template <typename T>
+void list<T>::deleteNodeAtIndex(int index) {
     if (index < 0 || index >= count) {
         throw std::out_of_range("Invalid range");
     }
+    list<T>* p = head;
+    for (int i = 0; i < index; i++) {
+        p = p->next;
+    }
+    deleteNode(p);
+}
 
-    list *p = this->head;
+// Returns the data at the node located at the given index.
+template <typename T>
+T list<T>::getNode(int index) {
+    if (index < 0 || index >= count) {
+        throw std::out_of_range("Invalid range");
+    }
+    list<T>* p = head;
     for (int i = 0; i < index; i++) {
         p = p->next;
     }
     return p->data;
 }
 
-// Delete node
-template <typename t>
-void list<t>::deleteNode(list *node) {
-    if (node->head != nullptr) {
-        node->head->next = node->next;
-    } else {
-        head = node->next; 
-    }
+// Delete a given node from the list.
+template <typename T>
+void list<T>::deleteNode(list<T>* node) {
+    if (node == nullptr)
+        return;
 
-    if (node->next != nullptr) {
-        node->next->head = node->head;
-    } else {
-        lastptr = node->head; 
-    }
+    if (node->prev != nullptr)
+        node->prev->next = node->next;
+    else
+        head = node->next; 
+
+    if (node->next != nullptr)
+        node->next->prev = node->prev;
+    else
+        tail = node->prev; 
 
     delete node;
     count--;
 }
 
-// Enqueue
-template <typename t>
-void list<t>::enqueue(t data) {
+// Queue operations - simply use list operations.
+template <typename T>
+void list<T>::enqueue(T data) {
     push_back(data);
 }
 
-// Dequeue
-template <typename t>
-void list<t>::dequeue() {
+template <typename T>
+void list<T>::dequeue() {
     pop_front();
 }
 
-// Front
-template <typename t>
-t list<t>::front() {
-    if (this->head == nullptr) {
+template <typename T>
+T list<T>::front() {
+    if (head == nullptr) {
         throw std::out_of_range("Queue is empty");
     }
-    return this->head->data;
+    return head->data;
 }
 
-// Back
-template <typename t>
-t list<t>::back() {
-    if (lastptr == nullptr) {
+template <typename T>
+T list<T>::back() {
+    if (tail == nullptr) {
         throw std::out_of_range("Queue is empty");
     }
-    return lastptr->data;
+    return tail->data;
 }
 
-/// Clear list
-template <typename t>
-void list<t>::clearList() {
-    list *p = this->head;
-    while (p != nullptr) {
-        list *temp = p; 
-        p = p->next;    
-        delete temp;    
+// Clear the entire list.
+template <typename T>
+void list<T>::clearList() {
+    list<T>* current = head;
+    while (current != nullptr) {
+        list<T>* nextNode = current->next;
+        delete current;
+        current = nextNode;
     }
-    this->head = nullptr; 
-    this->lastptr = nullptr; 
-    this->count = 0; 
+    head = tail = nullptr;
+    count = 0;
 }
 
-// Forward print
-template <typename t>
-void list<t>::forwardPrint() {
-    list *p = this->head;
-
+// Print list from beginning to end.
+template <typename T>
+void list<T>::forwardPrint() {
+    list<T>* p = head;
     while (p != nullptr) {
         std::cout << p->data << ", ";
         p = p->next;
     }
-    std::cout << " " << std::endl;
+    std::cout << std::endl;
 }
 
-// Reverse print
-template <typename t>
-void list<t>::reversePrint() {
-    list *p = lastptr;
-
+// Print list from end to beginning.
+template <typename T>
+void list<T>::reversePrint() {
+    list<T>* p = tail;
     while (p != nullptr) {
         std::cout << p->data << ", ";
-        p = p->head;
+        p = p->prev;
     }
-    std::cout << " " << std::endl;
+    std::cout << std::endl;
 }
 
-// Get size
-template <typename t>
-int list<t>::getSize() { 
-    return count; 
+// Return the number of nodes in the list.
+template <typename T>
+int list<T>::getSize() {
+    return count;
 }
 
-// Check if empty
-template <typename t>
-bool list<t>::empty() {
-    return count <= 0;
+// Check if the list is empty.
+template <typename T>
+bool list<T>::empty() {
+    return count == 0;
 }
 
-// Destructor // still need fixing
-template <typename t>
-list<t>::~list() {
-    //clearList();
+// Destructor for the list container.
+template <typename T>
+list<T>::~list() {
+    clearList();
 }

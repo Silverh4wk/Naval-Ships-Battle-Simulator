@@ -1,55 +1,68 @@
+/**********|**********|**********|
+Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Course: Object Oriented Programming
+Trimester: 2410??
+Name: Hazim Elamin Mohamed Ali musa
+ID: 241UC2400P
+Lecture Section: TC2L
+Tutorial Section: TT7L
+Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
+Phone: +60-111-871-9811
+**********|**********|**********/
 #include <iostream>
 #include <random>
 #include "Battlefield.h"
 #include "ships.h"
 #include "helpers.h"
 
-void Battlefield::initializeGrid()
-{
-    for (int i = 0; i < height; ++i)
-        for (int j = 0; j < width; ++j)
-            grid[i][j] = '0';
-}
+
 
 // my thoughts just for tracking
 // will set the grid in battelfield = to the grid from game
 // then after copying everything, it will set gr(grid in game) to nullptr;
-Battlefield::Battlefield(char **gr, int w, int h) : width(w), height(h)
+Battlefield::Battlefield(char** gr, int w, int h) : width(w), Height(h), grid(gr)
 {
-    grid = gr;
-    terrain = new char *[height];
-    for (int i = 0; i < height; ++i)
+    terrain = new char* [Height];
+    for (int i = 0; i < Height; ++i)
     {
-        grid[i] = gr[i];
         terrain[i] = new char[width];
         for (int j = 0; j < width; ++j)
             terrain[i][j] = gr[i][j];
     }
-    **grid = **gr;
-    gr = nullptr;
 }
-
-char Battlefield::getTerrainAt(int y, int x) const{ return terrain[y][x]; }
+char Battlefield::getTerrainAt(int y, int x) const { return terrain[y][x]; }
 
 Battlefield::~Battlefield()
 {
-    for (int i = 0; i < height; ++i)
-    {
-        delete[] grid[i];
-        delete[] terrain[i];
+   
+
+    // Delete the terrain
+    if (terrain) {
+        for (int i = 0; i < Height; ++i) {
+            delete[] terrain[i];
+        }
+        delete[] terrain;  
+        terrain = nullptr;
     }
-    delete[] grid;
-    delete[] terrain;
     std::cout << "battlefield deleted\n";
+    
+    for (int i = 0; i<ships.getSize() ; i++)
+    {
+        ships.deleteNodeAtIndex(i);
+    }
+    for (int i = 0; i < shipGraveYard.getSize(); i++)
+    {
+        shipGraveYard.deleteNodeAtIndex(i);
+    }
 }
 
 // To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;
-void Battlefield::placeShip(Ship *ship)
+void Battlefield::placeShip(Ship* ship)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> disX(0, width - 1);
-    std::uniform_int_distribution<> disY(0, height - 1);
+    std::uniform_int_distribution<> disY(0, Height - 1);
 
     int x, y;
     do
@@ -64,26 +77,26 @@ void Battlefield::placeShip(Ship *ship)
     grid[y][x] = ship->getSymbol();
 }
 
-void Battlefield::hardPlaceShip(Ship *ship, int x, int y)
+void Battlefield::hardPlaceShip(Ship* ship, int x, int y)
 {
     ship->setShipPosition(x, y);
     ships.push_back(ship);
     std::cout << "ship of type " << ship->getType() << " is placed at Y:X " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
-void Battlefield::display() const
+void Battlefield::display(std::ostream& os) const
 {
-    for (int i = 0; i < height; ++i)
+    for (int i = 0; i < Height; ++i)
     {
         for (int j = 0; j < width; ++j)
-            std::cout << grid[i][j] << ' ';
-        std::cout << std::endl;
+            os << grid[i][j] << ' ';
+        os<< "\n";
     }
 }
 
-Ship *Battlefield::getShipAt(int x, int y)
+Ship* Battlefield::getShipAt(int x, int y)const
 {
-    list<Ship *> *p = ships.head;
+    list<Ship*>* p = ships.head;
     while (p != nullptr)
     {
         if (p->data->getShipPositionX() == x && p->data->getShipPositionY() == y)
@@ -96,37 +109,47 @@ Ship *Battlefield::getShipAt(int x, int y)
     return nullptr;
 }
 int Battlefield::getWidth() const { return width; }
-int Battlefield::getHeight() const { return height; }
-char **Battlefield::getGrid() const { return grid; }
+int Battlefield::getHeight() const { return Height; }
+char** Battlefield::getGrid() const { return grid; }
 
 // upgrade system
 //  Remove old ship from the battlefield
-//  then set the new shipâ€™s position
+//  then set the new ship’s position
 //  Replace it in the ship list
 //  Add the new ship to the battlefield in place of the older one .... hope this works IT DOESNT
-void Battlefield::replaceShip(Ship *oldShip, Ship *newShip)
-{
+void Battlefield::replaceShip(Ship* oldShip, Ship* newShip, game& gameManager) {
+    // 1. Get team from game manager
+    Team* team = gameManager.getTeam(oldShip->getTeamSymbol());
+
+    // 2. Update the team roster
+    if (team) {
+        // Remove the old ship from team
+        for (int i = 0; i < team->ships.getSize(); ++i) {
+            if (team->ships.getNode(i) == oldShip) {
+                team->ships.deleteNodeAtIndex(i);
+                break;
+            }
+        }
+
+        // Add new ship to team
+        team->ships.push_back(newShip);
+    }
+
+    // 3. Update the battlefield state
     int x = oldShip->getShipPositionX();
     int y = oldShip->getShipPositionY();
-    //newShip = std::move(oldShip);
-    std::cout << oldShip->getType() << " upgraded to " << newShip->getType() << " at (" << y << ", " << x << ")\n";
-    newShip->setShipPosition(x, y);
+    grid[y][x] = newShip->getSymbol();
 
-    for (int i = 0; i < ships.getSize(); ++i)
-    {
-        if (ships.getNode(i) == oldShip)
-        {
-            std::cout << "ship of type " << ships.getNode(i)->getType() << " was removed \n";
-            std::cin.get();
+    // 4. Update global ship list
+    for (int i = 0; i < ships.getSize(); ++i) {
+        if (ships.getNode(i) == oldShip) {
             ships.deleteNodeAtIndex(i);
+            ships.insertNodeAtIndex(i, newShip);
             break;
         }
     }
 
-    grid[y][x] = newShip->getSymbol();
-    ships.push_back(newShip);
+    // 5. Cleanup
+    std::cout << "Ship upgraded in team " << oldShip->getTeamSymbol() << "\n";
 
-    std::cout << oldShip->getType() << " upgraded to " << newShip->getType() << " at (" << y << ", " << x << ")\n";
-    std::cout << "Upgrade complete: " << newShip->getType() << " now at (" << y << ", " << x << ")\n";
-    delete oldShip;
 }
