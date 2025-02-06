@@ -13,13 +13,14 @@ Phone: +60-111-871-9811
 #include "game.h"
 #include "ships.h"
 #include "Amphibious.h"
-#include "Battleship.h"
+#include "BattleShip.h"
 #include "Corvette.h"
 #include "Cruiser.h"
 #include "Destroyer.h"
 #include "Frigate.h"
-#include "Supership.h"
+#include "SuperShip.h"
 #include "Battlefield.h"
+#include "Suicidal.h"
 #include <fstream>
 #include <sstream>
 #include <random>
@@ -199,7 +200,12 @@ bool game::gameInit(std::string&& filename)
                         A->SuperShipSymbol = symbol;
                         A->NumberOfSuperShip++;
                     }
-
+                    else if (shipType == "Suicidal")
+                    {
+                       ship = new Suicidal(symbol, "Suicidal", 'A');
+                        A->SuicidalSymbol = symbol;
+                        A->NumberOfSuicidal++;
+                    }
                     if (ship)
                     {
                         A->ships.push_back(ship);
@@ -271,7 +277,12 @@ bool game::gameInit(std::string&& filename)
                         B->SuperShipSymbol = symbol;
                         B->NumberOfSuperShip++;
                     }
-
+                    else if (shipType == "Suicidal")
+                    {
+                       ship = new Suicidal(symbol, "Suicidal", 'B');
+                        A->SuicidalSymbol = symbol;
+                        A->NumberOfSuicidal++;
+                    }
                     if (ship)
                     {
                         B->ships.push_back(ship);
