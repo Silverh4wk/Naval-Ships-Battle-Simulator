@@ -13,7 +13,7 @@ Phone: +60-111-871-9811
 #define SHIP_H
 #include <string>
 #include "helpers.h"  
-#include "Game.h"
+#include "game.h"
 
 // Forward declaration for Battlefield
 class Battlefield;
@@ -28,10 +28,8 @@ protected:
     std::string type = "Ship";
     char teamSymbol = '0';
     char shipSymbol = '+';
-   
+    
 public:
-    // bool wasOnIsland = false; // Store last known position of island
-    // virtual bool getWasOnIsland() const;
 
     bool isInDeathQueue = false;
 
@@ -109,6 +107,15 @@ public:
         : Ship(shipSymbol, type, teamSymbol) {
     }
     virtual void ram(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) = 0;
+};
+
+class BlowShip : virtual public Ship
+{
+    public:
+    BlowShip(char shipSymbol, std::string type, char teamSymbol)
+        : Ship(shipSymbol, type, teamSymbol) {
+    }
+    virtual void BlowUp(char** gr, int rows, int cols, Battlefield& battlefield) = 0;
 };
 
 #endif  
