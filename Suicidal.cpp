@@ -61,13 +61,7 @@ void Suicidal::BlowUp(char** gr, int rows, int cols, Battlefield& battlefield)
         this->reduceLives(battlefield); // reduce its own lives
         gr[this->getShipPositionY()][this->getShipPositionX()] = battlefield.getTerrainAt(this->getShipPositionY(),this->getShipPositionX()); // Clear the grid
         std::cout << "Suicidal ship symbol: " << this->getSymbol() << " " << "is dead? = " << this->isDestroyed() << "\n";
-    }
-    if (this->isDestroyed() == true) // If the ship is destroyed
-    {
         shipsDestroyed++;
-      //  destroyedShips.push_back(this->getSymbol());
-        std::cout << this->getSymbol() << " destroyed\n";
-        std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
     }
 }
 

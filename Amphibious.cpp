@@ -99,11 +99,6 @@ void Amphibious::shoot(char **gr, int rows, int cols, Battlefield &battlefield, 
                     gr[targetY][targetX] = battlefield.getTerrainAt(targetY, targetX); // Clear the grid
                     std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->isDestroyed() << "\n";
                     shipsDestroyed++;
-                    std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
-                    if (enemyShip->isDestroyed() == true) // If the ship is destroyed
-                    {
-                       //gameEliminationTally.push_back(enemyShip->getSymbol());
-                    }
                 }
             }
             else

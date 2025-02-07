@@ -84,12 +84,6 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
                 gr[ny][nx] = this->getSymbol();                        // Update new position
                 setShipPosition(nx, ny);
                 shipsDestroyed++;
-                std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
-
-                // Check if enemy is destroyed
-                if (enemyShip->isDestroyed()) {
-                    //destroyedShips.push_back(enemyShip->getSymbol());
-                }
                 foundEnemy = true;
             }
         }

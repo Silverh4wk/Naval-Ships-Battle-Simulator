@@ -169,12 +169,6 @@ void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
                 enemyShip->reduceLives(battlefield);
                 gr[targetY][targetX] = battlefield.getTerrainAt(targetY, targetX);  // Clear the grid
                 shipsDestroyed++;  // Record the hit
-                if (enemyShip->isDestroyed() == true) // If the ship is destroyed
-                {
-                    //destroyedShips.add(enemyShip->getSymbol());
-                }
-                std::cout << enemyShip->getSymbol() << " hit\n";
-                std::cout << "Ship out of the game! Total ships taken out: " << shipsDestroyed << "\n";
             }
             else
             {
