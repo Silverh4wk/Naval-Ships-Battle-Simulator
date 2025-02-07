@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: game.cpp / game.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -36,6 +36,11 @@ public:
     char AmphibiousSymbol ;
     int NumberOfSuperShip = 0;
     char SuperShipSymbol ;
+    char SuicidalSymbol;
+    int NumberOfSuicidal= 0;
+    ~Team() { std::cout << "team is getting deleted" << std::endl; 
+ 
+    };
 };
 
 class game
@@ -60,7 +65,7 @@ public:
     void actionQueue();
     void fillQueue();
     void respawn();
-    void removeDeadShipFromTeam();// need more working and fixes, fixed.
+    void removeDeadShipFromTeam();// need more working and fixes,.... fixed.
     Team* getTeam(char teamSymbol) const;
     void removeFromQueues(Ship* ship);
     friend std::ostream& operator<<(std::ostream& os, const game& g);

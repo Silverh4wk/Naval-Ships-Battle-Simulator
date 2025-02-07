@@ -1,11 +1,14 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: main.cpp / main.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
+Name: RIME HAMZA MOHAMMED
 ID: 241UC2400P
 Lecture Section: TC2L
 Tutorial Section: TT7L
+Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
+Phone: +60-111-871-9811
 Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
 Phone: +60-111-871-9811
 **********|**********|**********/

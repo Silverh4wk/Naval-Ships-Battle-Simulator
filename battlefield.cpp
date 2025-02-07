@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Battlefield.cpp / Battlefield.h
 Course: Object Oriented Programming
 Trimester: 2410??
 Name: Hazim Elamin Mohamed Ali musa
@@ -34,26 +34,19 @@ char Battlefield::getTerrainAt(int y, int x) const { return terrain[y][x]; }
 
 Battlefield::~Battlefield()
 {
-   
+
 
     // Delete the terrain
-    if (terrain) {
+   if (terrain) {
+        std::cout << "terrain is getting deleted \n";
         for (int i = 0; i < Height; ++i) {
             delete[] terrain[i];
         }
-        delete[] terrain;  
+        delete[] terrain;
         terrain = nullptr;
     }
-    std::cout << "battlefield deleted\n";
-    
-    for (int i = 0; i<ships.getSize() ; i++)
-    {
-        ships.deleteNodeAtIndex(i);
-    }
-    for (int i = 0; i < shipGraveYard.getSize(); i++)
-    {
-        shipGraveYard.deleteNodeAtIndex(i);
-    }
+
+        std::cout << "battlefield dis\n";
 }
 
 // To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;
@@ -114,18 +107,19 @@ char** Battlefield::getGrid() const { return grid; }
 
 // upgrade system
 //  Remove old ship from the battlefield
-//  then set the new ship’s position
+//  then set the new shipâ€™s position
 //  Replace it in the ship list
 //  Add the new ship to the battlefield in place of the older one .... hope this works IT DOESNT
 void Battlefield::replaceShip(Ship* oldShip, Ship* newShip, game& gameManager) {
     // 1. Get team from game manager
-    Team* team = gameManager.getTeam(oldShip->getTeamSymbol());
+    Team* team = gameManager.getTeam(newShip->getTeamSymbol());
 
     // 2. Update the team roster
     if (team) {
         // Remove the old ship from team
         for (int i = 0; i < team->ships.getSize(); ++i) {
             if (team->ships.getNode(i) == oldShip) {
+                std::cout << "old ship is getting removed \n";
                 team->ships.deleteNodeAtIndex(i);
                 break;
             }
@@ -133,6 +127,7 @@ void Battlefield::replaceShip(Ship* oldShip, Ship* newShip, game& gameManager) {
 
         // Add new ship to team
         team->ships.push_back(newShip);
+        std::cout<<"added new ship to team" << newShip->getTeamSymbol() << " " << newShip->getType() << "\n";
     }
 
     // 3. Update the battlefield state
@@ -144,12 +139,12 @@ void Battlefield::replaceShip(Ship* oldShip, Ship* newShip, game& gameManager) {
     for (int i = 0; i < ships.getSize(); ++i) {
         if (ships.getNode(i) == oldShip) {
             ships.deleteNodeAtIndex(i);
+            delete oldShip;
             ships.insertNodeAtIndex(i, newShip);
             break;
         }
     }
 
-    // 5. Cleanup
-    std::cout << "Ship upgraded in team " << oldShip->getTeamSymbol() << "\n";
+    std::cout << "Ship upgraded in team " << newShip->getTeamSymbol() << "\n";
 
 }

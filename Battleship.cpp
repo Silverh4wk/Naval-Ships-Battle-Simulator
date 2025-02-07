@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Battleship.cpp / Battleship.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -37,50 +37,50 @@ BattleShip::BattleShip(char shipSymbol, std::string type, char teamSymbol)
 {
 }
 
-BattleShip&  BattleShip::operator=(BattleShip&& other) noexcept {
+BattleShip::BattleShip(BattleShip&& other) noexcept
+    : Ship(other.getSymbol(), other.getType(), other.getTeamSymbol()),
+    MovingShip(std::move(other)),
+    ShootingShip(std::move(other)),
+    SeeingRobot(std::move(other)) 
+{
+    shipsDestroyed = other.shipsDestroyed;
+
+}
+
+BattleShip& BattleShip::operator=(BattleShip&& other) noexcept {
     if (this != &other) {
-        
         Ship::operator=(std::move(other));
+        MovingShip::operator=(std::move(other));
+        ShootingShip::operator=(std::move(other));
+        SeeingRobot::operator=(std::move(other));
     }
     return *this;
 }
 
-void BattleShip::moveTo(Ship& target) {
-    if (auto* dest = dynamic_cast<BattleShip*>(&target)) {
-        *dest = std::move(*this); 
-    }
-}
 
+
+BattleShip::~BattleShip() {
+    std::cout << getType() << " was deleted\n";
+}
 
 void BattleShip::move(char** gr, int rows, int cols, Battlefield& battlefield)
 {
+    std::cout << "\n" << getSymbol() << " is deciding where to Move\n";
+    std::cout << "________________________________________\n";
+
+    // Direction vectors: up, right, down, left
     int directions[4][2] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0} };
     std::string directionNames[4] = { "up", "right", "down", "left" };
+
     RANDOM_DEVICE
         std::uniform_int_distribution<int> uniform_dist(0, 3);
     int chance = uniform_dist(r1);
-    int newX = 0;
-    int newY = 0;
+
+    // Calculate new coordinates using the random direction
+    int newX = getShipPositionX() + directions[chance][0];
+    int newY = getShipPositionY() + directions[chance][1];
+
     // 1 in 4 chance to move in a random direction
-    switch (chance)
-    {
-    case 0:
-        newX = getShipPositionX() + directions[0][0];
-        newY = getShipPositionY() + directions[0][1];
-        break;
-    case 1:
-        newX = getShipPositionX() + directions[1][0];
-        newY = getShipPositionY() + directions[1][1];
-        break;
-    case 2:
-        newX = getShipPositionX() + directions[2][0];
-        newY = getShipPositionY() + directions[2][1];
-        break;
-    case 3:
-        newX = getShipPositionX() + directions[3][0];
-        newY = getShipPositionY() + directions[3][1];
-        break;
-    }
     if (newX >= 0 && newX < cols && newY >= 0 && newY < rows && gr[newY][newX] == '0')
     {
         // Valid move found
@@ -92,12 +92,12 @@ void BattleShip::move(char** gr, int rows, int cols, Battlefield& battlefield)
         gr[oldY][oldX] = battlefield.getTerrainAt(oldY, oldX);
         setShipPosition(newX, newY);
         gr[newY][newX] = getSymbol();
-        std::cout << "battleship " << getSymbol() << " moving " << directionNames[chance] << "\n";
+        std::cout << getType() << " "<< getSymbol() << " moving " << directionNames[chance] << "\n";
         return;
     }
     else
     {
-        std::cout << "battleship " << getSymbol() << " can't move " << directionNames[chance] << "\n";
+        std::cout << getSymbol() << " can't move " << directionNames[chance] << "\n";
     }
 }
 
@@ -105,6 +105,7 @@ void BattleShip::look(char** gr, int rows, int cols)
 {
     std::cout << "\n" << getSymbol() << " is looking around\n";
     std::cout << "________________________________________\n";
+
     for (int i = -1; i <= 1; ++i)
     {
         for (int j = -1; j <= 1; ++j)
@@ -134,9 +135,13 @@ void BattleShip::look(char** gr, int rows, int cols)
 
 void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
+    std::cout << "\n" << getSymbol() << " is deciding where to Shoot\n";
+    std::cout << "________________________________________\n";
     RANDOM_DEVICE
-        std::uniform_int_distribution<int> chanceX(0, cols - 1);
+
+    std::uniform_int_distribution<int> chanceX(0, cols - 1);
     std::uniform_int_distribution<int> chanceY(0, rows - 1);
+
     // remember to return to this after testing
     for (int i = 0; i < 2; ++i)
     {
@@ -147,41 +152,32 @@ void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
         std::cout << "target coordinates: (" << targetY << ", " << targetX << ")\n";
         // Check if the target is within the city block distance of 5
         // SO MANY ISSUES HERE FIX SOON, also need to understand the city block distance constraint
-        std::cout << "city block distance: " << std::abs(getShipPositionY() - targetY) <<" + " << std::abs(getShipPositionX() - targetX) << "\n";
-        std::cout << "city block distance: " << std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY)  << "\n";
+        std::cout << "city block distance: " << std::abs(getShipPositionY() - targetY)
+            << " + " << std::abs(getShipPositionX() - targetX) << "\n";
+        std::cout << "city block distance: "
+            << std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) << "\n";
 
         if (std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) <= 5)
         {
             char targetCell = gr[targetY][targetX];
             std::cout << "target cell: " << targetCell << "\n";
-            
-                Ship* enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
-                // check if its not on the same team before shooting at it
-                if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol() )
-                {
-                    std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
-                    enemyShip->reduceLives(battlefield);
-                    gr[targetY][targetX] = battlefield.getTerrainAt(targetY, targetX);  // Clear the grid
-                    shipsDestroyed++;
-                    if (enemyShip->isDestroyed() == true) // If the ship is destroyed
-                        destroyedShips.push_back(enemyShip->getSymbol());
-                        std::cout << enemyShip->getSymbol() << " destroyed\n";
-                    {
-                        enemyShip = nullptr;
-                        std::cout << "Ship out of the game! Total ships taken out: " << shipsDestroyed << "\n";
 
-                        if (shipsDestroyed >= 4)
-                        {
-                            // Upgrade Battleship to Destroyer
-                            std::cout << "Battleship upgraded to Destroyer!\n";
-                            gr[getShipPositionY()][getShipPositionX()] = '0';
-                            Destroyer* newDestroyer = new Destroyer(std::move(*this));
-                            battlefield.replaceShip(this, newDestroyer, gameManager);
-                            return; // so program doesn't use the deleted pointer or big crash happen
-                        }
-                    }
+            Ship* enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
+            // check if its not on the same team before shooting at it
+            if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
+            {
+                std::cout << "Shooting at enemy ship at (" << targetY << ", " << targetX << ")\n";
+                enemyShip->reduceLives(battlefield);
+                gr[targetY][targetX] = battlefield.getTerrainAt(targetY, targetX);  // Clear the grid
+                shipsDestroyed++;  // Record the hit
+                if (enemyShip->isDestroyed() == true) // If the ship is destroyed
+                {
+                   
+                    //destroyedShips.add(enemyShip->getSymbol());
                 }
-            
+                std::cout << enemyShip->getSymbol() << " hit\n";
+                std::cout << "Ship out of the game! Total ships taken out: " << shipsDestroyed << "\n";
+            }
             else
             {
                 std::cout << "no enemy ship found to shoot at (" << targetY << ", " << targetX << ")\n";
@@ -194,6 +190,7 @@ void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
     }
 }
 
+
 void BattleShip::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
     if (!isInDeathQueue)
@@ -201,8 +198,18 @@ void BattleShip::actions(char** gr, int rows, int cols, Battlefield& battlefield
         SHIPS_INFO;
         look(gr, rows, cols);
         move(gr, rows, cols, battlefield);
-        shoot(gr, rows, cols, battlefield,gameManager);
+       // shoot(gr, rows, cols, battlefield, gameManager);
+        if (shipsDestroyed >= 4)
+        {
+            std::cout  <<getType()<< " upgraded to Destroyer!\n";
+            gr[getShipPositionY()][getShipPositionX()] = '0';
+            Destroyer* newDestroyer = new Destroyer(std::move(*this));
+            battlefield.replaceShip(this, newDestroyer, gameManager);
+            return; // Exit to prevent further use of the replaced ship or big crash happens
+        }
     }
     else
+    {
         std::cout << getSymbol() << " is waiting to respawn\n";
+    }
 }

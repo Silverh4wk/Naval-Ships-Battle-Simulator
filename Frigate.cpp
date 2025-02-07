@@ -1,13 +1,13 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Frigate.cpp / Frigate.h
 Course: Object Oriented Programming
-Trimester: 2410??
-Name: Hazim Elamin Mohamed Ali musa
-ID: 241UC2400P
+Trimester: 2430
+Name: RIME HAMZA MOHAMMED
+ID: 241UC240Y8
 Lecture Section: TC2L
 Tutorial Section: TT7L
-Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
-Phone: +60-111-871-9811
+Email: mohammed.rime.hamza@student.mmu.edu.my
+Phone: +60-108-220-891
 **********|**********|**********/
 
 #include "Frigate.h"
@@ -15,7 +15,7 @@ Phone: +60-111-871-9811
 #include <iostream>
 #include <cmath>
 #include "Macros.h"
-
+#include"Corvette.h"
 
 
 /*
@@ -30,6 +30,24 @@ Phone: +60-111-871-9811
 Frigate::Frigate(char shipSymbol, std::string type, char teamSymbol) : 
 Ship(shipSymbol, type, teamSymbol),
 ShootingShip(shipSymbol, type, teamSymbol){}
+
+Frigate::Frigate(Frigate&& other) noexcept
+    : Ship(other.getSymbol(), other.getType(), other.getTeamSymbol()),
+    ShootingShip(other.getSymbol(), other.getType(), other.getTeamSymbol())
+{
+    shipsDestroyed = other.shipsDestroyed;
+
+}
+
+Frigate& Frigate::operator=(Frigate&& other) noexcept {
+    if (this != &other) {
+        Ship::operator=(std::move(other));
+        ShootingShip::operator=(std::move(other));
+        shipsDestroyed = other.shipsDestroyed;
+
+    }
+    return *this;
+}
 
 void Frigate::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
@@ -74,14 +92,7 @@ void Frigate::shoot(char** gr, int rows, int cols, Battlefield& battlefield, gam
                         enemyShip = nullptr;
                         std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
                     }
-                    // if (SHIPSDESTROYED >= 3)
-                    // {
-                    //     gr[this->getShipPositionY()][this->getShipPositionX()] = '0';
-                    //     std::cout << "Frigate upgraded to Corvette!\n";
-                    //     corvette *newcorvette = corvette::createFrom(this);
-                    //     battlefield.replaceShip(this, newcorvette);
-                    //     return; // so program dont use the deleted pointer or big crash happen
-                    // }
+                   
                 }
                 else
                 {
@@ -109,6 +120,12 @@ void Frigate::actions(char** gr, int rows, int cols, Battlefield& battlefield, g
         SHIPS_INFO;
         shoot(gr, rows, cols, battlefield,gameManager);
     }
+       if (shipsDestroyed >= 3) {
+           std::cout  <<getType()<< " upgraded to SuperShip!\n";
+           corvette* newcorvette = new corvette(std::move(*this));
+           battlefield.replaceShip(this, newcorvette, gameManager);
+           return;
+       }
     else
         std::cout << getSymbol() << " is waiting to respawn\n";
 }

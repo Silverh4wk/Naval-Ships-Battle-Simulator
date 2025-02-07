@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: helpers.cpp / helpers.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -33,9 +33,9 @@ Phone: +60-111-871-9811
 // 15. dequeue - delete the first node in the list
 // 16. front - get the data of the first node in the list
 // 17. back - get the data of the last node in the list
-// need to add these later(remember to update what it does since multiple refactors and fixes):
-//     move constructor - move the list
-//     move assignment operator - move the list
+// // need to add these later(remember to update what it does since multiple refactors and fixes):
+// //     move constructor - move the list
+// //     move assignment operator - move the list
 
 template <typename T>
 class list {

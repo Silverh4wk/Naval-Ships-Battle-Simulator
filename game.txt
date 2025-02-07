@@ -1,17 +1,15 @@
 ------------------------------
-iterations 45
+iterations 100
 width 5
 height 5
 Team A 1
-Amphibious # 2
+Battleship # 5
 Team B 1
-Amphibious @ 3
+Frigate @ 1
  
-
-
 1 1 1 1 1 
 1 0 0 0 1 
 1 0 0 0 1 
-1 1 1 1 1 
+1 1 0 1 1 
 1 1 1 1 1 
 --------------------------------

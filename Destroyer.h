@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Destroyer.cpp / Destroyer.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -26,21 +26,16 @@ Phone: +60-111-871-9811
 */
 class Destroyer :public BattleShip, public Cruiser
 {
-private:
-    int shipsDestroyed = 0;
 
 public:
     Destroyer(char shipSymbol, std::string type, char teamSymbol);
     //static Destroyer* createFrom(Ship* source);
-
-    virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
-
+    ~Destroyer();
+    Destroyer(Destroyer&&) noexcept;
+    Destroyer& operator=(Destroyer&& other) noexcept;
     Destroyer(Cruiser&& base) noexcept;
     Destroyer(BattleShip&& base) noexcept;
-    virtual void shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
-    virtual void ram(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
-    void setDestroyedShipsNumber(int number);
-    void upgradeToDestroyer();
+    virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 };
 
-#endif // DESTROYER_H
+#endif 

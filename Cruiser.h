@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Cruiser.cpp / Cruiser.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -27,11 +27,14 @@ class Destroyer;
 class Cruiser : public RamShip
 {
 private:
-    int shipsDestroyed = 0;
-
+    list<char> destroyedShips;
 public:
     Cruiser(char shipSymbol, std::string type, char teamSymbol);
-    void moveTo(Ship& target);
+
+    Cruiser(Cruiser&& other) noexcept;
+    Cruiser& operator=(Cruiser&& other) noexcept;
+
+    ~Cruiser();
     virtual void ram(char** gr, int rows, int cols, Battlefield& battlefield,game&gameManager) override;
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 };

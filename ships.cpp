@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: ships.cpp / ships.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -32,6 +32,8 @@ Ship& Ship::operator=(const Ship& other)
         type = other.type;
         teamSymbol = other.teamSymbol;
         isInDeathQueue = other.isInDeathQueue;
+        shipsDestroyed = other.shipsDestroyed;
+
     }
     return *this;
 }
@@ -41,7 +43,7 @@ Ship::Ship(const Ship& other)
     shipPositionX(other.shipPositionX),
     shipPositionY(other.shipPositionY),
     type(other.type), teamSymbol(other.teamSymbol),
-     isInDeathQueue(other.isInDeathQueue) {
+     isInDeathQueue(other.isInDeathQueue),shipsDestroyed(other.shipsDestroyed) {
 }
 
 Ship::Ship(Ship&& other) noexcept
@@ -50,7 +52,8 @@ Ship::Ship(Ship&& other) noexcept
     shipPositionY(other.shipPositionY),
     type(std::move(other.type)), 
     teamSymbol(other.teamSymbol),
-    shipSymbol(other.shipSymbol)
+    shipSymbol(other.shipSymbol),
+    shipsDestroyed(other.shipsDestroyed)
 {
     other.teamSymbol = '0';  
     other.shipSymbol = '+';
@@ -64,6 +67,7 @@ Ship& Ship::operator=(Ship&& other) noexcept {
         std::swap(type, other.type); 
         std::swap(teamSymbol, other.teamSymbol);
         std::swap(shipSymbol, other.shipSymbol);
+        std::swap(shipsDestroyed, other.shipsDestroyed);
     }
     return *this;
 }
@@ -125,3 +129,4 @@ void Ship::setShipPosition(int x, int y)
 void Ship::setType(std::string type) { this->type = type; }
 void Ship::setLives(int lives) { this->lives = lives; }
 void Ship::setSymbol(char c) { this->shipSymbol = c; }
+void Ship::setTeamSymbol(char c) { this->teamSymbol = c; }

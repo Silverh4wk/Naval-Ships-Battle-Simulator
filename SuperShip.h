@@ -1,13 +1,13 @@
 /**********|**********|**********|
 Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
 Course: Object Oriented Programming
-Trimester: 2410??
-Name: Hazim Elamin Mohamed Ali musa
-ID: 241UC2400P
+Trimester: 2430
+Name: RIME HAMZA MOHAMMED
+ID: 241UC240Y8
 Lecture Section: TC2L
 Tutorial Section: TT7L
-Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
-Phone: +60-111-871-9811
+Email: mohammed.rime.hamza@student.mmu.edu.my
+Phone: +60-108-220-891
 **********|**********|**********/
 #ifndef SUPERSHIP_H
 #define SUPERSHIP_H
@@ -15,6 +15,7 @@ Phone: +60-111-871-9811
 #include "Cruiser.h"
 #include "Amphibious.h"
 #include "Destroyer.h"
+#include "BattleShip.h"
 /*
 --------------------------------------------------------------------
  SuperShip --:
@@ -23,9 +24,8 @@ Phone: +60-111-871-9811
  shoots randomly at 3 locations in the same turn
 --------------------------------------------------------------------
 */
-class SuperShip : public Cruiser, public ShootingShip { 
+class SuperShip : public Destroyer { 
 private:
-    int shipsDestroyed = 0;
     list<char> destroyedShips;
 
 public:
@@ -35,8 +35,7 @@ public:
     virtual void shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
     //static SuperShip* createFrom(Ship* source);
-    void upgradeToSuperShip();
 
 };
 
-#endif // SUPERSHIP_H
+#endif 

@@ -29,12 +29,30 @@ Phone: +60-111-871-9811
  --------------------------------------------------------------------
 */
 
-Cruiser::Cruiser(char shipSymbol, std::string type, char teamSymbol)
+Cruiser::Cruiser(char shipSymbol = 'c', std::string type="Cruiser", char teamSymbol='T')
     : Ship(shipSymbol, type, teamSymbol),   
     RamShip(shipSymbol, type, teamSymbol)
+{}
+
+Cruiser::Cruiser(Cruiser&& other) noexcept
+    : Ship(std::move(other)),  
+    RamShip(std::move(other))  
 {
+    shipsDestroyed = other.shipsDestroyed;
+    destroyedShips = std::move(other.destroyedShips);
 }
 
+Cruiser& Cruiser::operator=(Cruiser&& other) noexcept {
+    if (this != &other) {
+        Ship::operator=(std::move(other));
+        RamShip::operator=(std::move(other));
+        shipsDestroyed = other.shipsDestroyed;
+        destroyedShips = std::move(other.destroyedShips);
+    }
+    return *this;
+}
+
+Cruiser::~Cruiser() {std::cout<< getType() << " was deleted\n"; }
 
 
 void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) {
@@ -42,7 +60,7 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
     int ny = 0;
     bool foundEnemy = false;
 
-    std::cout << "\n" << getSymbol() << " is deciding \n";
+    std::cout << "\n" << getSymbol() << " is deciding where to Ram\n";
     std::cout << "________________________________________\n";
 
     for (int i = -1; i <= 1 && !foundEnemy; ++i) {
@@ -60,8 +78,7 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
             if (enemyShip && enemyShip->getTeamSymbol() != this->getTeamSymbol()) {
 
                 enemyShip->reduceLives(battlefield);
-                std::cout << "Enemy ship symbol: " << enemyShip->getSymbol()
-                    << " is dead? = " << enemyShip->isDestroyed() << "\n";
+                shipsDestroyed++;
 
                 // Move cruiser to enemy's position
                 int oldx = getShipPositionX();
@@ -72,19 +89,10 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
 
                 // Check if enemy is destroyed
                 if (enemyShip->isDestroyed()) {
-                    shipsDestroyed++;
                     std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
                     //destroyedShips.push_back(enemyShip->getSymbol());
                     std::cout << enemyShip->getSymbol() << " destroyed\n";
                 }
-                //finally it checks for upgrade
-               if (shipsDestroyed >= 3) {
-                   std::cout << "Cruiser upgraded to Destroyer!\n";
-                   Destroyer* newDestroyer = new Destroyer(std::move(*this));
-                   battlefield.replaceShip(this, newDestroyer, gameManager);
-                   return;
-               }
-
                 foundEnemy = true;
             }
         }
@@ -124,11 +132,6 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
     }
 }
 
-void Cruiser::moveTo(Ship& target) {
-    if (auto* dest = dynamic_cast<Cruiser*>(&target)) {
-        *dest = std::move(*this);
-    }
-}
 
 
 void Cruiser::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
@@ -136,8 +139,14 @@ void Cruiser::actions(char** gr, int rows, int cols, Battlefield& battlefield, g
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
-        std::cout << " is ramming now \n";
        //ram(gr, rows, cols, battlefield,gameManager);
+       //finally it checks for upgrade
+       if (shipsDestroyed >= 3) {
+           std::cout << "Cruiser upgraded to Destroyer!\n";
+           Destroyer* newDestroyer = new Destroyer(std::move(*this));
+           battlefield.replaceShip(this, newDestroyer, gameManager);
+           return;
+       }
     }
     else
         std::cout << getSymbol() << " is waiting to respawn\n";

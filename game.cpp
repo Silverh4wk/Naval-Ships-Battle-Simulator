@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: game.cpp / game.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -13,14 +13,14 @@ Phone: +60-111-871-9811
 #include "game.h"
 #include "ships.h"
 #include "Amphibious.h"
-#include "BattleShip.h"
+#include "Battleship.h"
 #include "Corvette.h"
 #include "Cruiser.h"
 #include "Destroyer.h"
 #include "Frigate.h"
-#include "SuperShip.h"
-#include "Battlefield.h"
+#include "Supership.h"
 #include "Suicidal.h"
+#include "Battlefield.h"
 #include <fstream>
 #include <sstream>
 #include <random>
@@ -37,21 +37,11 @@ game::game()
 game::~game()
 {
     std::cout << "game is ending.. \n";
-    for (int i = 0; i < A->ships.getSize(); ++i)
-    {
-        A->ships.deleteNodeAtIndex(i);
-    }
-    for (int i = 0; i < B->ships.getSize(); ++i)
-    {
-        B->ships.deleteNodeAtIndex(i);
-    }
-    for (int i = 0; i < queue.getSize(); ++i)
-    {
-        queue.deleteNodeAtIndex(i);
-    }
 
-    if (grid) {
-        for (int i = 0; i < Height; ++i) {
+    if (grid)
+    {
+        for (int i = 0; i < Height; ++i)
+        {
             delete[] grid[i];
         }
         delete[] grid;
@@ -59,16 +49,31 @@ game::~game()
     }
     delete battlefield;
     battlefield = nullptr;
+    for (int i = 0; i < A->ships.getSize(); ++i)
+    {
+        Ship *deadShip = A->ships.getNode(i);
+        A->ships.deleteNodeAtIndex(i);
+        delete deadShip;
+        deadShip = nullptr;
+    }
+
+    for (int i = 0; i < B->ships.getSize(); ++i)
+    {
+        Ship *deadShip = B->ships.getNode(i);
+        B->ships.deleteNodeAtIndex(i);
+        delete deadShip;
+        deadShip = nullptr;
+    }
     delete A;
     delete B;
 
     std::cout << "game ended\n";
 };
 
-bool game::gameInit(std::string&& filename)
+bool game::gameInit(std::string &&filename)
 {
 
-    std::ifstream file{ filename };
+    std::ifstream file{filename};
     std::string line;
 
     if (!file.is_open())
@@ -77,12 +82,14 @@ bool game::gameInit(std::string&& filename)
         return false;
     }
 
-    if (grid) {
-        for (int i = 0; i < Height; ++i) {
+    if (grid)
+    {
+        for (int i = 0; i < Height; ++i)
+        {
             delete[] grid[i];
         }
         delete[] grid;
-        grid = nullptr;  // Prevent dangling pointer
+        grid = nullptr;
     }
 
     while (std::getline(file, line))
@@ -112,7 +119,7 @@ bool game::gameInit(std::string&& filename)
         }
     }
 
-    grid = new char* [Height];
+    grid = new char *[Height];
     for (int i = 0; i < Height; i++)
     {
         grid[i] = new char[Width];
@@ -131,7 +138,6 @@ bool game::gameInit(std::string&& filename)
         }
     }
     battlefield = new Battlefield(grid, Width, Height);
-
 
     file.close();
     file.open(filename);
@@ -158,7 +164,7 @@ bool game::gameInit(std::string&& filename)
 
                 for (int j = 0; j < count; ++j)
                 {
-                    Ship* ship = nullptr;
+                    Ship *ship = nullptr;
                     if (shipType == "Battleship")
                     {
                         ship = new BattleShip(symbol, "Battleship", 'A');
@@ -173,6 +179,7 @@ bool game::gameInit(std::string&& filename)
                     }
                     else if (shipType == "Destroyer")
                     {
+                        ship = new Destroyer(symbol, "Destroyer", 'A');
                         A->DestroyerSymbol = symbol;
                         A->NumberOfDestroyer++;
                     }
@@ -196,15 +203,15 @@ bool game::gameInit(std::string&& filename)
                     }
                     else if (shipType == "SuperShip")
                     {
-                       ship = new SuperShip(symbol, "SuperShip", 'A');
+                        ship = new SuperShip(symbol, "SuperShip", 'A');
                         A->SuperShipSymbol = symbol;
                         A->NumberOfSuperShip++;
                     }
                     else if (shipType == "Suicidal")
                     {
-                       ship = new Suicidal(symbol, "Suicidal", 'A');
-                        A->SuicidalSymbol = symbol;
-                        A->NumberOfSuicidal++;
+                        ship = new Suicidal(symbol, "Suicidal", 'B');
+                        B->SuicidalSymbol = symbol;
+                        B->NumberOfSuicidal++;
                     }
                     if (ship)
                     {
@@ -212,6 +219,8 @@ bool game::gameInit(std::string&& filename)
                         addShipToGame(ship);
                         queue.enqueue(ship);
                     }
+                    else
+                        std::cout << "cant place " << shipType << " " << symbol << " " << count << "\n";
                 }
                 std::cout << shipType << " " << symbol << " " << count << "\n";
             }
@@ -230,12 +239,11 @@ bool game::gameInit(std::string&& filename)
                 char symbol;
                 int count;
 
-
                 shipStream >> shipType >> symbol >> count;
 
                 for (int j = 0; j < count; ++j)
                 {
-                    Ship* ship = nullptr;
+                    Ship *ship = nullptr;
                     if (shipType == "Battleship")
                     {
                         ship = new BattleShip(symbol, "Battleship", 'B');
@@ -250,6 +258,8 @@ bool game::gameInit(std::string&& filename)
                     }
                     else if (shipType == "Destroyer")
                     {
+                        ship = new Destroyer(symbol, "Destroyer", 'B');
+
                         B->DestroyerSymbol = symbol;
                         B->NumberOfDestroyer++;
                     }
@@ -279,16 +289,19 @@ bool game::gameInit(std::string&& filename)
                     }
                     else if (shipType == "Suicidal")
                     {
-                       ship = new Suicidal(symbol, "Suicidal", 'B');
-                        A->SuicidalSymbol = symbol;
-                        A->NumberOfSuicidal++;
+                        ship = new Suicidal(symbol, "Suicidal", 'B');
+                        B->SuicidalSymbol = symbol;
+                        B->NumberOfSuicidal++;
                     }
+
                     if (ship)
                     {
                         B->ships.push_back(ship);
                         addShipToGame(ship);
                         queue.enqueue(ship);
                     }
+                    else
+                        std::cout << "cant place " << shipType << " " << symbol << " " << count << "\n";
                 }
                 std::cout << shipType << " " << symbol << " " << count << "\n";
             }
@@ -300,7 +313,7 @@ bool game::gameInit(std::string&& filename)
     return true;
 }
 
-void game::addShipToGame(Ship* ship)
+void game::addShipToGame(Ship *ship)
 {
     if (ship == nullptr)
     {
@@ -314,21 +327,24 @@ void game::addShipToGame(Ship* ship)
     }
 
     std::cout << "Adding ship to game: " << ship->getType()
-        << " at (" << ship->getShipPositionY() << ", " << ship->getShipPositionY() << ")"
-        << " with symbol " << ship->getSymbol() << std::endl;
+              << " at (" << ship->getShipPositionY() << ", " << ship->getShipPositionY() << ")"
+              << " with symbol " << ship->getSymbol() << std::endl;
 
     battlefield->placeShip(ship);
 }
-void game::hardaddShipToGame(Ship* ship, int x, int y)
+void game::hardaddShipToGame(Ship *ship, int x, int y)
 {
     battlefield->hardPlaceShip(ship, x, y);
 }
 
-void game::displayBattleField(std::ostream& os) const {
-    if (battlefield) {
+void game::displayBattleField(std::ostream &os) const
+{
+    if (battlefield)
+    {
         battlefield->display(os);
     }
-    else {
+    else
+    {
         os << "Battlefield is not initialized.\n";
     }
 }
@@ -358,16 +374,16 @@ void game::actionQueue()
     {
         try
         {
-            Ship* ship = queue.front();
-            if (!ship->isDestroyed()&& ship != nullptr)
+            Ship *ship = queue.front();
+            if (!ship->isDestroyed() && ship != nullptr)
             {
-                ship->actions(grid, Width, Height, *battlefield,*this);
+                ship->actions(grid, Width, Height, *battlefield, *this);
                 battlefield->display();
             }
 
             queue.dequeue();
         }
-        catch (const std::exception& e)
+        catch (const std::exception &e)
         {
             std::cerr << "Exception in actionQueue: " << e.what() << std::endl;
             break;
@@ -377,11 +393,14 @@ void game::actionQueue()
     std::cout << "Action queue processing complete. Remaining queue size: " << queue.getSize() << "\n";
 }
 
-void game::fillQueue() {
-    queue.clearList(); 
-    for (int i = 0; i < battlefield->getShips().getSize(); ++i) {
-        Ship* ship = battlefield->getShips().getNode(i);
-        if (!ship->isDestroyed()) {
+void game::fillQueue()
+{
+    queue.clearList();
+    for (int i = 0; i < battlefield->getShips().getSize(); ++i)
+    {
+        Ship *ship = battlefield->getShips().getNode(i);
+        if (!ship->isDestroyed())
+        {
             queue.enqueue(ship);
         }
     }
@@ -405,8 +424,9 @@ void game::respawn()
                 break;
             }
 
-            Ship* ship = battlefield->shipGraveYard.front();
-            if (!ship) {
+            Ship *ship = battlefield->shipGraveYard.front();
+            if (!ship)
+            {
                 battlefield->shipGraveYard.dequeue();
                 continue;
             }
@@ -435,18 +455,18 @@ void game::respawn()
 
             ship->setShipPosition(x, y);
             grid[y][x] = ship->getSymbol();
-            std::cout << ship->getSymbol() <<" "<< ship->getSymbol() << " respawned at (" << y << ", " << x << ")\n";
+            std::cout << ship->getSymbol() << " respawned at (" << y << ", " << x << ")\n";
 
             ship->isInDeathQueue = false;
             battlefield->shipGraveYard.dequeue();
         }
-        catch (const std::exception& e)
+        catch (const std::exception &e)
         {
             std::cerr << "Exception in respawn: " << e.what() << "\n";
             break;
         }
     }
-    // std::cout << "At least two ships respawned \n";
+    std::cout << "At least two ships respawned \n";
 }
 
 void game::removeDeadShipFromTeam()
@@ -455,8 +475,8 @@ void game::removeDeadShipFromTeam()
     {
         if (A->ships.getNode(i)->isDestroyed() || A->ships.getNode(i) == nullptr)
         {
-            Ship* deadShip = A->ships.getNode(i);
-            std::cout  << A->ships.getNode(i)->getType() << " " << A->ships.getNode(i)->getSymbol() <<" is getting removed from the game.." << "\n";
+            Ship *deadShip = A->ships.getNode(i);
+            std::cout << A->ships.getNode(i)->getType() << " " << A->ships.getNode(i)->getSymbol() << " is getting removed from the game.." << "\n";
             A->ships.deleteNodeAtIndex(i);
             delete deadShip;
             deadShip = nullptr;
@@ -465,38 +485,44 @@ void game::removeDeadShipFromTeam()
 
     for (int i = 0; i < B->ships.getSize(); ++i)
     {
-        if (B->ships.getNode(i)->isDestroyed()||B->ships.getNode(i) == nullptr)
+        if (B->ships.getNode(i)->isDestroyed() || B->ships.getNode(i) == nullptr)
         {
-            Ship* deadShip = B->ships.getNode(i);
-            std::cout  << B->ships.getNode(i)->getType() << " " << B->ships.getNode(i)->getSymbol() <<" is getting removed from the game.." << "\n";
+            Ship *deadShip = B->ships.getNode(i);
+            std::cout << B->ships.getNode(i)->getType() << " " << B->ships.getNode(i)->getSymbol() << " is getting removed from the game.." << "\n";
             B->ships.deleteNodeAtIndex(i);
             delete deadShip;
             deadShip = nullptr;
         }
     }
+    std::cout << "teamA sizes " << A->ships.getSize() << "\n" ;
+    std::cout << "teamB sizes " << B->ships.getSize() <<"\n";
 }
 
-
-Team* game::getTeam(char teamSymbol) const {
-    switch (toupper(teamSymbol)) {
-    case 'A': return A;
-    case 'B': return B;
+Team *game::getTeam(char teamSymbol) const
+{
+    switch (toupper(teamSymbol))
+    {
+    case 'A':
+        return A;
+    case 'B':
+        return B;
     default:
         std::cerr << "Invalid team symbol: " << teamSymbol << "\n";
         return nullptr;
     }
 }
 
-
-std::ostream& operator<<(std::ostream& os, const game& g) {
+std::ostream &operator<<(std::ostream &os, const game &g)
+{
     os << "Game state:\n";
     os << "Iterations left: " << g.iterations << "\n";
     g.displayBattleField();
     return os;
 }
 
-
-void game::removeFromQueues(Ship* ship) {
+// used in testing, just to remove a ship from all queues in the game if it exits there
+void game::removeFromQueues(Ship *ship)
+{
     for (int i = 0; i < A->ships.getSize(); ++i)
     {
         if (A->ships.getNode(i) == ship)
@@ -515,7 +541,6 @@ void game::removeFromQueues(Ship* ship) {
         }
     }
 
-
     for (int i = 0; i < battlefield->getShips().getSize(); ++i)
     {
         if (battlefield->getShips().getNode(i) == ship)
@@ -533,5 +558,4 @@ void game::removeFromQueues(Ship* ship) {
             battlefield->getShips().deleteNodeAtIndex(i);
         }
     }
-
 }

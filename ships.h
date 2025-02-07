@@ -13,7 +13,7 @@ Phone: +60-111-871-9811
 #define SHIP_H
 #include <string>
 #include "helpers.h"  
-#include "game.h"
+#include "Game.h"
 
 // Forward declaration for Battlefield
 class Battlefield;
@@ -28,13 +28,14 @@ protected:
     std::string type = "Ship";
     char teamSymbol = '0';
     char shipSymbol = '+';
-    
+    int shipsDestroyed = 0;
 public:
+    // bool wasOnIsland = false; // Store last known position of island
+    // virtual bool getWasOnIsland() const;
 
     bool isInDeathQueue = false;
 
     Ship(char shipSymbol, std::string type, char teamSymbol);
-
     Ship(const Ship& other);
 
     Ship& operator=(const Ship& other);
@@ -64,6 +65,7 @@ public:
     void setLives(int lives);
     void setSymbol(char c);
     bool isDestroyed() const;
+    void setTeamSymbol(char c);
     //
     virtual ~Ship() = default;
 };
@@ -74,8 +76,14 @@ class MovingShip : virtual public Ship
 {
 public:
     MovingShip(char shipSymbol, std::string type, char teamSymbol)
-        : Ship(shipSymbol, type, teamSymbol) {
+        : Ship(shipSymbol, type, teamSymbol) {}
+
+    MovingShip(MovingShip&& other) noexcept : Ship(std::move(other)) {}
+    MovingShip& operator=(MovingShip&& other) noexcept {
+        Ship::operator=(std::move(other));
+        return *this;
     }
+
     virtual void move(char** gr, int rows, int cols, Battlefield& battlefield) = 0;
 };
 
@@ -84,8 +92,15 @@ class ShootingShip : virtual public Ship
 {
 public:
     ShootingShip(char shipSymbol, std::string type, char teamSymbol)
-        : Ship(shipSymbol, type, teamSymbol) {
+        : Ship(shipSymbol, type, teamSymbol){}
+
+    ShootingShip(ShootingShip&& other) noexcept : Ship(std::move(other)) {}
+    
+    ShootingShip& operator=(ShootingShip&& other) noexcept {
+        Ship::operator=(std::move(other));
+        return *this;
     }
+
     virtual void shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) = 0;
 };
 
@@ -94,8 +109,15 @@ class SeeingRobot : virtual public Ship
 {
 public:
     SeeingRobot(char shipSymbol, std::string type, char teamSymbol)
-        : Ship(shipSymbol, type, teamSymbol) {
+        : Ship(shipSymbol, type, teamSymbol)
+    {
     }
+    SeeingRobot(SeeingRobot&& other) noexcept : Ship(std::move(other)) {}
+    SeeingRobot& operator=(SeeingRobot&& other) noexcept {
+        Ship::operator=(std::move(other));
+        return *this;
+    }
+
     virtual void look(char** gr, int rows, int cols) = 0;
 };
 
@@ -104,11 +126,18 @@ class RamShip : virtual public Ship
 {
 public:
     RamShip(char shipSymbol, std::string type, char teamSymbol)
-        : Ship(shipSymbol, type, teamSymbol) {
+        : Ship(shipSymbol, type, teamSymbol)
+    {
     }
+    RamShip(RamShip&& other) noexcept : Ship(std::move(other)) {}
+    RamShip& operator=(RamShip&& other) noexcept {
+        Ship::operator=(std::move(other));
+        return *this;
+    }
+
     virtual void ram(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) = 0;
 };
-
+// Interface for ships that can blow and deal damage to nearby ships
 class BlowShip : virtual public Ship
 {
     public:
@@ -117,5 +146,4 @@ class BlowShip : virtual public Ship
     }
     virtual void BlowUp(char** gr, int rows, int cols, Battlefield& battlefield) = 0;
 };
-
 #endif  

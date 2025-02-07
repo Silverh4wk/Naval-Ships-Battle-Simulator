@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Battleship.cpp / Battleship.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -26,14 +26,10 @@ Phone: +60-111-871-9811
 */
 class BattleShip : public MovingShip, public ShootingShip, public SeeingRobot
 {
-private:
-    int shipsDestroyed = 0;
-    list<char> destroyedShips;
-
 public:
     BattleShip(char shipSymbol, std::string type, char teamSymbol);
-
-    BattleShip(BattleShip&&) noexcept = default;
+    ~BattleShip();
+    BattleShip(BattleShip&&) noexcept;
     BattleShip& operator=(BattleShip&& other) noexcept;
 
 
@@ -45,8 +41,7 @@ public:
 
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 
-    void moveTo(Ship& target);
         
 };
 
-#endif // BATTLESHIP_H
+#endif 

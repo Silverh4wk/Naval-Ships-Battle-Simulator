@@ -1,46 +1,50 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Amphibious.cpp / Amphibious.h
 Course: Object Oriented Programming
-Trimester: 2410??
-Name: Hazim Elamin Mohamed Ali musa
-ID: 241UC2400P
+Trimester: 2430
+Name: RIME HAMZA MOHAMMED
+ID: 241UC240Y8
 Lecture Section: TC2L
 Tutorial Section: TT7L
-Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
-Phone: +60-111-871-9811
+Email: mohammed.rime.hamza@student.mmu.edu.my
+Phone: +60-108-220-891
 **********|**********|**********/
 #include "Amphibious.h"
 #include "Battlefield.h"
-#include"SuperShip.h"
+#include "SuperShip.h"
 #include <iostream>
 #include <random>
 #include "Macros.h"
 
 Amphibious::Amphibious(char shipSymbol, std::string type, char teamSymbol) : Ship(shipSymbol, type, teamSymbol),
-BattleShip(shipSymbol, type, teamSymbol) {
+                                                                             BattleShip(shipSymbol, type, teamSymbol)
+{
 }
 
-
-Amphibious& Amphibious::operator=(Amphibious&& other) noexcept {
-    if (this != &other) {
+Amphibious &Amphibious::operator=(Amphibious &&other) noexcept
+{
+    if (this != &other)
+    {
 
         Ship::operator=(std::move(other));
     }
     return *this;
 }
 
-void Amphibious::moveTo(Ship& target) {
-    if (auto* dest = dynamic_cast<Amphibious*>(&target)) {
+void Amphibious::moveTo(Ship &target)
+{
+    if (auto *dest = dynamic_cast<Amphibious *>(&target))
+    {
         *dest = std::move(*this);
     }
 }
 
-void Amphibious::move(char** gr, int rows, int cols, Battlefield& battlefield)
+void Amphibious::move(char **gr, int rows, int cols, Battlefield &battlefield)
 {
-    int directions[4][2] = { {0, -1}, {1, 0}, {0, 1}, {-1, 0} };
-    std::string directionNames[4] = { "up", "right", "down", "left" };
+    int directions[4][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+    std::string directionNames[4] = {"up", "right", "down", "left"};
     RANDOM_DEVICE
-        std::uniform_int_distribution<int> uniform_dist(0, 3);
+    std::uniform_int_distribution<int> uniform_dist(0, 3);
     int chance = uniform_dist(r1);
     int newX = 0;
     int newY = 0;
@@ -66,10 +70,10 @@ void Amphibious::move(char** gr, int rows, int cols, Battlefield& battlefield)
     }
 }
 
-void Amphibious::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void Amphibious::shoot(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     RANDOM_DEVICE
-        std::uniform_int_distribution<int> chanceX(0, cols - 1);
+    std::uniform_int_distribution<int> chanceX(0, cols - 1);
     std::uniform_int_distribution<int> chanceY(0, rows - 1);
     // remember to return to  this after testing
     for (int i = 0; i < 2; ++i)
@@ -79,8 +83,6 @@ void Amphibious::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
         int targetY = chanceY(r1);
 
         std::cout << "target coordinates: (" << targetY << ", " << targetX << ")\n";
-        // Check if the target is within the city block distance of 5
-        // SO MANY ISSUES HERE FIX SOON, also need to understand the city block distance constraint
         std::cout << "city block distance: " << getShipPositionX() << "-" << targetX << " " << std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) << "\n";
         if (std::abs(getShipPositionX() - targetX) + std::abs(getShipPositionY() - targetY) <= 5)
         {
@@ -88,7 +90,7 @@ void Amphibious::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
             std::cout << "target cell: " << targetCell << "\n";
             if (targetCell != '0' && targetCell != getSymbol()) // If it's a ship
             {
-                Ship* enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
+                Ship *enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
                 // check if its not on the same team before shooting at it
                 if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
                 {
@@ -104,16 +106,6 @@ void Amphibious::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
                         enemyShip = nullptr; // set the dead ship to null
                         std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
                     }
-                     if (shipsDestroyed >= 4)
-                     {
-                         std::cout << "Battleship upgraded to Destroyer!\n";
-                         gr[getShipPositionY()][getShipPositionX()] = '0';
-                         SuperShip* newSuperShip= new SuperShip(std::move(*this));
-                         battlefield.replaceShip(this, newSuperShip, gameManager);
-                         return;
-                        return; // so program dont use the deleted pointer or big crash happen
-                     }
-
                 }
             }
             else
@@ -128,14 +120,22 @@ void Amphibious::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
 
 // bool Amphibious::getWasOnIsland() const { return wasOnIsland; }
 
-void Amphibious::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void Amphibious::actions(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
         look(gr, rows, cols);
         move(gr, rows, cols, battlefield);
-        shoot(gr, rows, cols, battlefield,gameManager);
+        shoot(gr, rows, cols, battlefield, gameManager);
+        if (shipsDestroyed >= 4)
+        {
+            std::cout << getType() << " upgraded to SuperShip!\n";
+            gr[getShipPositionY()][getShipPositionX()] = '0';
+            SuperShip *newSuperShip = new SuperShip(std::move(*this));
+            battlefield.replaceShip(this, newSuperShip, gameManager);
+            return;
+        }
     }
     else
 

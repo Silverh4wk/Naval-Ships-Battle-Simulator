@@ -1,7 +1,7 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Macros.cpp / Macros.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L
@@ -25,8 +25,9 @@ Phone: +60-111-871-9811
               << "Symbol: " << getSymbol() << "\n"                             \
               << "Position: (" << getShipPositionY() << ", " << getShipPositionX() << ")\n"     \
               << "Lives: " << getLives() << "\n"                               \
-              << "Type: " << getType() << "\n"      ;                           \
+              << "ships destroyed : " <<shipsDestroyed    <<"\n"                     \
+              << "Type: " << getType() << "\n"      ;                          \
                                                           \
     std::cout << "________________________________________\n";
 
-#endif // MACROS_H
+#endif 

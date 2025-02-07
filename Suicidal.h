@@ -25,4 +25,4 @@ public:
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 };
 
-#endif // SUICIDAL_H
+#endif

@@ -1,13 +1,13 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Amphibious.cpp / Amphibious.h
 Course: Object Oriented Programming
-Trimester: 2410??
-Name: Hazim Elamin Mohamed Ali musa
-ID: 241UC2400P
+Trimester: 2430
+Name: RIME HAMZA MOHAMMED
+ID: 241UC240Y8
 Lecture Section: TC2L
 Tutorial Section: TT7L
-Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
-Phone: +60-111-871-9811
+Email: mohammed.rime.hamza@student.mmu.edu.my
+Phone: +60-108-220-891
 **********|**********|**********/
 #ifndef AMPHIBIOUS_H
 #define AMPHIBIOUS_H
@@ -25,7 +25,6 @@ Phone: +60-111-871-9811
 class Amphibious : public BattleShip
 {
 private:
-    int shipsDestroyed = 0;
     list<char> destroyedShips;
 public:
     Amphibious(char shipSymbol, std::string type, char teamSymbol);
@@ -38,4 +37,4 @@ public:
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 };
 
-#endif // AMPHIBIOUS_H
+#endif 

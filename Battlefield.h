@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Battlefield.cpp / Battlefield.h
 Course: Object Oriented Programming
 Trimester: 2410??
 Name: Hazim Elamin Mohamed Ali musa
@@ -13,7 +13,7 @@ Phone: +60-111-871-9811
 #define BATTLEFIELD_H
 class Ship;
 #include "helpers.h"
-#include "Game.h"
+#include "game.h"
 
 class Battlefield
 {

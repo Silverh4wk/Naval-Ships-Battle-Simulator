@@ -1,61 +1,59 @@
 /**********|**********|**********|
 Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
 Course: Object Oriented Programming
-Trimester: 2410??
-Name: Hazim Elamin Mohamed Ali musa
-ID: 241UC2400P
+Trimester: 2430
+Name: RIME HAMZA MOHAMMED
+ID: 241UC240Y8
 Lecture Section: TC2L
 Tutorial Section: TT7L
-Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
-Phone: +60-111-871-9811
+Email: mohammed.rime.hamza@student.mmu.edu.my
+Phone: +60-108-220-891
 **********|**********|**********/
 
-#include "SuperShip.h" 
+#include "SuperShip.h"
 #include <iostream>
 #include "Battlefield.h"
 #include "Cruiser.h"
 #include "Amphibious.h"
 #include "Destroyer.h"
-
 #include "Macros.h"
 
 SuperShip::SuperShip(char shipSymbol, std::string type, char teamSymbol)
-    : Ship(shipSymbol, type, teamSymbol), 
-    Cruiser(shipSymbol, type, teamSymbol), 
-    ShootingShip(shipSymbol, type, teamSymbol) { 
+    : Ship(shipSymbol, type, teamSymbol),
+      Destroyer(shipSymbol, type, teamSymbol)
+{
 }
 
-// Conversion from Amphibious   
-SuperShip::SuperShip(Amphibious&& base) noexcept
-    : Ship(std::move(base)),
-    Cruiser(base.getSymbol(), "SuperShip", base.getTeamSymbol()),
-    ShootingShip(base.getSymbol(), "SuperShip", base.getTeamSymbol())
+
+// Conversion from Amphibious
+SuperShip::SuperShip(Amphibious &&base) noexcept
+    : Ship(base.getSymbol(), "SuperShip", base.getTeamSymbol()),
+        Destroyer(std::move(base))
 {
-    upgradeToSuperShip();
+    setLives(3);
+    setTeamSymbol(base.getTeamSymbol());
     setShipPosition(base.getShipPositionX(), base.getShipPositionY());
+    shipsDestroyed = 0;
 }
 // Conversion from DestroyerShip
 
-SuperShip::SuperShip(Destroyer&& base) noexcept
-    : Ship(std::move(base)),
-    Cruiser(base.getSymbol(), "Destroyer", base.getTeamSymbol()),
-    ShootingShip(base.getSymbol(), "SuperShip", base.getTeamSymbol())
+SuperShip::SuperShip(Destroyer &&base) noexcept
+    : Ship(base.getSymbol(), "SuperShip", base.getTeamSymbol()),
+      Destroyer(std::move(base))
 {
-    upgradeToSuperShip();
+    setLives(3);
+    setTeamSymbol(base.getTeamSymbol());
     setShipPosition(base.getShipPositionX(), base.getShipPositionY());
+    shipsDestroyed = 0;
 }
 
-void SuperShip::upgradeToSuperShip() {
-    //upgrade benefit
-    setLives(getLives() + 2);
-}
-void SuperShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void SuperShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     for (int i = 0; i < 3; ++i)
     {
-        int directions[8][2] = { {0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1} };
+        int directions[8][2] = {{0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}};
         RANDOM_DEVICE
-            std::uniform_int_distribution<int> uniform_dist(0, 7);
+        std::uniform_int_distribution<int> uniform_dist(0, 7);
         int chance = uniform_dist(r1);
         int targetX = 0;
         int targetY = 0;
@@ -65,7 +63,7 @@ void SuperShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, g
         targetX = getShipPositionX() + directions[chance][0];
         targetY = getShipPositionY() + directions[chance][1];
 
-        // checks if its out of bounds 
+        // checks if its out of bounds
         if (targetX >= 0 && targetX < cols && targetY >= 0 && targetY < rows)
         {
             char targetCell = gr[targetY][targetX];
@@ -77,7 +75,7 @@ void SuperShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, g
             else
             {
                 std::cout << "Shooting at (" << targetY << ", " << targetX << ")\n";
-                Ship* enemyShip = battlefield.getShipAt(targetX, targetY);
+                Ship *enemyShip = battlefield.getShipAt(targetX, targetY);
 
                 if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
                 {
@@ -99,7 +97,6 @@ void SuperShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, g
                     std::cout << "Team member found! skip shooting at (" << targetY << ", " << targetX << "). Rotating...\n";
                 }
             }
-
         }
         else
         {
@@ -108,18 +105,16 @@ void SuperShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, g
     }
 }
 
-
-void SuperShip::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void SuperShip::actions(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
         std::cout << " is ramming now \n";
-        ram(gr, rows, cols, battlefield,gameManager);
+        ram(gr, rows, cols, battlefield, gameManager);
 
-        shoot(gr, rows, cols, battlefield,gameManager);
+        shoot(gr, rows, cols, battlefield, gameManager);
     }
     else
         std::cout << getSymbol() << " is waiting to respawn\n";
 }
-
