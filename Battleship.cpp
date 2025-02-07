@@ -198,7 +198,7 @@ void BattleShip::actions(char** gr, int rows, int cols, Battlefield& battlefield
         SHIPS_INFO;
         look(gr, rows, cols);
         move(gr, rows, cols, battlefield);
-       // shoot(gr, rows, cols, battlefield, gameManager);
+        shoot(gr, rows, cols, battlefield, gameManager);
         if (shipsDestroyed >= 4)
         {
             std::cout  <<getType()<< " upgraded to Destroyer!\n";

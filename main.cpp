@@ -79,10 +79,10 @@ void runSimulation() {
         g.removeDeadShipFromTeam();
     }
 
-    if (g.teamAEmpty() && !g.teamBEmpty()) {
+    if ( g.getTeam('B')->ships.getSize()>g.getTeam('A')->ships.getSize()) {
         std::cout << "Game Over! Team B Wins!\n";
     }
-    else if (g.teamBEmpty() && !g.teamAEmpty()) {
+    else if (g.getTeam('A')->ships.getSize()>g.getTeam('B')->ships.getSize()) {
         std::cout << "Game Over! Team A Wins!\n";
     }
     else {
