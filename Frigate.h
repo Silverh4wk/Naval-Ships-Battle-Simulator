@@ -29,6 +29,9 @@ private:
 
 public:
     Frigate(char shipSymbol, std::string type, char teamSymbol);
+    ~Frigate() {
+        std::cout << "Frigate was deleted\n";
+    }
     Frigate(Frigate &&) noexcept;
     Frigate &operator=(Frigate &&other) noexcept;
     virtual void shoot(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager) override;

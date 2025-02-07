@@ -45,15 +45,8 @@ void Suicidal::BlowUp(char** gr, int rows, int cols, Battlefield& battlefield)
                 enemyShip->reduceLives(battlefield);
                 gr[targetY][targetX] = battlefield.getTerrainAt(targetY,targetX); // Clear the grid
                 std::cout << "Enemy ship symbol: " << enemyShip->getSymbol() << " " << "is dead? = " << enemyShip->isDestroyed() << "\n";
-                
-                if (enemyShip->isDestroyed() == true) // If the ship is destroyed
-                {
-                    shipsDestroyed++;
-                   // destroyedShips.push_back(enemyShip->getSymbol());
-                    std::cout << enemyShip->getSymbol() << " destroyed\n";
-                    enemyShip = nullptr;
-                    std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
-                }
+                shipsDestroyed++;
+                std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
             }
         
         }

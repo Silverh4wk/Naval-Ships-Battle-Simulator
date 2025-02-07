@@ -76,7 +76,6 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
             if (enemyShip && enemyShip->getTeamSymbol() != this->getTeamSymbol()) {
 
                 enemyShip->reduceLives(battlefield);
-                shipsDestroyed++;
 
                 // Move cruiser to enemy's position
                 int oldx = getShipPositionX();
@@ -84,12 +83,12 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
                 gr[oldy][oldx] = battlefield.getTerrainAt(oldy, oldx); // Restore terrain
                 gr[ny][nx] = this->getSymbol();                        // Update new position
                 setShipPosition(nx, ny);
+                shipsDestroyed++;
+                std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
 
                 // Check if enemy is destroyed
                 if (enemyShip->isDestroyed()) {
-                    std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";
                     //destroyedShips.push_back(enemyShip->getSymbol());
-                    std::cout << enemyShip->getSymbol() << " destroyed\n";
                 }
                 foundEnemy = true;
             }

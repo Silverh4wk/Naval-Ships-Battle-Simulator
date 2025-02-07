@@ -55,8 +55,6 @@ Ship::Ship(Ship&& other) noexcept
     shipSymbol(other.shipSymbol),
     shipsDestroyed(other.shipsDestroyed)
 {
-    other.teamSymbol = '0';  
-    other.shipSymbol = '+';
 }
 
 Ship& Ship::operator=(Ship&& other) noexcept {

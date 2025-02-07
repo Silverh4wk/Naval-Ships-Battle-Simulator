@@ -18,6 +18,7 @@ class Suicidal : public BlowShip
 {
 public:
     Suicidal(char shipSymbol, std::string type, char teamSymbol);
+    ~Suicidal() { std::cout << "Suicidal was deleted\n"; }
     void BlowUp(char** gr, int rows, int cols, Battlefield& battlefield) override;
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 };

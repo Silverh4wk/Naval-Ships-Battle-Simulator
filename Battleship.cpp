@@ -171,7 +171,6 @@ void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
                 shipsDestroyed++;  // Record the hit
                 if (enemyShip->isDestroyed() == true) // If the ship is destroyed
                 {
-                   
                     //destroyedShips.add(enemyShip->getSymbol());
                 }
                 std::cout << enemyShip->getSymbol() << " hit\n";

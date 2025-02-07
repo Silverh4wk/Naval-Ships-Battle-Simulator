@@ -70,13 +70,14 @@ void runSimulation() {
 
     while (!g.shipListEmpty() && g.iterations > 0 && !g.teamAEmpty() && !g.teamBEmpty()) {
         std::cout << "Rounds left: " << g.iterations << "\n";
-        g.actionQueue();
-        g.displayBattleField();
-        g.fillQueue();
+        g.removeDeadShipFromTeam();
         g.respawn();
         g.displayBattleField();
-        g.iterations--;
+        g.actionQueue();
         g.removeDeadShipFromTeam();
+        g.fillQueue();
+        g.displayBattleField();
+        g.iterations--;
     }
 
     if ( g.getTeam('B')->ships.getSize()>g.getTeam('A')->ships.getSize()) {

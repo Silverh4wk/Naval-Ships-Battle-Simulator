@@ -27,6 +27,9 @@ private:
 public:
     corvette(char shipSymbol, std::string type, char teamSymbol);
     corvette(Frigate&& base) noexcept;
+    ~corvette() {
+        std::cout << "Corvette was deleted\n";
+    }
     virtual void shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
     virtual void actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;
 };

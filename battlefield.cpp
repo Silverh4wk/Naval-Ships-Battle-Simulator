@@ -45,8 +45,7 @@ Battlefield::~Battlefield()
         delete[] terrain;
         terrain = nullptr;
     }
-
-        std::cout << "battlefield dis\n";
+        std::cout << "battlefield destrctor called\n";
 }
 
 // To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;

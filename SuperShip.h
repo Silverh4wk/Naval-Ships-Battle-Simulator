@@ -26,6 +26,9 @@ Phone: +60-108-220-891
 */
 class SuperShip : public Destroyer { 
 public:
+    ~SuperShip() {
+        std::cout << "SuperShip was deleted\n";
+    }
     SuperShip(char shipSymbol, std::string type, char teamSymbol);
     SuperShip(Amphibious&& base) noexcept;
     SuperShip(Destroyer&& base) noexcept;

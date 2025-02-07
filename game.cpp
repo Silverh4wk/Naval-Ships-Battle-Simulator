@@ -49,20 +49,19 @@ game::~game()
     }
     delete battlefield;
     battlefield = nullptr;
-    for (int i = 0; i < A->ships.getSize(); ++i)
+
+    while (A->ships.getSize() > 0)
     {
-        Ship *deadShip = A->ships.getNode(i);
-        A->ships.deleteNodeAtIndex(i);
-        delete deadShip;
-        deadShip = nullptr;
+        Ship* ship = A->ships.getNode(0);
+        A->ships.deleteNodeAtIndex(0);
+        delete ship; 
     }
 
-    for (int i = 0; i < B->ships.getSize(); ++i)
+    while (B->ships.getSize() > 0)
     {
-        Ship *deadShip = B->ships.getNode(i);
-        B->ships.deleteNodeAtIndex(i);
-        delete deadShip;
-        deadShip = nullptr;
+        Ship* ship = B->ships.getNode(0);
+        B->ships.deleteNodeAtIndex(0);
+        delete ship;
     }
     delete A;
     delete B;
@@ -375,7 +374,7 @@ void game::actionQueue()
         try
         {
             Ship *ship = queue.front();
-            if (!ship->isDestroyed() && ship != nullptr)
+            if (!ship->isDestroyed() && ship != nullptr &&ship)
             {
                 ship->actions(grid, Width, Height, *battlefield, *this);
                 battlefield->display();
@@ -399,7 +398,7 @@ void game::fillQueue()
     for (int i = 0; i < battlefield->getShips().getSize(); ++i)
     {
         Ship *ship = battlefield->getShips().getNode(i);
-        if (!ship->isDestroyed())
+        if (!ship->isDestroyed() && ship != nullptr && ship)
         {
             queue.enqueue(ship);
         }
@@ -412,91 +411,125 @@ void game::respawn()
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> disX(0, Width - 1);
     std::uniform_int_distribution<> disY(0, Height - 1);
-    std::cout << "deathQueue size = " << battlefield->shipGraveYard.getSize() << "\n";
 
-    for (size_t i = 0; i < 2; i++)
+    std::cout << "deathQueue size = "
+        << battlefield->shipGraveYard.getSize() << "\n";
+
+    int shipsRespawned = 0; 
+    const int maxShipsToRespawn = 2;
+
+    while (shipsRespawned < maxShipsToRespawn && !battlefield->shipGraveYard.empty())
     {
         try
         {
-            if (battlefield->shipGraveYard.empty())
-            {
-                std::cout << "No ships in the graveyard to respawn.\n";
-                break;
-            }
+            Ship* ship = battlefield->shipGraveYard.front();
 
-            Ship *ship = battlefield->shipGraveYard.front();
-            if (!ship)
-            {
-                battlefield->shipGraveYard.dequeue();
-                continue;
-            }
-            if (!ship || ship->isDestroyed())
+            if (ship == nullptr)
             {
                 battlefield->shipGraveYard.dequeue();
                 continue;
             }
 
+            if (ship->isDestroyed())
+            {
+                std::cout << "Ship " << ship->getSymbol()
+                    << " is destroyed and cannot be respawned.\n";
+                battlefield->shipGraveYard.dequeue();
+                continue;
+            }
+
+          
             int x, y;
             int attempts = 0;
-            const int maxAttempts = 100; // Maximum number of attempts to find an empty cell
+            const int maxAttempts = 100; 
 
-            do
+           
+            while (attempts < maxAttempts)
             {
                 x = disX(gen);
                 y = disY(gen);
+                if (grid[y][x] == '0') 
+                {
+                    break;
+                }
                 attempts++;
-            } while (grid[y][x] != '0' && attempts < maxAttempts);
+            }
 
             if (attempts >= maxAttempts)
             {
-                std::cout << "Failed to find an empty cell for respawning.\n";
+                std::cout << "Failed to find an empty cell for respawning ship "
+                    << ship->getSymbol() << ".\n";
+              
+                battlefield->shipGraveYard.dequeue();
                 continue;
             }
 
             ship->setShipPosition(x, y);
             grid[y][x] = ship->getSymbol();
-            std::cout << ship->getSymbol() << " respawned at (" << y << ", " << x << ")\n";
+            ship->isInDeathQueue = false; 
 
-            ship->isInDeathQueue = false;
+            std::cout << "Ship " << ship->getSymbol()
+                << " respawned at (" << y << ", " << x << ").\n";
             battlefield->shipGraveYard.dequeue();
+            shipsRespawned++;
         }
-        catch (const std::exception &e)
+        catch (const std::exception& e)
         {
             std::cerr << "Exception in respawn: " << e.what() << "\n";
             break;
         }
     }
-    std::cout << "At least two ships respawned \n";
+
+    if (shipsRespawned > 0)
+    {
+        std::cout << shipsRespawned << " ship(s) respawned successfully.\n";
+    }
+    else
+    {
+        std::cout << "No valid ships were available to respawn.\n";
+    }
 }
+
 
 void game::removeDeadShipFromTeam()
 {
-    for (int i = 0; i < A->ships.getSize(); ++i)
+    // Process Team A ships.
+    for (int i = A->ships.getSize() - 1; i >= 0; --i)
     {
-        if (A->ships.getNode(i)->isDestroyed() || A->ships.getNode(i) == nullptr)
+        Ship* ship = A->ships.getNode(i);
+        
+        if (ship == nullptr || ship->isDestroyed())
         {
-            Ship *deadShip = A->ships.getNode(i);
-            std::cout << A->ships.getNode(i)->getType() << " " << A->ships.getNode(i)->getSymbol() << " is getting removed from the game.." << "\n";
+            if (ship != nullptr)
+            {
+                std::cout << ship->getType() << " " << ship->getSymbol()
+                    << " is getting removed from the game.." << "\n";
+            }
             A->ships.deleteNodeAtIndex(i);
-            delete deadShip;
-            deadShip = nullptr;
+            delete ship;  
         }
     }
 
-    for (int i = 0; i < B->ships.getSize(); ++i)
+    // Process Team B ships.
+    for (int i = B->ships.getSize() - 1; i >= 0; --i)
     {
-        if (B->ships.getNode(i)->isDestroyed() || B->ships.getNode(i) == nullptr)
+        Ship* ship = B->ships.getNode(i);
+        if (ship == nullptr || ship->isDestroyed())
         {
-            Ship *deadShip = B->ships.getNode(i);
-            std::cout << B->ships.getNode(i)->getType() << " " << B->ships.getNode(i)->getSymbol() << " is getting removed from the game.." << "\n";
+            if (ship != nullptr)
+            {
+                std::cout << ship->getType() << " " << ship->getSymbol()
+                    << " is getting removed from the game.." << "\n";
+            }
             B->ships.deleteNodeAtIndex(i);
-            delete deadShip;
-            deadShip = nullptr;
+            delete ship;
         }
     }
-    std::cout << "teamA sizes " << A->ships.getSize() << "\n" ;
-    std::cout << "teamB sizes " << B->ships.getSize() <<"\n";
+
+    std::cout << "Team A size: " << A->ships.getSize() << "\n";
+    std::cout << "Team B size: " << B->ships.getSize() << "\n";
 }
+
 
 Team *game::getTeam(char teamSymbol) const
 {

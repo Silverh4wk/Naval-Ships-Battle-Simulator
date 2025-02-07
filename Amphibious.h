@@ -28,6 +28,9 @@ private:
 public:
     Amphibious(char shipSymbol, std::string type, char teamSymbol);
     Amphibious(Amphibious&&) noexcept = default;
+    ~Amphibious() {
+        std::cout << "Amphibious was deleted\n";
+    }
     Amphibious& operator=(Amphibious&& other) noexcept;
     void moveTo(Ship& target);
     virtual void move(char** gr, int rows, int cols, Battlefield& battlefield) override;
