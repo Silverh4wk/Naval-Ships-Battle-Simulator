@@ -16,9 +16,6 @@ Phone: +60-108-220-891
 /// blow  a 3x3 area and anything in that area will get cleared even islands
 class Suicidal : public BlowShip
 {
-private:
-    int shipsDestroyed = 0;
-    list<char> destroyedShips;
 public:
     Suicidal(char shipSymbol, std::string type, char teamSymbol);
     void BlowUp(char** gr, int rows, int cols, Battlefield& battlefield) override;

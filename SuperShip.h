@@ -25,9 +25,6 @@ Phone: +60-108-220-891
 --------------------------------------------------------------------
 */
 class SuperShip : public Destroyer { 
-private:
-    list<char> destroyedShips;
-
 public:
     SuperShip(char shipSymbol, std::string type, char teamSymbol);
     SuperShip(Amphibious&& base) noexcept;

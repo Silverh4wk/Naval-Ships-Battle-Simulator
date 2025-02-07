@@ -25,7 +25,6 @@ Phone: +60-108-220-891
 class Amphibious : public BattleShip
 {
 private:
-    list<char> destroyedShips;
 public:
     Amphibious(char shipSymbol, std::string type, char teamSymbol);
     Amphibious(Amphibious&&) noexcept = default;

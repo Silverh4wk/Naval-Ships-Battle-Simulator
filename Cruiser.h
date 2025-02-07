@@ -27,7 +27,6 @@ class Destroyer;
 class Cruiser : public RamShip
 {
 private:
-    list<char> destroyedShips;
 public:
     Cruiser(char shipSymbol, std::string type, char teamSymbol);
 

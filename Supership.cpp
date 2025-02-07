@@ -86,7 +86,7 @@ void SuperShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield, g
                     if (enemyShip->isDestroyed() == true) // If the ship is destroyed
                     {
                         shipsDestroyed++;
-                        destroyedShips.push_back(enemyShip->getSymbol());
+                      //  destroyedShips.push_back(enemyShip->getSymbol());
                         std::cout << enemyShip->getSymbol() << " destroyed\n";
                         enemyShip = nullptr; // set the dead ship to null
                         std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";

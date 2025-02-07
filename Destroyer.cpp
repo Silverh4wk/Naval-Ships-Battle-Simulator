@@ -104,12 +104,12 @@ void Destroyer::actions(char** gr, int rows, int cols, Battlefield& battlefield,
         move(gr, rows, cols, battlefield);
        ram(gr, rows, cols, battlefield,gameManager);
         shoot(gr, rows, cols, battlefield,gameManager);
-    //     if (shipsDestroyed >= 3) {
-    //        std::cout  <<getType()<< " upgraded to SuperShip!\n";
-    //        SuperShip* newSuperShip = new SuperShip(std::move(*this));
-    //        battlefield.replaceShip(this, newSuperShip, gameManager);
-    //        return;
-    //    }
+        if (shipsDestroyed >= 3) {
+           std::cout  <<getType()<< " upgraded to SuperShip!\n";
+           SuperShip* newSuperShip = new SuperShip(std::move(*this));
+           battlefield.replaceShip(this, newSuperShip, gameManager);
+           return;
+       }
     }
     else
         std::cout << getSymbol() << " is waiting to respawn\n";

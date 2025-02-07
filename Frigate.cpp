@@ -87,7 +87,7 @@ void Frigate::shoot(char** gr, int rows, int cols, Battlefield& battlefield, gam
                     if (enemyShip->isDestroyed() == true) // If the ship is destroyed
                     {
                         shipsDestroyed++;
-                        destroyedShips.push_back(enemyShip->getSymbol());
+                       // destroyedShips.push_back(enemyShip->getSymbol());
                         std::cout << enemyShip->getSymbol() << " destroyed\n";
                         enemyShip = nullptr;
                         std::cout << "Ship destroyed! Total ships destroyed: " << shipsDestroyed << "\n";

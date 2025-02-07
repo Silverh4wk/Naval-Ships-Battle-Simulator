@@ -39,7 +39,7 @@ Cruiser::Cruiser(Cruiser&& other) noexcept
     RamShip(std::move(other))  
 {
     shipsDestroyed = other.shipsDestroyed;
-    destroyedShips = std::move(other.destroyedShips);
+    //destroyedShips = std::move(other.destroyedShips);
 }
 
 Cruiser& Cruiser::operator=(Cruiser&& other) noexcept {
@@ -47,7 +47,7 @@ Cruiser& Cruiser::operator=(Cruiser&& other) noexcept {
         Ship::operator=(std::move(other));
         RamShip::operator=(std::move(other));
         shipsDestroyed = other.shipsDestroyed;
-        destroyedShips = std::move(other.destroyedShips);
+       // destroyedShips = std::move(other.destroyedShips);
     }
     return *this;
 }
@@ -139,7 +139,7 @@ void Cruiser::actions(char** gr, int rows, int cols, Battlefield& battlefield, g
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
-       //ram(gr, rows, cols, battlefield,gameManager);
+       ram(gr, rows, cols, battlefield,gameManager);
        //finally it checks for upgrade
        if (shipsDestroyed >= 3) {
            std::cout << "Cruiser upgraded to Destroyer!\n";

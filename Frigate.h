@@ -25,7 +25,6 @@ Phone: +60-108-220-891
 class Frigate : public ShootingShip
 {
 private:
-    list<char> destroyedShips;
     int clock = 0;
 
 public:
@@ -37,4 +36,4 @@ public:
     virtual void actions(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager) override;
 };
 
-#endif // FRIGATE_H
+#endif 

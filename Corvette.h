@@ -24,7 +24,6 @@ class corvette : public ShootingShip
 {
 private:
     int clock = 0;
-    list<char> destroyedShips;
 public:
     corvette(char shipSymbol, std::string type, char teamSymbol);
     corvette(Frigate&& base) noexcept;
