@@ -35,7 +35,6 @@ Frigate::Frigate(Frigate&& other) noexcept
     : Ship(other.getSymbol(), other.getType(), other.getTeamSymbol()),
     ShootingShip(other.getSymbol(), other.getType(), other.getTeamSymbol())
 {
-    shipsDestroyed = other.shipsDestroyed;
 
 }
 
@@ -43,7 +42,6 @@ Frigate& Frigate::operator=(Frigate&& other) noexcept {
     if (this != &other) {
         Ship::operator=(std::move(other));
         ShootingShip::operator=(std::move(other));
-        shipsDestroyed = other.shipsDestroyed;
 
     }
     return *this;

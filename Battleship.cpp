@@ -43,7 +43,6 @@ BattleShip::BattleShip(BattleShip&& other) noexcept
     ShootingShip(std::move(other)),
     SeeingRobot(std::move(other)) 
 {
-    shipsDestroyed = other.shipsDestroyed;
 
 }
 

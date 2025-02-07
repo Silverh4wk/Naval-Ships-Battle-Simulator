@@ -42,7 +42,6 @@ Destroyer::Destroyer(Destroyer&& other) noexcept
     BattleShip(std::move(other)),
     Cruiser(std::move(other)) 
 {
-    shipsDestroyed = other.shipsDestroyed;
 
 }
 

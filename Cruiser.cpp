@@ -38,7 +38,6 @@ Cruiser::Cruiser(Cruiser&& other) noexcept
     : Ship(std::move(other)),  
     RamShip(std::move(other))  
 {
-    shipsDestroyed = other.shipsDestroyed;
     //destroyedShips = std::move(other.destroyedShips);
 }
 
@@ -46,7 +45,6 @@ Cruiser& Cruiser::operator=(Cruiser&& other) noexcept {
     if (this != &other) {
         Ship::operator=(std::move(other));
         RamShip::operator=(std::move(other));
-        shipsDestroyed = other.shipsDestroyed;
        // destroyedShips = std::move(other.destroyedShips);
     }
     return *this;
