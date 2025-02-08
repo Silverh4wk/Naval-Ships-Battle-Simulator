@@ -15,8 +15,7 @@ Phone: +60-108-220-891
 #include <iostream>
 #include <cmath>
 #include "Macros.h"
-#include"Corvette.h"
-
+#include "Corvette.h"
 
 /*
 --------------------------------------------------------------------
@@ -27,41 +26,40 @@ Phone: +60-108-220-891
 --------------------------------------------------------------------
 */
 
-Frigate::Frigate(char shipSymbol, std::string type, char teamSymbol) : 
-Ship(shipSymbol, type, teamSymbol),
-ShootingShip(shipSymbol, type, teamSymbol){}
+Frigate::Frigate(char shipSymbol, std::string type, char teamSymbol) : Ship(shipSymbol, type, teamSymbol),
+                                                                       ShootingShip(shipSymbol, type, teamSymbol) {}
 
-Frigate::Frigate(Frigate&& other) noexcept
+Frigate::Frigate(Frigate &&other) noexcept
     : Ship(other.getSymbol(), other.getType(), other.getTeamSymbol()),
-    ShootingShip(other.getSymbol(), other.getType(), other.getTeamSymbol())
+      ShootingShip(other.getSymbol(), other.getType(), other.getTeamSymbol())
 {
-
 }
 
-Frigate& Frigate::operator=(Frigate&& other) noexcept {
-    if (this != &other) {
+Frigate &Frigate::operator=(Frigate &&other) noexcept
+{
+    if (this != &other)
+    {
         Ship::operator=(std::move(other));
         ShootingShip::operator=(std::move(other));
-
     }
     return *this;
 }
 
-void Frigate::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void Frigate::shoot(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     int shipX = getShipPositionX();
     int shipY = getShipPositionY();
 
     // Clockwise movement order
-    int dx[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
-    int dy[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+    int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
+    int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
 
     for (int i = 0; i < 8; ++i) // move only in 8 directions clockwise
     {
         int targetX = shipX + dx[clock];
         int targetY = shipY + dy[clock];
 
-        // checks if its out of bounds 
+        // checks if its out of bounds
         if (targetX >= 0 && targetX < cols && targetY >= 0 && targetY < rows)
         {
             char targetCell = gr[targetY][targetX];
@@ -73,7 +71,7 @@ void Frigate::shoot(char** gr, int rows, int cols, Battlefield& battlefield, gam
             else
             {
                 std::cout << "Shooting at (" << targetY << ", " << targetX << ")\n";
-                Ship* enemyShip = battlefield.getShipAt(targetX, targetY);
+                Ship *enemyShip = battlefield.getShipAt(targetX, targetY);
 
                 if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
                 {
@@ -89,33 +87,32 @@ void Frigate::shoot(char** gr, int rows, int cols, Battlefield& battlefield, gam
                 }
             }
             clock = (clock + 1) % 8;
-            return;  // End turn after shooting
+            return; // End turn after shooting
         }
         else
         {
             std::cout << "Target out of bounds!!(" << targetY << ", " << targetX << "). Rotating...\n";
         }
         clock = (clock + 1) % 8;
-        return;  // End turn after shooting
+        return; // End turn after shooting
     }
 }
 
-
-
-void Frigate::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void Frigate::actions(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
-        shoot(gr, rows, cols, battlefield,gameManager);
+        shoot(gr, rows, cols, battlefield, gameManager);
+        if (shipsDestroyed >= 3)
+        {
+            std::cout << getType() << " upgraded to corvette!\n";
+            corvette *newcorvette = new corvette(std::move(*this));
+            battlefield.replaceShip(this, newcorvette, gameManager);
+            return;
+        }
     }
-       if (shipsDestroyed >= 3) {
-           std::cout  <<getType()<< " upgraded to corvette!\n";
-           corvette* newcorvette = new corvette(std::move(*this));
-           battlefield.replaceShip(this, newcorvette, gameManager);
-           return;
-       }
+   
     else
         std::cout << getSymbol() << " is waiting to respawn\n";
 }
-
