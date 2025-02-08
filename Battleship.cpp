@@ -118,7 +118,7 @@ void BattleShip::look(char** gr, int rows, int cols)
                 if (cell != '0' && cell != '1' &&
                     cell != getSymbol() && cell != '\0')
                 {
-                    std::cout << "Enemy ship detected at ("
+                    std::cout << "Ship detected at ("
                         << ny << ", " << nx << ")!\n";
                 }
             }
@@ -160,7 +160,7 @@ void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
         {
             char targetCell = gr[targetY][targetX];
             std::cout << "target cell: " << targetCell << "\n";
-
+            
             Ship* enemyShip = battlefield.getShipAt(targetX, targetY); // Get the target ship
             // check if its not on the same team before shooting at it
             if (enemyShip != nullptr && enemyShip->getTeamSymbol() != this->getTeamSymbol())
@@ -185,7 +185,7 @@ void BattleShip::shoot(char** gr, int rows, int cols, Battlefield& battlefield, 
 
 void BattleShip::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
-    if (!isInDeathQueue)
+    if (!isInDeathQueue )
     {
         SHIPS_INFO;
         look(gr, rows, cols);

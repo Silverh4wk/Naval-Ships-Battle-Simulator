@@ -487,7 +487,6 @@ void game::removeDeadShipFromTeam()
     for (int i = A->ships.getSize() - 1; i >= 0; --i)
     {
         Ship* ship = A->ships.getNode(i);
-        
         if (ship == nullptr || ship->isDestroyed())
         {
             if (ship != nullptr)
@@ -496,8 +495,8 @@ void game::removeDeadShipFromTeam()
                     << " is getting removed from the game.." << "\n";
             }
             A->ships.deleteNodeAtIndex(i);
-            delete ship;  
-            ship = nullptr; // set to nullptr after deletion as the game is still going
+            delete ship;
+            ship = nullptr; 
         }
     }
 
@@ -514,7 +513,7 @@ void game::removeDeadShipFromTeam()
             }
             B->ships.deleteNodeAtIndex(i);
             delete ship;
-            ship = nullptr;// set to nullptr after deletion as the game is still going
+            ship = nullptr;
         }
     }
 
