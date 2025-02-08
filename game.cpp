@@ -208,9 +208,9 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Suicidal")
                     {
-                        ship = new Suicidal(symbol, "Suicidal", 'B');
-                        B->SuicidalSymbol = symbol;
-                        B->NumberOfSuicidal++;
+                        ship = new Suicidal(symbol, "Suicidal", 'A');
+                        A->SuicidalSymbol = symbol;
+                        A->NumberOfSuicidal++;
                     }
                     if (ship)
                     {
@@ -326,7 +326,6 @@ void game::addShipToGame(Ship *ship)
     }
 
     std::cout << "Adding ship to game: " << ship->getType()
-              << " at (" << ship->getShipPositionY() << ", " << ship->getShipPositionY() << ")"
               << " with symbol " << ship->getSymbol() << std::endl;
 
     battlefield->placeShip(ship);
@@ -367,23 +366,17 @@ bool game::teamBEmpty() const
     return B->ships.getSize() < 1;
 }
 
-void game::actionQueue()
-{
-    while (queue.getSize() > 0)
-    {
-        try
-        {
+void game::actionQueue() {
+    while (queue.getSize() > 0) {
+        try {
             Ship *ship = queue.front();
-            if (!ship->isDestroyed() && ship != nullptr &&ship)
-            {
+            if (ship != nullptr && !ship->isDestroyed()) {
                 ship->actions(grid, Width, Height, *battlefield, *this);
                 battlefield->display();
             }
-
             queue.dequeue();
         }
-        catch (const std::exception &e)
-        {
+        catch (const std::exception &e) {
             std::cerr << "Exception in actionQueue: " << e.what() << std::endl;
             break;
         }
@@ -392,14 +385,11 @@ void game::actionQueue()
     std::cout << "Action queue processing complete. Remaining queue size: " << queue.getSize() << "\n";
 }
 
-void game::fillQueue()
-{
+void game::fillQueue() {
     queue.clearList();
-    for (int i = 0; i < battlefield->getShips().getSize(); ++i)
-    {
+    for (int i = 0; i < battlefield->getShips().getSize(); ++i) {
         Ship *ship = battlefield->getShips().getNode(i);
-        if (!ship->isDestroyed() && ship != nullptr && ship)
-        {
+        if (ship != nullptr && !ship->isDestroyed()) {
             queue.enqueue(ship);
         }
     }
@@ -507,6 +497,7 @@ void game::removeDeadShipFromTeam()
             }
             A->ships.deleteNodeAtIndex(i);
             delete ship;  
+            ship = nullptr; // set to nullptr after deletion as the game is still going
         }
     }
 
@@ -523,6 +514,7 @@ void game::removeDeadShipFromTeam()
             }
             B->ships.deleteNodeAtIndex(i);
             delete ship;
+            ship = nullptr;// set to nullptr after deletion as the game is still going
         }
     }
 

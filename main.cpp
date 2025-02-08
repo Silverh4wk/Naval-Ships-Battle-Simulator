@@ -114,8 +114,7 @@ class TeeBuf : public std::streambuf {
         std::cout.rdbuf(&tee);
     
         game g;
-        g.displayBattleField();
-    
+        std::cout << "\n SIMULATION BEGIN , ROUNDS =  " << g.iterations << "\n\n";
         while (!g.shipListEmpty() && g.iterations > 0 && !g.teamAEmpty() && !g.teamBEmpty()) {
             std::cout << "Rounds left: " << g.iterations << "\n";
             g.removeDeadShipFromTeam();

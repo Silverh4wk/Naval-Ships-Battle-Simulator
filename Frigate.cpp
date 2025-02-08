@@ -110,7 +110,7 @@ void Frigate::actions(char** gr, int rows, int cols, Battlefield& battlefield, g
         shoot(gr, rows, cols, battlefield,gameManager);
     }
        if (shipsDestroyed >= 3) {
-           std::cout  <<getType()<< " upgraded to SuperShip!\n";
+           std::cout  <<getType()<< " upgraded to corvette!\n";
            corvette* newcorvette = new corvette(std::move(*this));
            battlefield.replaceShip(this, newcorvette, gameManager);
            return;

@@ -22,7 +22,7 @@ Phone: +60-111-871-9811
 #define SHIPS_INFO                                                             \
     std::cout << "________________________________________\n"                  \
               << getType() << " status: \n"                                    \
-              << "Symbol: " << getSymbol() << "\n"                             \
+              << "Symbol: " << getSymbol()  <<  " Team:" << getTeamSymbol()<< "\n"                             \
               << "Position: (" << getShipPositionY() << ", " << getShipPositionX() << ")\n"     \
               << "Lives: " << getLives() << "\n"                               \
               << "ships destroyed : " <<shipsDestroyed    <<"\n"                     \
