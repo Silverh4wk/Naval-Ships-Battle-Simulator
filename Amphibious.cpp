@@ -33,13 +33,6 @@ Amphibious &Amphibious::operator=(Amphibious &&other) noexcept
     return *this;
 }
 
-void Amphibious::moveTo(Ship &target)
-{
-    if (auto *dest = dynamic_cast<Amphibious *>(&target))
-    {
-        *dest = std::move(*this);
-    }
-}
 
 void Amphibious::move(char **gr, int rows, int cols, Battlefield &battlefield)
 {
@@ -133,6 +126,7 @@ void Amphibious::actions(char **gr, int rows, int cols, Battlefield &battlefield
         }
     }
     else
+
 
         std::cout << getSymbol() << " is waiting to respawn\n";
 }

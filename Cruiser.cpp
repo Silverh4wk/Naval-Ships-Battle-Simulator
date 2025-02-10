@@ -144,7 +144,7 @@ void Cruiser::actions(char** gr, int rows, int cols, Battlefield& battlefield, g
     if (!isInDeathQueue)
     {
         SHIPS_INFO;
-       ram(gr, rows, cols, battlefield,gameManager);
+        ram(gr, rows, cols, battlefield,gameManager);
        //finally it checks for upgrade
        if (shipsDestroyed >= 3) {
            std::cout << "Cruiser upgraded to Destroyer!\n";

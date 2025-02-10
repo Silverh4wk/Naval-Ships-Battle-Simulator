@@ -1,0 +1,1260 @@
+Iterations = 30
+Width = 5
+Height = 5
+Number of ships assigned to Team A is: 2
+Adding ship to game: Suicidal with symbol !
+ship of type Suicidal is placed at Y:X 0:3
+Adding ship to game: Suicidal with symbol !
+ship of type Suicidal is placed at Y:X 1:2
+Suicidal ! 2
+Adding ship to game: Cruiser with symbol $
+ship of type Cruiser is placed at Y:X 3:1
+Adding ship to game: Cruiser with symbol $
+ship of type Cruiser is placed at Y:X 2:1
+Cruiser $ 2
+Number of ships assigned to Team B is: 2
+Adding ship to game: Destroyer with symbol <
+ship of type Destroyer is placed at Y:X 1:1
+Destroyer < 1
+Adding ship to game: SuperShip with symbol >
+ship of type SuperShip is placed at Y:X 2:3
+SuperShip > 1
+Game initialized from the file: game.txt
+
+1 0 0 ! 1 
+1 < ! 0 1 
+0 $ 0 > 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+
+
+ SIMULATION BEGIN , ROUNDS =  30
+
+Rounds left: 30
+deathQueue size = 0
+No valid ships were available to respawn.
+Team A size: 4
+Team B size: 2
+1 0 0 ! 1 
+1 < ! 0 1 
+0 $ 0 > 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Suicidal status: 
+Symbol: ! Team:A
+Position: (0, 3)
+Lives: 3
+ships destroyed : 0
+Type: Suicidal
+________________________________________
+A Bomb is dropped on a 3x3 area
+Bomb out of bounds!!(-1, 3).
+Bomb out of bounds!!(-1, 4).
+Bomb out of bounds!!(-1, 2).
+Bombing (0, 3)
+Ship hit! Lives remaining: 2
+Ship added to graveyard for repairs...
+Suicidal ship symbol: ! is dead? = 0
+1 0 0 0 1 
+1 < ! 0 1 
+0 $ 0 > 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Suicidal status: 
+Symbol: ! Team:A
+Position: (1, 2)
+Lives: 3
+ships destroyed : 0
+Type: Suicidal
+________________________________________
+A Bomb is dropped on a 3x3 area
+Bombing (2, 3)
+Ship hit! Lives remaining: 2
+Ship added to graveyard for repairs...
+Enemy ship symbol: > is dead? = 0
+Ship destroyed! Total ships destroyed: 1
+Bombing (1, 1)
+Ship hit! Lives remaining: 2
+Ship added to graveyard for repairs...
+Enemy ship symbol: < is dead? = 0
+Ship destroyed! Total ships destroyed: 2
+Bombing (1, 2)
+Ship hit! Lives remaining: 2
+Ship added to graveyard for repairs...
+Suicidal ship symbol: ! is dead? = 0
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 1)
+Lives: 3
+ships destroyed : 0
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (4, 0).
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+$ 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (2, 1)
+Lives: 3
+ships destroyed : 0
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 1).
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+$ 0 0 0 0 
+< is waiting to respawn
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+$ 0 0 0 0 
+> is waiting to respawn
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+$ 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 4
+Team B size: 2
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+$ 0 0 0 0 
+Rounds left: 29
+deathQueue size = 4
+Ship ! respawned at (4, 3).
+Ship > respawned at (2, 1).
+2 ship(s) respawned successfully.
+Team A size: 4
+Team B size: 2
+1 0 0 0 1 
+1 0 0 0 1 
+0 > 0 0 0 
+0 $ 0 0 0 
+$ 0 0 ! 0 
+________________________________________
+Suicidal status: 
+Symbol: ! Team:A
+Position: (4, 3)
+Lives: 2
+ships destroyed : 1
+Type: Suicidal
+________________________________________
+A Bomb is dropped on a 3x3 area
+Bomb out of bounds!!(5, 4).
+Bomb out of bounds!!(5, 3).
+Bomb out of bounds!!(5, 2).
+Bombing (4, 3)
+Ship hit! Lives remaining: 1
+Ship added to graveyard for repairs...
+Suicidal ship symbol: ! is dead? = 0
+1 0 0 0 1 
+1 0 0 0 1 
+0 > 0 0 0 
+0 $ 0 0 0 
+$ 0 0 0 0 
+! is waiting to respawn
+1 0 0 0 1 
+1 0 0 0 1 
+0 > 0 0 0 
+0 $ 0 0 0 
+$ 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (4, 0)
+Lives: 3
+ships destroyed : 0
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (4, 1).
+1 0 0 0 1 
+1 0 0 0 1 
+0 > 0 0 0 
+0 $ 0 0 0 
+0 $ 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 1)
+Lives: 3
+ships destroyed : 0
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 1
+Ship added to graveyard for repairs...
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+< is waiting to respawn
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+> is waiting to respawn
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 4
+Team B size: 2
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+Rounds left: 28
+deathQueue size = 4
+Ship < respawned at (3, 1).
+Ship ! respawned at (1, 2).
+2 ship(s) respawned successfully.
+Team A size: 4
+Team B size: 2
+1 0 0 0 1 
+1 0 ! 0 1 
+0 $ 0 0 0 
+0 < 0 0 0 
+0 $ 0 0 0 
+! is waiting to respawn
+1 0 0 0 1 
+1 0 ! 0 1 
+0 $ 0 0 0 
+0 < 0 0 0 
+0 $ 0 0 0 
+________________________________________
+Suicidal status: 
+Symbol: ! Team:A
+Position: (1, 2)
+Lives: 2
+ships destroyed : 3
+Type: Suicidal
+________________________________________
+A Bomb is dropped on a 3x3 area
+Bombing (1, 2)
+Ship hit! Lives remaining: 1
+Ship added to graveyard for repairs...
+Suicidal ship symbol: ! is dead? = 0
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 < 0 0 0 
+0 $ 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (4, 1)
+Lives: 3
+ships destroyed : 0
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 1
+Ship added to graveyard for repairs...
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (2, 1)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (1, 1).
+1 0 0 0 1 
+1 $ 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+< is waiting to respawn
+1 0 0 0 1 
+1 $ 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+> is waiting to respawn
+1 0 0 0 1 
+1 $ 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 4
+Team B size: 2
+1 0 0 0 1 
+1 $ 0 0 1 
+0 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+Rounds left: 27
+deathQueue size = 4
+Ship ! respawned at (4, 3).
+Ship > respawned at (2, 0).
+2 ship(s) respawned successfully.
+Team A size: 4
+Team B size: 2
+1 0 0 0 1 
+1 $ 0 0 1 
+> 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 ! 0 
+________________________________________
+Suicidal status: 
+Symbol: ! Team:A
+Position: (4, 3)
+Lives: 1
+ships destroyed : 2
+Type: Suicidal
+________________________________________
+A Bomb is dropped on a 3x3 area
+Bomb out of bounds!!(5, 4).
+Bomb out of bounds!!(5, 3).
+Bomb out of bounds!!(5, 2).
+Bombing (4, 3)
+Ship hit! Lives remaining: 0
+Ship destroyed and added to graveyard!
+Suicidal ship symbol: ! is dead? = 1
+1 0 0 0 1 
+1 $ 0 0 1 
+> 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+! is waiting to respawn
+1 0 0 0 1 
+1 $ 0 0 1 
+> 0 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 1)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 0
+Ship destroyed and added to graveyard!
+1 0 0 0 1 
+1 $ 0 0 1 
+$ 0 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (1, 1)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (0, 1).
+1 $ 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+< is waiting to respawn
+1 $ 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Suicidal ! is getting removed from the game..
+Suicidal was deleted
+SuperShip > is getting removed from the game..
+SuperShip was deleted
+Destroyer was deleted
+SuperShip was deleted
+SuperShip was deleted
+Team A size: 3
+Team B size: 1
+1 $ 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+Rounds left: 26
+deathQueue size = 2
+Ship ! respawned at (0, 3).
+Ship < respawned at (3, 3).
+2 ship(s) respawned successfully.
+Team A size: 3
+Team B size: 1
+1 $ 0 ! 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+0 0 0 < 0 
+0 0 0 0 0 
+________________________________________
+Suicidal status: 
+Symbol: ! Team:A
+Position: (0, 3)
+Lives: 1
+ships destroyed : 4
+Type: Suicidal
+________________________________________
+A Bomb is dropped on a 3x3 area
+Bomb out of bounds!!(-1, 3).
+Bomb out of bounds!!(-1, 4).
+Bomb out of bounds!!(-1, 2).
+Bombing (0, 3)
+Ship hit! Lives remaining: 0
+Ship destroyed and added to graveyard!
+Suicidal ship symbol: ! is dead? = 1
+1 $ 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+0 0 0 < 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (2, 0)
+Lives: 3
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 0).
+1 $ 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+$ 0 0 < 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (0, 1)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (0, 2).
+1 0 $ 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+$ 0 0 < 0 
+0 0 0 0 0 
+________________________________________
+Destroyer status: 
+Symbol: < Team:B
+Position: (3, 3)
+Lives: 1
+ships destroyed : 0
+Type: Destroyer
+________________________________________
+
+< is looking around
+________________________________________
+
+
+
+
+< is deciding where to Move
+________________________________________
+Destroyer < moving up
+
+< is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 2).
+
+< is deciding where to Shoot
+________________________________________
+shooting # 1
+target coordinates: (2, 4)
+city block distance: 1 + 2
+city block distance: 3
+target cell: 0
+no enemy ship found to shoot at (2, 4)
+shooting # 2
+target coordinates: (3, 4)
+city block distance: 0 + 2
+city block distance: 2
+target cell: 0
+no enemy ship found to shoot at (3, 4)
+1 0 $ 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+$ 0 < 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Suicidal ! is getting removed from the game..
+Suicidal was deleted
+Team A size: 2
+Team B size: 1
+1 0 $ 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+$ 0 < 0 0 
+0 0 0 0 0 
+Rounds left: 25
+deathQueue size = 0
+No valid ships were available to respawn.
+Team A size: 2
+Team B size: 1
+1 0 $ 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+$ 0 < 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 0)
+Lives: 3
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (4, 0).
+1 0 $ 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 0 < 0 0 
+$ 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (0, 2)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (0, 1).
+1 $ 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 0 < 0 0 
+$ 0 0 0 0 
+________________________________________
+Destroyer status: 
+Symbol: < Team:B
+Position: (3, 2)
+Lives: 1
+ships destroyed : 0
+Type: Destroyer
+________________________________________
+
+< is looking around
+________________________________________
+
+
+
+
+< is deciding where to Move
+________________________________________
+Destroyer < moving down
+
+< is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (4, 3).
+
+< is deciding where to Shoot
+________________________________________
+shooting # 1
+target coordinates: (3, 2)
+city block distance: 1 + 1
+city block distance: 2
+target cell: 0
+no enemy ship found to shoot at (3, 2)
+shooting # 2
+target coordinates: (0, 3)
+city block distance: 4 + 0
+city block distance: 4
+target cell: 0
+Shooting at enemy ship at (0, 3)
+1 $ 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 0 0 0 0 
+$ 0 0 < 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 2
+Team B size: 1
+1 $ 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 0 0 0 0 
+$ 0 0 < 0 
+Rounds left: 24
+deathQueue size = 0
+No valid ships were available to respawn.
+Team A size: 2
+Team B size: 1
+1 $ 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 0 0 0 0 
+$ 0 0 < 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (4, 0)
+Lives: 3
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 0).
+1 $ 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 < 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (0, 1)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (1, 2).
+1 0 0 0 1 
+1 0 $ 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 < 0 
+________________________________________
+Destroyer status: 
+Symbol: < Team:B
+Position: (4, 3)
+Lives: 1
+ships destroyed : 1
+Type: Destroyer
+________________________________________
+
+< is looking around
+________________________________________
+
+
+Cell (5, 2) is out-of-bounds.
+Cell (5, 3) is out-of-bounds.
+Cell (5, 4) is out-of-bounds.
+
+
+< is deciding where to Move
+________________________________________
+Destroyer < moving up
+
+< is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (2, 4).
+
+< is deciding where to Shoot
+________________________________________
+shooting # 1
+target coordinates: (4, 2)
+city block distance: 2 + 2
+city block distance: 4
+target cell: 0
+no enemy ship found to shoot at (4, 2)
+shooting # 2
+target coordinates: (2, 1)
+city block distance: 0 + 3
+city block distance: 3
+target cell: 0
+no enemy ship found to shoot at (2, 1)
+1 0 0 0 1 
+1 0 $ 0 1 
+0 0 0 0 < 
+$ 0 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 0 $ 0 1 
+0 0 0 0 < 
+$ 0 0 0 0 
+0 0 0 0 0 
+Rounds left: 23
+deathQueue size = 0
+No valid ships were available to respawn.
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 0 $ 0 1 
+0 0 0 0 < 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 0)
+Lives: 3
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 1).
+1 0 0 0 1 
+1 0 $ 0 1 
+0 0 0 0 < 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (1, 2)
+Lives: 3
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (2, 3).
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 $ < 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+Destroyer status: 
+Symbol: < Team:B
+Position: (2, 4)
+Lives: 1
+ships destroyed : 1
+Type: Destroyer
+________________________________________
+
+< is looking around
+________________________________________
+Cell (1, 5) is out-of-bounds.
+
+Ship detected at (2, 3)!
+Cell (2, 5) is out-of-bounds.
+
+Cell (3, 5) is out-of-bounds.
+
+
+< is deciding where to Move
+________________________________________
+Destroyer < moving down
+
+< is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 2
+Ship added to graveyard for repairs...
+
+< is deciding where to Shoot
+________________________________________
+shooting # 1
+target coordinates: (1, 2)
+city block distance: 1 + 1
+city block distance: 2
+target cell: 0
+no enemy ship found to shoot at (1, 2)
+shooting # 2
+target coordinates: (3, 1)
+city block distance: 1 + 2
+city block distance: 3
+target cell: $
+Shooting at enemy ship at (3, 1)
+Ship hit! Lives remaining: 2
+Ship added to graveyard for repairs...
+Destroyer upgraded to SuperShip!
+old ship is getting removed 
+added new ship to teamB SuperShip
+Destroyer was deleted
+Destroyer was deleted
+Destroyer was deleted
+Ship upgraded in team B
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 < 0 
+0 0 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 < 0 
+0 0 0 0 0 
+0 0 0 0 0 
+Rounds left: 22
+deathQueue size = 2
+Ship $ respawned at (2, 1).
+Ship $ respawned at (2, 0).
+2 ship(s) respawned successfully.
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 0 0 0 1 
+$ $ 0 < 0 
+0 0 0 0 0 
+0 0 0 0 0 
+shooting # 1
+Nothing to shoot at (2, 4). Rotating...
+shooting # 2
+Nothing to shoot at (2, 4). Rotating...
+shooting # 3
+Nothing to shoot at (3, 4). Rotating...
+1 0 0 0 1 
+1 0 0 0 1 
+$ $ 0 < 0 
+0 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (2, 0)
+Lives: 2
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 0).
+1 0 0 0 1 
+1 0 0 0 1 
+0 $ 0 < 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (2, 1)
+Lives: 2
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (1, 2).
+1 0 0 0 1 
+1 0 $ 0 1 
+0 0 0 < 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+SuperShip status: 
+Symbol: < Team:B
+Position: (2, 3)
+Lives: 3
+ships destroyed : 0
+Type: SuperShip
+________________________________________
+ is ramming now 
+
+< is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 1
+Ship added to graveyard for repairs...
+shooting # 1
+Nothing to shoot at (0, 1). Rotating...
+shooting # 2
+Nothing to shoot at (0, 3). Rotating...
+shooting # 3
+Nothing to shoot at (0, 3). Rotating...
+1 0 0 0 1 
+1 0 < 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 0 < 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+Rounds left: 21
+deathQueue size = 1
+Ship $ respawned at (4, 1).
+1 ship(s) respawned successfully.
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 0 < 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 $ 0 0 0 
+shooting # 1
+Nothing to shoot at (1, 1). Rotating...
+shooting # 2
+Nothing to shoot at (1, 1). Rotating...
+shooting # 3
+Nothing to shoot at (2, 2). Rotating...
+1 0 0 0 1 
+1 0 < 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 $ 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 0)
+Lives: 2
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (2, 0).
+1 0 0 0 1 
+1 0 < 0 1 
+$ 0 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (4, 1)
+Lives: 1
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 0).
+1 0 0 0 1 
+1 0 < 0 1 
+$ 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+SuperShip status: 
+Symbol: < Team:B
+Position: (1, 2)
+Lives: 3
+ships destroyed : 1
+Type: SuperShip
+________________________________________
+ is ramming now 
+
+< is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (0, 1).
+shooting # 1
+Target out of bounds!!(-1, 2). Rotating...
+shooting # 2
+Nothing to shoot at (1, 1). Rotating...
+shooting # 3
+Nothing to shoot at (0, 2). Rotating...
+1 < 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 2
+Team B size: 1
+1 < 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+Rounds left: 20
+deathQueue size = 0
+No valid ships were available to respawn.
+Team A size: 2
+Team B size: 1
+1 < 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+shooting # 1
+Target out of bounds!!(-1, 1). Rotating...
+shooting # 2
+Nothing to shoot at (1, 1). Rotating...
+shooting # 3
+Nothing to shoot at (0, 2). Rotating...
+1 < 0 0 1 
+1 0 0 0 1 
+$ 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (2, 0)
+Lives: 2
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (1, 1).
+1 < 0 0 1 
+1 $ 0 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 0)
+Lives: 1
+ships destroyed : 1
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (2, 1).
+1 < 0 0 1 
+1 $ 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+SuperShip status: 
+Symbol: < Team:B
+Position: (0, 1)
+Lives: 3
+ships destroyed : 1
+Type: SuperShip
+________________________________________
+ is ramming now 
+
+< is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 1
+Ship added to graveyard for repairs...
+shooting # 1
+Nothing to shoot at (0, 1). Rotating...
+shooting # 2
+Nothing to shoot at (2, 2). Rotating...
+shooting # 3
+Nothing to shoot at (2, 2). Rotating...
+1 0 0 0 1 
+1 < 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 < 0 0 1 
+0 $ 0 0 0 
+0 0 0 0 0 
+0 0 0 0 0 
+Rounds left: 19
+deathQueue size = 1
+Ship $ respawned at (3, 0).
+1 ship(s) respawned successfully.
+Team A size: 2
+Team B size: 1
+1 0 0 0 1 
+1 < 0 0 1 
+0 $ 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+shooting # 1
+Nothing to shoot at (0, 2). Rotating...
+shooting # 2
+Shooting at (2, 1)
+Shooting at enemy ship at (2, 1)
+Ship hit! Lives remaining: 0
+Ship destroyed and added to graveyard!
+Enemy ship symbol: $ is dead? = 1
+shooting # 3
+Nothing to shoot at (0, 2). Rotating...
+1 0 0 0 1 
+1 < 0 0 1 
+0 0 0 0 0 
+$ 0 0 0 0 
+0 0 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (3, 0)
+Lives: 1
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (4, 1).
+1 0 0 0 1 
+1 < 0 0 1 
+0 0 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+________________________________________
+SuperShip status: 
+Symbol: < Team:B
+Position: (1, 1)
+Lives: 3
+ships destroyed : 3
+Type: SuperShip
+________________________________________
+ is ramming now 
+
+< is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (2, 1).
+shooting # 1
+Nothing to shoot at (3, 2). Rotating...
+shooting # 2
+Nothing to shoot at (2, 0). Rotating...
+shooting # 3
+Nothing to shoot at (1, 2). Rotating...
+1 0 0 0 1 
+1 0 0 0 1 
+0 < 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Cruiser $ is getting removed from the game..
+Cruiser was deleted
+Team A size: 1
+Team B size: 1
+1 0 0 0 1 
+1 0 0 0 1 
+0 < 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+Rounds left: 18
+deathQueue size = 0
+No valid ships were available to respawn.
+Team A size: 1
+Team B size: 1
+1 0 0 0 1 
+1 0 0 0 1 
+0 < 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+shooting # 1
+Nothing to shoot at (3, 1). Rotating...
+shooting # 2
+Nothing to shoot at (3, 2). Rotating...
+shooting # 3
+Nothing to shoot at (1, 0). Rotating...
+1 0 0 0 1 
+1 0 0 0 1 
+0 < 0 0 0 
+0 0 0 0 0 
+0 $ 0 0 0 
+________________________________________
+Cruiser status: 
+Symbol: $ Team:A
+Position: (4, 1)
+Lives: 1
+ships destroyed : 2
+Type: Cruiser
+________________________________________
+
+$ is deciding where to Ram
+________________________________________
+No enemy found. Moved to random position (3, 1).
+1 0 0 0 1 
+1 0 0 0 1 
+0 < 0 0 0 
+0 $ 0 0 0 
+0 0 0 0 0 
+________________________________________
+SuperShip status: 
+Symbol: < Team:B
+Position: (2, 1)
+Lives: 3
+ships destroyed : 3
+Type: SuperShip
+________________________________________
+ is ramming now 
+
+< is deciding where to Ram
+________________________________________
+Ship hit! Lives remaining: 0
+Ship destroyed and added to graveyard!
+shooting # 1
+Nothing to shoot at (2, 1). Rotating...
+shooting # 2
+Nothing to shoot at (3, 2). Rotating...
+shooting # 3
+Nothing to shoot at (2, 2). Rotating...
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 < 0 0 0 
+0 0 0 0 0 
+Action queue processing complete. Remaining queue size: 0
+Cruiser $ is getting removed from the game..
+Cruiser was deleted
+Team A size: 0
+Team B size: 1
+1 0 0 0 1 
+1 0 0 0 1 
+0 0 0 0 0 
+0 < 0 0 0 
+0 0 0 0 0 
+Game Over! Team B Wins!
