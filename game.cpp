@@ -1,11 +1,3 @@
-
-
-
-
-
- 
-
-
 /**********|**********|**********|
 Program: game.cpp / game.h
 Course: Object Oriented Programming

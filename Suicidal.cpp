@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Suicidal.cpp / Suicidal.h
 Course: Object Oriented Programming
 Trimester: 2430
 Name: RIME HAMZA MOHAMMED
@@ -19,7 +19,9 @@ Suicidal::Suicidal(char shipSymbol, std::string type, char teamSymbol) :
 Ship(shipSymbol, type, teamSymbol),
 BlowShip(shipSymbol, type, teamSymbol){}
 
-
+// suicidal ship adds a bomb to the 3x3 area
+// it will avoid bombing it's team members and islands
+// suicidal ship will also blow itself up with its enemies
 void Suicidal::BlowUp(char** gr, int rows, int cols, Battlefield& battlefield)
 {
     int shipX = getShipPositionX();

@@ -1,7 +1,7 @@
 /**********|**********|**********|
 Program: Battlefield.cpp / Battlefield.h
 Course: Object Oriented Programming
-Trimester: 2410??
+Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa
 ID: 241UC2400P
 Lecture Section: TC2L

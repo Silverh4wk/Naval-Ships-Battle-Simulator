@@ -44,6 +44,9 @@ Frigate &Frigate::operator=(Frigate &&other) noexcept
     }
     return *this;
 }
+// Frigate shoots in a clockwise direction and moves once for every turn
+// Fridate will upgrade to corvette if it kills 3 or more ships
+// Fridate will not move and will not shoot at it's team members 
 
 void Frigate::shoot(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {

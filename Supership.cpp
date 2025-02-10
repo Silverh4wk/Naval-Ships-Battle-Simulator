@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Supership.cpp / SuperShip.h
 Course: Object Oriented Programming
 Trimester: 2430
 Name: RIME HAMZA MOHAMMED
@@ -24,7 +24,6 @@ SuperShip::SuperShip(char shipSymbol, std::string type, char teamSymbol)
 {
 }
 
-
 // Conversion from Amphibious
 SuperShip::SuperShip(Amphibious &&base) noexcept
     : Ship(base.getSymbol(), "SuperShip", base.getTeamSymbol()),
@@ -46,7 +45,7 @@ SuperShip::SuperShip(Destroyer &&base) noexcept
     setShipPosition(base.getShipPositionX(), base.getShipPositionY());
     shipsDestroyed = 0;
 }
-
+// The shoot here is amended to shoot 3 times in random directions in the same turn
 void SuperShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {
     for (int i = 0; i < 3; ++i)
@@ -97,6 +96,7 @@ void SuperShip::shoot(char **gr, int rows, int cols, Battlefield &battlefield, g
         }
     }
 }
+//supership inherits all the actions from destroyer and adds the shoot function
 
 void SuperShip::actions(char **gr, int rows, int cols, Battlefield &battlefield, game &gameManager)
 {

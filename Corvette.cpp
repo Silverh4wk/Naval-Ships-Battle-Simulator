@@ -47,7 +47,9 @@ Corvette::Corvette(Frigate&& base) noexcept
         setShipPosition(base.getShipPositionX(), base.getShipPositionY());
         shipsDestroyed = 0;
     }
-
+// corvette will shoot at random directions in a clockwise direction
+// corvette will not move and will not shoot at it's team members
+// corvette will not upgrade to any other ship
 void Corvette::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
     int directions[8][2] = { {0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1} };

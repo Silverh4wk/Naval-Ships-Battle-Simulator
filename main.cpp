@@ -95,12 +95,12 @@ int main() {
         }
         std::cin.ignore();
     } while (choice != 5);
-    _CrtDumpMemoryLeaks();
+    _CrtDumpMemoryLeaks(); // for memory leak detection
     return EXIT_SUCCESS;
 }
 
 // Custom stream buffer that writes to two stream buffers 
-
+// Stream buffer doesn't work if you're using Macos so comment out the lines highlighted below
 class TeeBuf : public std::streambuf {
     public:
         TeeBuf(std::streambuf* sb1, std::streambuf* sb2)
@@ -136,10 +136,10 @@ class TeeBuf : public std::streambuf {
             return;
         }
     
-        std::streambuf* origCoutBuf = std::cout.rdbuf();
+        std::streambuf* origCoutBuf = std::cout.rdbuf(); // to run on mac need to comment this line
     
-        TeeBuf tee(origCoutBuf, outFile.rdbuf());
-        std::cout.rdbuf(&tee);
+        TeeBuf tee(origCoutBuf, outFile.rdbuf());  // to run on mac need to comment this line
+        std::cout.rdbuf(&tee); // to run on mac need to comment this line
     
         game g;
         std::cout << "\n SIMULATION BEGIN , ROUNDS =  " << g.iterations << "\n\n";
@@ -167,7 +167,7 @@ class TeeBuf : public std::streambuf {
             std::cout << "Game Over! It's a draw!\n";
         }
     
-        std::cout.rdbuf(origCoutBuf);
+        std::cout.rdbuf(origCoutBuf);  // to run on mac need to comment this line
     
         outFile.close();
     }

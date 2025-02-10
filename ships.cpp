@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: ships.cpp / ships.h
+Program: Ships.cpp / Ships.h
 Course: Object Oriented Programming
 Trimester: 2430
 Name: Hazim Elamin Mohamed Ali musa

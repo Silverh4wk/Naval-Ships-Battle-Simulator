@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: Suicidal.cpp / Suicidal.h
 Course: Object Oriented Programming
 Trimester: 2430
 Name: RIME HAMZA MOHAMMED

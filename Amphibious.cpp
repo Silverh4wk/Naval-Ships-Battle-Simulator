@@ -1,5 +1,3 @@
-
-
 /**********|**********|**********|
 Program: Amphibious.cpp / Amphibious.h
 Course: Object Oriented Programming
@@ -33,7 +31,8 @@ Amphibious &Amphibious::operator=(Amphibious &&other) noexcept
     return *this;
 }
 
-
+// Amphibiuos ship can move in 4 directions and can move through islands and water 
+// if kill = 4, upgrades to SuperShip
 void Amphibious::move(char **gr, int rows, int cols, Battlefield &battlefield)
 {
     int directions[4][2] = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
