@@ -1,3 +1,10 @@
+// The Amphibious.cpp file implements an Amphibious ship for the warship simulation.
+// It defines the movement, shooting, and upgrade actions specific to an amphibious ship,
+// such as moving randomly within grid boundaries and initiating combat with enemy ships.
+// This class inherits from Ship and BattleShip, and interacts with the Battlefield and game manager
+// to update the status of the game state.
+
+
 /**********|**********|**********|
 Program: Amphibious.cpp / Amphibious.h
 Course: Object Oriented Programming

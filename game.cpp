@@ -190,7 +190,7 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Corvette")
                     {
-                        ship = new corvette(symbol, "Corvette", 'A');
+                        ship = new Corvette(symbol, "Corvette", 'A');
                         A->CorvetteSymbol = symbol;
                         A->NumberOfCorvette++;
                     }
@@ -270,7 +270,7 @@ bool game::gameInit(std::string &&filename)
                     }
                     else if (shipType == "Corvette")
                     {
-                        ship = new corvette(symbol, "Corvette", 'B');
+                        ship = new Corvette(symbol, "Corvette", 'B');
                         B->CorvetteSymbol = symbol;
                         B->NumberOfCorvette++;
                     }
@@ -389,7 +389,7 @@ void game::fillQueue() {
     queue.clearList();
     for (int i = 0; i < battlefield->getShips().getSize(); ++i) {
         Ship *ship = battlefield->getShips().getNode(i);
-        if (ship != nullptr && !ship->isDestroyed()) {
+        if (!ship->isDestroyed() && ship != nullptr ) {
             queue.enqueue(ship);
         }
     }
@@ -413,12 +413,6 @@ void game::respawn()
         try
         {
             Ship* ship = battlefield->shipGraveYard.front();
-
-            if (ship == nullptr)
-            {
-                battlefield->shipGraveYard.dequeue();
-                continue;
-            }
 
             if (ship->isDestroyed())
             {

@@ -15,11 +15,11 @@ Phone: +60-108-220-891
 #include <random>
 #include "Macros.h"
 
-corvette::corvette(char shipSymbol, std::string type, char teamSymbol) : Ship(shipSymbol, type, teamSymbol)
+Corvette::Corvette(char shipSymbol, std::string type, char teamSymbol) : Ship(shipSymbol, type, teamSymbol)
 ,ShootingShip(shipSymbol,type,teamSymbol){}
 
 // Conversion from BattleShip
-corvette::corvette(Frigate&& base) noexcept
+Corvette::Corvette(Frigate&& base) noexcept
         : Ship(base.getSymbol(), "corvette", base.getTeamSymbol()),  
         ShootingShip(base.getSymbol(), "corvette", base.getTeamSymbol())
     {
@@ -29,7 +29,7 @@ corvette::corvette(Frigate&& base) noexcept
         shipsDestroyed = 0;
     }
 
-void corvette::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void Corvette::shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
     int directions[8][2] = { {0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1} };
     RANDOM_DEVICE
@@ -79,7 +79,7 @@ void corvette::shoot(char** gr, int rows, int cols, Battlefield& battlefield, ga
 }
 
 
-void corvette::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
+void Corvette::actions(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager)
 {
     if (!isInDeathQueue)
     {

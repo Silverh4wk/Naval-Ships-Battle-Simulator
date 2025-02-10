@@ -20,14 +20,14 @@ Corvette --:
  cant move, shoot at random neighbour cells
 --------------------------------------------------------------------
 */
-class corvette : public ShootingShip
+class Corvette : public ShootingShip
 {
 private:
     int clock = 0;
 public:
-    corvette(char shipSymbol, std::string type, char teamSymbol);
-    corvette(Frigate&& base) noexcept;
-    ~corvette() {
+    Corvette(char shipSymbol, std::string type, char teamSymbol);
+    Corvette(Frigate&& base) noexcept;
+    ~Corvette() {
         std::cout << "Corvette was deleted\n";
     }
     virtual void shoot(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) override;

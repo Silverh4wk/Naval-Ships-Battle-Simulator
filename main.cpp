@@ -1,3 +1,30 @@
+
+/**
+ * @file main.cpp
+ * @brief WarShip Simulation main file.
+ *
+ * This file serves as the entry point for the WarShip Simulation application.
+ * It manages the simulation's main menu interface, allowing the user to:
+ *   - Start the simulation.
+ *   - View the game rules.
+ *   - Learn about various ship types and their behaviors in the simulation.
+ *   - Display the game credits.
+ *
+ * The simulation is handled by the function runSimulation(), which sets up a game loop
+ * that controls the progression of rounds. It makes use of a custom stream buffer class,
+ * TeeBuf, to simultaneously output simulation data to both the console and a file ("game_output.txt") which can be used for
+ * review later on.
+ *
+ * Key functionalities include:
+ *   - Initializing and managing game state and iterations.
+ *   - Displaying instructions and notifications about remaining simulation rounds.
+ *   - Updating and displaying the battlefield as the simulation runs.
+ *   - Evaluating win conditions based on the remaining ships in each team.
+ *   - Providing comprehensive details about ship behaviors, upgrades, and interactions.
+ *
+ * Memory management is also addressed by enabling debug settings to track and dump 
+ * memory leaks upon program termination.
+ */
 /**********|**********|**********|
 Program: main.cpp / main.h
 Course: Object Oriented Programming
@@ -18,8 +45,8 @@ Phone: +60-111-871-9811
 #include <sstream>
 #include <string>
 #include <random>
-#include "game.h"
-#include "ships.h"
+#include "Game.h"
+#include "Ships.h"
 #include "Battlefield.h"
 #include <crtdbg.h>
 #include <cstdlib>
@@ -73,6 +100,7 @@ int main() {
 }
 
 // Custom stream buffer that writes to two stream buffers 
+
 class TeeBuf : public std::streambuf {
     public:
         TeeBuf(std::streambuf* sb1, std::streambuf* sb2)
@@ -117,15 +145,15 @@ class TeeBuf : public std::streambuf {
         std::cout << "\n SIMULATION BEGIN , ROUNDS =  " << g.iterations << "\n\n";
         while (!g.shipListEmpty() && g.iterations > 0 && !g.teamAEmpty() && !g.teamBEmpty()) {
             std::cout << "Rounds left: " << g.iterations << "\n";
-            g.removeDeadShipFromTeam();
             g.respawn();
+            g.removeDeadShipFromTeam();
             g.displayBattleField();
             g.actionQueue();
             g.removeDeadShipFromTeam();
             g.fillQueue();
             g.displayBattleField();
             g.iterations--;
-            //std::cin.get(); if a pause between rounds is needed but i would adive against it unless the simulation is small
+            //std::cin.get(); if a pause between rounds is needed but i would advice against it unless the simulation is small
             // as one run may take thousands of lines
         }
     
@@ -168,7 +196,7 @@ class TeeBuf : public std::streambuf {
     
         // Battleship
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Battleship" << std::endl;
+        std::cout << "\nShip Type: Battleship" << std::endl;
         std::cout << "Behavior: In each turn, the Battleship evaluates its current position and decides on a move." << std::endl;
         std::cout << "          It then moves once and fires 2 shots at random positions." << std::endl;
         std::cout << "Firing:   The maximum city block distance for any shot is 5 (i.e. for any fire(x,y), x+y <= 5)." << std::endl;
@@ -178,7 +206,7 @@ class TeeBuf : public std::streambuf {
     
         // Cruiser
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Cruiser" << std::endl;
+        std::cout << "\nShip Type: Cruiser" << std::endl;
         std::cout << "Behavior: Each turn, the Cruiser inspects its immediate 3x3 neighbourhood" << std::endl;
         std::cout << "          (centered at its current position) and moves to one of the neighbouring cells." << std::endl;
         std::cout << "Combat:   It does not fire; instead, it destroys (Rams) any enemy ship encountered  on its path," << std::endl;
@@ -188,7 +216,7 @@ class TeeBuf : public std::streambuf {
     
         // Destroyer
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Destroyer" << std::endl;
+        std::cout << "\nShip Type: Destroyer" << std::endl;
         std::cout << "Description: A Destroyer combines the functionality of both the BattleShip and Cruiser." << std::endl;
         std::cout << "             It can both shoot (like the Battleship) and destroy enemy ships on contact" << std::endl;
         std::cout << "             (like the Cruiser)." << std::endl;
@@ -196,7 +224,7 @@ class TeeBuf : public std::streambuf {
     
         // Frigate
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Frigate" << std::endl;
+        std::cout << "\nShip Type: Frigate" << std::endl;
         std::cout << "Behavior: Does not move or scan its surroundings. It remains stationary." << std::endl;
         std::cout << "Firing:   Shoots at one immediate neighbouring cell per turn. The target cell is" << std::endl;
         std::cout << "          chosen according to a fixed sequence: starting from the cell directly above" << std::endl;
@@ -205,27 +233,27 @@ class TeeBuf : public std::streambuf {
     
         // Corvette
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Corvette" << std::endl;
+        std::cout << "\nShip Type: Corvette" << std::endl;
         std::cout << "Behavior: A stationary ship that does not move." << std::endl;
         std::cout << "Firing:   Shoots at one immediate neighbouring cell per turn, but the target is selected" << std::endl;
         std::cout << "          at random." << std::endl;
     
         // Amphibious
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Amphibious" << std::endl;
+        std::cout << "\nShip Type: Amphibious" << std::endl;
         std::cout << "Behavior: Can traverse both sea and island terrains. Its movement and firing pattern" << std::endl;
         std::cout << "          is similar to that of the Battleship." << std::endl;
         std::cout << "Upgrade:  After terminating 4 enemy ships, it is upgraded to a SuperShip." << std::endl;
     
         // SuperShip
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: SuperShip" << std::endl;
+        std::cout << "\nShip Type: SuperShip" << std::endl;
         std::cout << "Behavior: Moves like the Cruiser, destroying any enemy ship encountered on its path." << std::endl;
         std::cout << "Firing:   In addition, it fires randomly at 3 locations on the battlefield each turn." << std::endl;
       
         // Suicidal
         std::cout << "_________________________________" << std::endl;
-        std::cout << "Ship Type: Suicidal" << std::endl;
+        std::cout << "\nShip Type: Suicidal" << std::endl;
         std::cout << "Behavior: Blows and clears its surroundings(3x3), destroying any enemy ship caught in the explosion and itself." << std::endl;
         std::cout << "================================" << std::endl;
     }
