@@ -24,6 +24,15 @@ Phone: +60-111-871-9811
  Destroyer --:
  it can move it can shoot it can ram it can look
  if kill = 3, upgrades to supership
+ functions and how they operate:
+ 
+ Look: inherited the looking functionality from BattleShip
+ Move: inherited the movement functionality from BattleShip
+ Shoot: inherited the shooting functionality from BattleShip
+ ram : inherited the ramming functionality from Cruiser 
+
+ it upgrades to SuperShip if it kills 3 or more
+
  --------------------------------------------------------------------
 */
 
@@ -78,16 +87,18 @@ Destroyer::Destroyer(Cruiser&& base) noexcept
         setShipPosition(base.getShipPositionX(), base.getShipPositionY());
         shipsDestroyed = 0;
 }
-// factory function cuz i didnt know how to properly use movesemantics and im tired for now
-//Destroyer* Destroyer::createFrom(Ship* source)
-//{
-//    Destroyer* dest = new Destroyer('D', "Destroyer", source->getTeamSymbol());
-//    dest->setShipPosition(source->getShipPositionX(), source->getShipPositionY());
-//    dest->setLives(source->getLives());
-//    dest->setType("Destroyer");
-//    dest->setSymbol('$');
-//    return dest;
-//}
+
+//deprecated
+// // factory function cuz i didnt know how to properly use movesemantics and im tired for now
+// //Destroyer* Destroyer::createFrom(Ship* source)
+// //{
+// //    Destroyer* dest = new Destroyer('D', "Destroyer", source->getTeamSymbol());
+// //    dest->setShipPosition(source->getShipPositionX(), source->getShipPositionY());
+// //    dest->setLives(source->getLives());
+// //    dest->setType("Destroyer");
+// //    dest->setSymbol('$');
+// //    return dest;
+// //}
 
 
 

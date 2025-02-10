@@ -17,7 +17,18 @@ Phone: +60-108-220-891
 /*
 --------------------------------------------------------------------
 Corvette --:
- cant move, shoot at random neighbour cells
+ The Corvette ship cannot move; it solely fires at random neighboring cells.
+ This class uses an internal clock variable to manage its shooting timing:
+      It is incremented every cycle in the actions function. Once it reaches a preset threshold,
+      the Corvette triggers the shoot function to fire at one of its neighbors. 
+Functions and their operations:
+  - shoot:
+        This function randomly selects one of the neighboring cells and fires at it.
+        It verifies that the selected cell is within grid bounds and, if an enemy is present,
+        applies damage. This random targeting embodies the Corvette's unpredictable behavior.
+  - actions:
+        As the Corvette cannot move, this function solely focus on shooting.
+        It increments the clock on each cycle.
 --------------------------------------------------------------------
 */
 class Corvette : public ShootingShip

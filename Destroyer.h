@@ -22,8 +22,18 @@ Phone: +60-111-871-9811
  Destroyer --:
  it can move it can shoot it can ram it can look
  if kill = 3, upgrades to supership
---------------------------------------------------------------------
+ functions and how they operate:
+ 
+ Look: inherited the looking functionality from BattleShip
+ Move: inherited the movement functionality from BattleShip
+ Shoot: inherited the shooting functionality from BattleShip
+ ram : inherited the ramming functionality from Cruiser 
+
+ it upgrades to SuperShip if it kills 3 or more
+
+ --------------------------------------------------------------------
 */
+
 class Destroyer :public BattleShip, public Cruiser
 {
 

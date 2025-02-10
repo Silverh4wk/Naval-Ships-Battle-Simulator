@@ -12,14 +12,64 @@ Phone: +60-111-871-9811
 #include <iostream>
 #include <random>
 #include "Battlefield.h"
-#include "ships.h"
+#include "Ships.h"
 #include "helpers.h"
+
+
+
+/**********|********** Commented Function Descriptions |**********|**********
+ 
+this file handles the Battlefield of this game,
+its used for initiating the game grid, and keeping a copy of it 
+for changes that may happen to the grid later on during the game
+
+
+functions:
+- Battlefield Constructor:
+    • Copies an external grid (gr) into its own allocated 'terrain'.
+    • Stores dimensions 'width' and 'Height' for later use.
+    
+- getTerrainAt:
+    • Returns the terrain character at the given (y, x) coordinate.
+    
+- Destructor:
+    • Frees the allocated memory for the terrain grid.
+    • Outputs debug messages indicating deletion.
+    
+- placeShip:
+    • Randomly selects an empty location (where grid element is '0') to place a ship.
+    • Updates ship's position and grid symbol.
+    • Adds the ship to the internal ship list.
+    
+- hardPlaceShip:
+    • Places a ship at a user-specified (x, y) coordinate.
+    • Updates ship's position and grid symbol.
+    • Adds the ship to the ship list.
+    
+- display:
+    • Outputs the current state of the grid to the provided ostream.
+    
+- getShipAt:
+    • Searches the ship list to find a ship whose position matches (x, y).
+    • Returns a pointer to the ship if found; otherwise, returns nullptr.
+    
+- getWidth & getHeight:
+    • Provide access to grid dimensions.
+    
+- getGrid:
+    • Returns the raw grid pointer.
+    
+- replaceShip:
+    • Upgrades a ship by replacing an old ship with a new ship.
+    • Updates the corresponding team roster within the game manager.
+    • Replaces the symbol in the grid and updates the internal ship list.
+***************************************************************/
+
 
 
 
 // my thoughts just for tracking
 // will set the grid in battelfield = to the grid from game
-// then after copying everything, it will set gr(grid in game) to nullptr;
 Battlefield::Battlefield(char** gr, int w, int h) : width(w), Height(h), grid(gr)
 {
     terrain = new char* [Height];
@@ -48,7 +98,9 @@ Battlefield::~Battlefield()
         std::cout << "battlefield destrctor called\n";
 }
 
-// To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;
+// // To do, figure out how to place ships randmonly using random  x = rand() % height; y = rand() % width;
+
+
 void Battlefield::placeShip(Ship* ship)
 {
     std::random_device rd;
@@ -68,7 +120,7 @@ void Battlefield::placeShip(Ship* ship)
     std::cout << "ship of type " << ship->getType() << " is placed at Y:X " << y << ":" << x << std::endl;
     grid[y][x] = ship->getSymbol();
 }
-
+// used in testing to hardplace a ship to a desired position on the battlefied 
 void Battlefield::hardPlaceShip(Ship* ship, int x, int y)
 {
     ship->setShipPosition(x, y);

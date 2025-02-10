@@ -1,3 +1,11 @@
+
+
+
+
+
+ 
+
+
 /**********|**********|**********|
 Program: game.cpp / game.h
 Course: Object Oriented Programming
@@ -10,8 +18,8 @@ Email: HAZIM.ELAMIN.MOHAMED@student.mmu.edu.my
 Phone: +60-111-871-9811
 **********|**********|**********/
 #include <iostream>
-#include "game.h"
-#include "ships.h"
+#include "Game.h"
+#include "Ships.h"
 #include "Amphibious.h"
 #include "BattleShip.h"
 #include "Corvette.h"
@@ -25,6 +33,8 @@ Phone: +60-111-871-9811
 #include <sstream>
 #include <random>
 
+// Initializes the game by reading configuration parameters from "game.txt",
+// setting up the battlefield and teams, and displaying the initial state of the battlefield.
 game::game()
 {
     gameInit("game.txt");
@@ -33,7 +43,8 @@ game::game()
     battlefield->display();
     std::cout << std::endl;
 };
-
+//  Deallocates dynamically allocated memory including the grid, battlefield,
+//  teams, and ship objects. Ensures proper cleanup to prevent memory leaks.
 game::~game()
 {
     std::cout << "game is ending.. \n";
@@ -69,6 +80,14 @@ game::~game()
     std::cout << "game ended\n";
 };
 
+
+ // Reads configuration data (iterations, grid width, and height) and populates the grid.
+ //first it opens the file, get the data of the gird, close it and then reopen to get the rest of the data
+ // Processes the file to initialize teams and ship counts, places ships on the battlefield,
+ // and enqueues them for action processing.
+ //  filename: The name of the file to read the game configuration from.
+ // return  true if the file was successfully processed and the game initialized; false otherwise.
+ 
 bool game::gameInit(std::string &&filename)
 {
 
@@ -311,7 +330,11 @@ bool game::gameInit(std::string &&filename)
     std::cout << "Game initialized from the file: " << filename << std::endl;
     return true;
 }
-
+// 
+//  Adds a ship to the game.
+//  Validates the ship pointer and the battlefield before placing the ship on the battlefield .
+//  Outputs the ship's type and symbol as confirmation of placement.
+//   ship Pointer to the Ship object to be added.
 void game::addShipToGame(Ship *ship)
 {
     if (ship == nullptr)
@@ -330,10 +353,23 @@ void game::addShipToGame(Ship *ship)
 
     battlefield->placeShip(ship);
 }
+
+
+// 
+//   Adds a ship to the game at specific coordinates.
+//   Places the given ship directly on the battlefield at the position specified
+//   by (x, y) without further processing or random placement.
+//  was specifically used for testing
+
 void game::hardaddShipToGame(Ship *ship, int x, int y)
 {
     battlefield->hardPlaceShip(ship, x, y);
 }
+
+//    Displays the battlefield.
+//   Outputs the current grid state of the battlefield to the provided output stream.
+//   If the battlefield is not initialized, prints an appropriate message.
+//   os is The output stream where the battlefield will be displayed.
 
 void game::displayBattleField(std::ostream &os) const
 {
@@ -347,6 +383,12 @@ void game::displayBattleField(std::ostream &os) const
     }
 }
 
+
+
+
+//   Checks whether both teams' ship lists are empty.
+//   return true if both Team A and Team B have no ships remaining; false otherwise.
+
 bool game::shipListEmpty() const
 {
     if (A->ships.getSize() == 0 && B->ships.getSize() == 0)
@@ -356,15 +398,26 @@ bool game::shipListEmpty() const
     return false;
 }
 
+//   Checks Team A ship lists if its empty.
+//   return true if Team A have no ships remaining; false otherwise.
 bool game::teamAEmpty() const
 {
     return A->ships.getSize() < 1;
 }
 
+//   Checks Team B ship lists if its empty.
+//   return true if Team B have no ships remaining; false otherwise.
 bool game::teamBEmpty() const
 {
     return B->ships.getSize() < 1;
 }
+
+
+
+//   Processes the action queue for all ships.
+//   Iterates over each ship in the action queue. For each ship that is not marked as destroyed,
+//   executes its actions (e.g., movement, attack) and updates the battlefield after the action.
+//   If an exception occurs during processing, it is caught and logged.
 
 void game::actionQueue() {
     while (queue.getSize() > 0) {
@@ -385,6 +438,7 @@ void game::actionQueue() {
     std::cout << "Action queue processing complete. Remaining queue size: " << queue.getSize() << "\n";
 }
 
+// get the remaining alive ships from the battlefield and fill the  queue  
 void game::fillQueue() {
     queue.clearList();
     for (int i = 0; i < battlefield->getShips().getSize(); ++i) {
@@ -395,6 +449,11 @@ void game::fillQueue() {
     }
 }
 
+
+//   Attempts to respawn ships from the graveyard.
+//   Uses random positioning to find an empty cell in the grid to respawn ships that are in the graveyard.
+//   Up to a maximum of 2 (can be changed if needed) ships are respawned per call. If a ship cannot be respawned due to occupied cells,
+//   a message is output and the ship is skipped.
 void game::respawn()
 {
     std::random_device rd;
@@ -475,6 +534,13 @@ void game::respawn()
 }
 
 
+
+
+//   Removes dead ships from both teams.
+//   Iterates backwards through each team's ship list, removing and deallocating any ship
+//   that is either already deleted (nullptr) or marked as destroyed. Also outputs logs indicating
+//   which ships have been removed and provides updated counts for each team
+
 void game::removeDeadShipFromTeam()
 {
     // Process Team A ships.
@@ -516,6 +582,10 @@ void game::removeDeadShipFromTeam()
 }
 
 
+
+//   Retrieves the team associated with a given symbol.
+//   Returns a pointer to Team A or Team B depending on the uppercase version of the provided team symbol.
+//   If an invalid symbol is provided, outputs an error message and returns nullptr.
 Team *game::getTeam(char teamSymbol) const
 {
     switch (toupper(teamSymbol))
@@ -530,6 +600,15 @@ Team *game::getTeam(char teamSymbol) const
     }
 }
 
+//   Overloads the stream insertion operator for the game.
+
+//   Outputs the game state including current iterations, and displays the battlefield.
+//   Provides a standardized way to output game state information using standard I/O streams.
+//    os: The output stream to write the game state to.
+//    g: The const reference to the game object.
+//   returns a reference to the output stream that was used.
+//  
+
 std::ostream &operator<<(std::ostream &os, const game &g)
 {
     os << "Game state:\n";
@@ -539,6 +618,8 @@ std::ostream &operator<<(std::ostream &os, const game &g)
 }
 
 // used in testing, just to remove a ship from all queues in the game if it exits there
+
+
 void game::removeFromQueues(Ship *ship)
 {
     for (int i = 0; i < A->ships.getSize(); ++i)

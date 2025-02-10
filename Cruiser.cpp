@@ -20,14 +20,26 @@ Phone: +60-111-871-9811
 
 /*
 --------------------------------------------------------------------
- Cruiser --:
- it can look it can move and it can ram
- will not shoot at all and will terminate ships at its path
- in each turn it looks at 3x3 window, it will move to one of them
- if the cruiser kills 3 of them, cruiser ---> upgrade to destroyer
+Functionality Overview for Cruiser --:
 
- --------------------------------------------------------------------
+1. ram:
+    - Scans its surrounding 3x3 window centered at the Cruiser's current position.
+    - If an enemy ship (a ship that is not an empty cell and not from the same team) is found:
+      • Reduces the enemy ship’s lives.
+      • Moves to the enemy's position, effectively "ramming" and eliminating it.
+      • Increments an internal counter (shipsDestroyed) for each enemy ship destroyed.
+    - If no enemy is found:
+      • Tries several attempts to move randomly into an empty nearby cell.
+      • If no valid move is determined, the Cruiser remains in its current position.
+
+2. actions:
+    - Serves as the main behavior routine executed each turn.
+    - Calls the ram function to execute its ramming (or random) movement.
+    - Checks if it has destroyed at least 3 enemy ships:
+      • If so, it upgrades to a Destroyer by transferring its state and replacing itself on the battlefield.
+    - If the Cruiser is in a temporary disabled state (flagged by isInDeathQueue), it skips actions and notes that it is waiting to respawn.
 */
+
 
 Cruiser::Cruiser(char shipSymbol = 'c', std::string type="Cruiser", char teamSymbol='T')
     : Ship(shipSymbol, type, teamSymbol),   
@@ -37,21 +49,19 @@ Cruiser::Cruiser(char shipSymbol = 'c', std::string type="Cruiser", char teamSym
 Cruiser::Cruiser(Cruiser&& other) noexcept
     : Ship(std::move(other)),  
     RamShip(std::move(other))  
-{
-    //destroyedShips = std::move(other.destroyedShips);
-}
+{}
 
 Cruiser& Cruiser::operator=(Cruiser&& other) noexcept {
     if (this != &other) {
         Ship::operator=(std::move(other));
         RamShip::operator=(std::move(other));
-       // destroyedShips = std::move(other.destroyedShips);
     }
     return *this;
 }
 
 Cruiser::~Cruiser() {std::cout<< getType() << " was deleted\n"; }
 
+//will check its neighbouring positions and decide if its gonna ram or move to a random positin other wise 
 
 void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game& gameManager) {
     int nx = 0;
@@ -89,7 +99,11 @@ void Cruiser::ram(char** gr, int rows, int cols, Battlefield& battlefield, game&
         }
     }
 
-
+    
+//   If no enemy ship is detected in the neighboring cells, the function proceeds to randomly select 
+//   an adjacent cell (up to 10 attempts) to move the Cruiser. This random move is only performed if the 
+//   selected cell is within bounds and unoccupied (i.e., marked by '0'). If a valid random move is found, 
+//   the Cruiser's position is updated accordingly; otherwise, the Cruiser remains in its current location.
     if (!foundEnemy)
     {
         RANDOM_DEVICE;
