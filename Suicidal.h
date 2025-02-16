@@ -11,7 +11,7 @@ Phone: +60-108-220-891
 **********|**********|**********/
 #ifndef SUICIDAL_H
 #define SUICIDAL_H
-#include "ships.h"
+#include "Ships.h"
 
 /// blow  a 3x3 area and anything in that area will get cleared even islands
 class Suicidal : public BlowShip

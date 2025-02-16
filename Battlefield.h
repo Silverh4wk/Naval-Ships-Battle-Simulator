@@ -13,7 +13,7 @@ Phone: +60-111-871-9811
 #define BATTLEFIELD_H
 class Ship;
 #include "helpers.h"
-#include "game.h"
+#include "Game.h"
 
 
 /**********|********** Commented Function Descriptions |**********|**********

@@ -13,7 +13,7 @@ Phone: +60-111-871-9811
 #include <iostream>
 #include <sstream>
 #include <random>
-#include "ships.h"
+#include "Ships.h"
 #include "Battlefield.h"
 
 
