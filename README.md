@@ -5,7 +5,7 @@ A naval battle simulator, inspired by the old battleship board game. This projec
 --- 
 ## configuration
 ---
-
+```
 iterations 100
 width 10
 height 10
@@ -17,6 +17,9 @@ Frigate  @    3
 Team B 2
 Battleship  <  2
 Cruiser  >   3
+```
+### Map Layout
+```
 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 1 1 0
@@ -27,7 +30,10 @@ Cruiser  >   3
 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 1 1 1 0 0
 0 0 0 0 0 0 0 1 0 0
-
+```
+- `0` = Water  
+- `1` = Island
+  
 ### Features
 - Grid-based naval battle simulation
 - Multiple ship types with different stats 
